@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <nav th:fragment="navbar" class="navbar">
+        <ul>
+            <li class="navbar-item"><a th:href="@{/pages/home}">Logo</a></li>
+            <li class="navbar-item"><a th:href="@{/pages/home}">Home</a></li>
+            <li class="navbar-item"><a th:href="@{/pages/workouts}">Workouts</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
