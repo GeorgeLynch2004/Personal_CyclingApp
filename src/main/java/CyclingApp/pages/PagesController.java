@@ -37,4 +37,9 @@ public class PagesController {
         mav.addObject("workout", workoutEntity);
         return mav;
     }
+
+    @GetMapping("/builder")
+    public String builder(){
+        return "builder";
+    }
 }
