@@ -5,7 +5,7 @@ async function getAll(){
         const response = await fetch(url);
         const data = await response.json();
         console.log(data);
-        renderWorkouts(data);
+        renderWorkouts(container, template, data);
     } catch (e) {
         console.error("workouts getAll() failed.", e);
     }
@@ -46,9 +46,7 @@ async function getFiltered(filterForm) {
 }
 
 
-function renderWorkouts(workouts) {
-    const container = document.getElementById("workoutsContainer");
-    const template = document.getElementById("workoutCardTemplate");
+function renderWorkouts(container, template, workouts) {
 
     // 1️⃣ Remove all rendered workout cards, but keep the template
     Array.from(container.children).forEach(child => {
@@ -226,5 +224,9 @@ function getIntervalAtTime(structure, time) {
 
 
 
+const container = document.getElementById("workoutsContainer");
+const template = document.getElementById("workoutCardTemplate");
 
-window.addEventListener("DOMContentLoaded", getAll);
+if (container != null && template != null){
+    window.addEventListener("DOMContentLoaded", getAll);
+}

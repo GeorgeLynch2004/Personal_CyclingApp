@@ -36,7 +36,7 @@
 }
 
 /* Links */
-.navbar a {
+.navbar a, button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,13 +57,13 @@
 }
 
 /* Hover = accent punch */
-.navbar a:hover {
+.navbar a:hover, button:hover {
     background: #ff9100;
     transform: translateY(-2px);
 }
 
 /* Optional: active/current page */
-.navbar a.active {
+.navbar a.active, button:active {
     background: #000000;
     color: #ffffff;
 }
