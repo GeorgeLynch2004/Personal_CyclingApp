@@ -62,10 +62,11 @@
         feedbackDiv.textContent = ""; // clear previous message
 
         const usernameValid = await usernameValidation(feedbackDiv, username);
+        const emailValid = await emailValidation(feedbackDiv, email);
         const passwordValid = passwordValidation(feedbackDiv, password);
         const match = passwordsMatch(feedbackDiv, password, password2);
 
-        if (usernameValid && passwordValid && match){
+        if (usernameValid && emailValid && passwordValid && match){
             const formData = new FormData();
             formData.append("username", username);
             formData.append("email", email);
@@ -94,13 +95,13 @@
         if (password1 === password2){
             return true;
         }
-        feedbackDiv.textContent = "Passwords don't match.";
+        feedbackDiv.textContent += "Passwords don't match.\n";
         return false;
     }
 
     function passwordValidation(feedbackDiv, password){
         if (password.length < 8 || password.length > 20) {
-            feedbackDiv.textContent = "Password must be 8–20 characters.";
+            feedbackDiv.textContent += "Password must be 8–20 characters.\n";
             return false;
         }
 
@@ -109,7 +110,7 @@
         const hasSymbol = /[^A-Za-z0-9]/.test(password);
 
         if (!hasUppercase || !hasNumber || !hasSymbol) {
-            feedbackDiv.textContent = "Must contain uppercase, number, and symbol.";
+            feedbackDiv.textContent += "Password must contain uppercase, number, and symbol.\n";
             return false;
         }
 
@@ -118,7 +119,7 @@
 
     async function usernameValidation(feedbackDiv, username){
         if (username.length < 8 || username.length > 40) {
-            feedbackDiv.textContent = "Username must be 8–40 characters.";
+            feedbackDiv.textContent += "Username must be 8–40 characters.\n";
             return false;
         }
 
@@ -129,11 +130,31 @@
             const data = await response.json();
 
             if (data === true){
-                feedbackDiv.textContent = "Username taken.";
+                feedbackDiv.textContent += "Username taken.\n";
                 return false;
             }
         } catch (e) {
             console.error("Username check failed.", e);
+            feedbackDiv.textContent = "Server error. Try again later.";
+            return false;
+        }
+
+        return true;
+    }
+
+    async function emailValidation(feedbackDiv, email){
+        const url = `http://localhost:8080/users/emailExists?email=${encodeURIComponent(email)}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data === true){
+                feedbackDiv.textContent += "Email taken.\n";
+                return false;
+            }
+        } catch (e) {
+            console.error("Email check failed.", e);
             feedbackDiv.textContent = "Server error. Try again later.";
             return false;
         }

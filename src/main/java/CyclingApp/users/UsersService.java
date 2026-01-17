@@ -19,6 +19,9 @@ public class UsersService implements IUsersService{
     }
 
     @Override
+    public UserEntity getByEmail(String email) {return usersRepository.getByEmail(email);}
+
+    @Override
     public void addUser(SignupForm signupForm){
         UserEntity user = UsersFactory.signupFormToUserEntity(signupForm);
         usersRepository.addUser(user);

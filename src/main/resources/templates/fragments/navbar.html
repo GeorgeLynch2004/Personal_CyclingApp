@@ -18,7 +18,9 @@
                 <a th:href="@{/pages/signup}">Sign Up</a>
             </li>
             <li class="navbar-item" sec:authorize="isAuthenticated()">
-                <span th:text="${#authentication.principal.username}"></span>
+                <a th:href="@{/pages/profile/{username}(username=${#authentication.name})}">
+                    <span th:text="${#authentication.name}"></span>
+                </a>
             </li>
             <li sec:authorize="isAuthenticated()">
                 <form th:action="@{/logout}" method="post">
