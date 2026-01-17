@@ -48,7 +48,15 @@ public class UsersRepository implements IUsersRepository{
         } catch (EmptyResultDataAccessException e){
             return null;
         }
-
+    }
+    @Override
+    public UserEntity getByEmail(String email){
+        String sql = "SELECT id, created_at, username, email, password, usertype FROM users WHERE email=?";
+        try{
+            return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     @Override

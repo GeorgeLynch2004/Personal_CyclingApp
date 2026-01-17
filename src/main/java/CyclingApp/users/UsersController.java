@@ -15,6 +15,7 @@ public class UsersController {
         this.usersService = usersService;
     }
 
+    @PreAuthorize("#username == authentication.name")
     @GetMapping("/getByUsername")
     public ResponseEntity<UserEntity> getByUsername(@RequestParam(required = true) String username){
         UserEntity user = usersService.getByUsername(username);
@@ -25,6 +26,17 @@ public class UsersController {
     public ResponseEntity<Boolean> usernameExists(@RequestParam(required = true) String username){
         UserEntity user = usersService.getByUsername(username);
         if (user != null) {
+            return ResponseEntity.ok().body(true);
+        }
+        else{
+            return ResponseEntity.ok().body(false);
+        }
+    }
+
+    @GetMapping("/emailExists")
+    public ResponseEntity<Boolean> emailExists(@RequestParam(required = true) String email){
+        UserEntity user = usersService.getByEmail(email);
+        if (user != null){
             return ResponseEntity.ok().body(true);
         }
         else{

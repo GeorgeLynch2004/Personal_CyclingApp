@@ -57,6 +57,7 @@ public class PagesController {
         return "signup";
     }
 
+    @PreAuthorize("#username == authentication.name")
     @GetMapping("/profile/{username}")
     public String profile(@PathVariable String username){
         return "profile";

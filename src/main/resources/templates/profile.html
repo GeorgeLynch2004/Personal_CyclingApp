@@ -4,11 +4,59 @@
     <meta charset="UTF-8">
     <title>Profile</title>
     <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/workoutExpanded.css}">
     <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
 </head>
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
-    <h1>Profile Page</h1>
-    <p>paragraph paragraph</p>
+    <div class="workout-page">
+        <h1>Profile</h1>
+        <div class="workout-page">
+            <h2 id="username"></h2>
+            <h3 id="email"></h3>
+            <p id="usertype"></p>
+        </div>
+
+    </div>
+    <div class="workout-page">
+        <h1>Favourited Workouts</h1>
+        <div class="workout-page">
+
+        </div>
+    </div>
+    <div class="workout-page">
+        <h1>Created Workouts</h1>
+        <div class="workout-page">
+
+        </div>
+    </div>
 </body>
 </html>
+<script th:inline="javascript">
+    async function getProfile() {
+        const username = [[${#authentication.name}]];
+        const url = `/users/getByUsername?username=${username}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error("Request failed");
+            }
+
+            const data = await response.json();
+            console.log(data);
+            const usernameElement = document.getElementById("username");
+            const emailElement = document.getElementById("email");
+            const usertypeElement = document.getElementById("usertype");
+
+            usernameElement.textContent = "Username: " + data.username;
+            emailElement.textContent = "Email: " + data.email;
+            usertypeElement.textContent = "Access level: " + data.role;
+        } catch (e) {
+            console.error("Profile fetch failed", e);
+        }
+    }
+
+    // Call on page load
+    getProfile();
+</script>

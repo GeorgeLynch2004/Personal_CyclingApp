@@ -24,12 +24,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script th:src="@{/scripts/js/workouts.js}"></script>
 <script th:inline="javascript">
-    const canvas = document.querySelector(".workout-graph canvas");
-    const zones = document.querySelector(".workout-targetZones");
-
     const workoutStructure = [[${workout.structure}]];
     const targetZones = [[${workout.targetZones}]];
-
-    convertTargetZonesToString(zones, targetZones);
+    const canvas = document.querySelector(".workout-graph canvas");
+    const zones = document.querySelector(".workout-targetZones").textContent = convertTargetZonesToString(targetZones);
     createWorkoutGraph(canvas, workoutStructure);
 </script>

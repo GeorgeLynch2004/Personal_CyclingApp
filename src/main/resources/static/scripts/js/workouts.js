@@ -61,7 +61,7 @@ function renderWorkouts(container, template, workouts) {
 
         card.querySelector(".workout-name").textContent = workout.name;
         card.querySelector(".workout-description").textContent = workout.description;
-        card.querySelector(".workout-targetZones").textContent = workout.targetZones;
+        card.querySelector(".workout-targetZones").textContent = convertTargetZonesToString(workout.targetZones);
         card.querySelector(".workout-expandButton").href = `/pages/workouts/${workout.id}`;
 
         // Append the cloned card to the container
@@ -221,7 +221,7 @@ function getIntervalAtTime(structure, time) {
     return null;
 }
 
-function convertTargetZonesToString(element, zones) {
+function convertTargetZonesToString(zones) {
     const dict = {
         1: "Active Recovery",
         2: "Endurance",
@@ -236,7 +236,7 @@ function convertTargetZonesToString(element, zones) {
         .map(z => dict[z])
         .join(", ");
 
-    element.textContent = text;
+    return text;
 }
 
 
