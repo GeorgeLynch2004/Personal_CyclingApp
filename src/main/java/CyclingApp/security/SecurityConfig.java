@@ -33,9 +33,10 @@ public class SecurityConfig {
             "/scripts/**",
             "/pages/home",
             "/index.html",
-            "/pages/login",
+            "/pages/*",
             "/error/**",
             "/login",
+            "/users/*"
     };
 
     @Bean

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <title>Sign Up</title>
+    <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/loginForm.css}">
+
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="login-page">
+    <div class="login-card">
+        <h1>Sign Up</h1>
+
+        <form id="signUpForm" th:action="@{/users/signup}" method="post">
+            <div class="login-field">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" placeholder="username" required/>
+            </div>
+            <div class="login-field">
+                <label for="email">Email</label>
+                <input id="email" type="text" name="email" placeholder="email" required/>
+            </div>
+            <div class="login-field">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" placeholder="password" required/>
+            </div>
+            <div class="login-field">
+                <label for="password2">Re-type Password</label>
+                <input id="password2" type="password" name="password2" placeholder="re-type password" required/>
+            </div>
+            <div id="formFeedback">
+
+            </div>
+            <button class="login-button" type="submit">Sign Up</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    const form = document.getElementById("signUpForm");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        await validation(form);
+    });
+
+    async function validation(form){
+        const username = form.username.value.trim();
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        const password2 = form.password2.value;
+        const feedbackDiv = document.getElementById("formFeedback");
+
+        feedbackDiv.textContent = ""; // clear previous message
+
+        const usernameValid = await usernameValidation(feedbackDiv, username);
+        const passwordValid = passwordValidation(feedbackDiv, password);
+        const match = passwordsMatch(feedbackDiv, password, password2);
+
+        if (usernameValid && passwordValid && match){
+            const formData = new FormData();
+            formData.append("username", username);
+            formData.append("email", email);
+            formData.append("password", password);
+
+            const res = await fetch("/users/signup", {
+                method: "POST",
+                headers: {
+                    [document.querySelector('meta[name="_csrf_header"]').content]:
+                    document.querySelector('meta[name="_csrf"]').content
+                },
+                body: formData
+            });
+
+            if (res.ok){
+                window.location.href="/pages/login";
+            } else{
+                const error = await res.text();
+                console.error(error);
+                feedbackDiv.textContent = error;
+            }
+        }
+    }
+
+    function passwordsMatch(feedbackDiv, password1, password2){
+        if (password1 === password2){
+            return true;
+        }
+        feedbackDiv.textContent = "Passwords don't match.";
+        return false;
+    }
+
+    function passwordValidation(feedbackDiv, password){
+        if (password.length < 8 || password.length > 20) {
+            feedbackDiv.textContent = "Password must be 8–20 characters.";
+            return false;
+        }
+
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSymbol = /[^A-Za-z0-9]/.test(password);
+
+        if (!hasUppercase || !hasNumber || !hasSymbol) {
+            feedbackDiv.textContent = "Must contain uppercase, number, and symbol.";
+            return false;
+        }
+
+        return true;
+    }
+
+    async function usernameValidation(feedbackDiv, username){
+        if (username.length < 8 || username.length > 40) {
+            feedbackDiv.textContent = "Username must be 8–40 characters.";
+            return false;
+        }
+
+        const url = `http://localhost:8080/users/usernameExists?username=${encodeURIComponent(username)}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data === true){
+                feedbackDiv.textContent = "Username taken.";
+                return false;
+            }
+        } catch (e) {
+            console.error("Username check failed.", e);
+            feedbackDiv.textContent = "Server error. Try again later.";
+            return false;
+        }
+
+        return true;
+    }
+</script>

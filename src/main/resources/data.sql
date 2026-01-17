@@ -154,8 +154,8 @@ VALUES
     );
 
 TRUNCATE table users;
-insert ignore into users (username, email, password, usertype) values
-('user', 'user@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'USER'),
-('member', 'member@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'MEMBER'),
-('admin', 'admin@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'ADMIN');
+insert ignore into users (created_at, username, email, password, usertype) values
+('2025-01-04 06:30:00','user', 'user@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'USER'),
+('2025-01-04 06:30:00','member', 'member@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'MEMBER'),
+('2025-01-04 06:30:00','admin', 'admin@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'ADMIN');
 
