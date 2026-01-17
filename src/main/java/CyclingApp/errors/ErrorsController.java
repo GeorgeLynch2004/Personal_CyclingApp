@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.webmvc.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -33,5 +34,10 @@ public class ErrorsController implements ErrorController {
 
         // fallback
         return "errors/generic";
+    }
+
+    @GetMapping("/error/403")
+    public String forbidden(){
+        return "errors/403";
     }
 }

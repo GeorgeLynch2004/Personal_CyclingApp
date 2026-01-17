@@ -152,3 +152,10 @@ VALUES
      ),
      JSON_ARRAY(4,5)
     );
+
+TRUNCATE table users;
+insert ignore into users (username, email, password, usertype) values
+('user', 'user@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'USER'),
+('member', 'member@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'MEMBER'),
+('admin', 'admin@email.com', '$2a$10$/RHeVS4SViu1MxNkW9dIMugnqWuJLVWHK02rMogZ1Rxy3i/qBMfwK', 'ADMIN');
+

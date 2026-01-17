@@ -11,6 +11,20 @@
             <li class="navbar-item"><a th:href="@{/pages/home}">Home</a></li>
             <li class="navbar-item"><a th:href="@{/pages/workouts}">Find a Workout</a></li>
             <li class="navbar-item"><a th:href="@{/pages/builder}">Build a Workout</a></li>
+            <div sec:authorize="isAnonymous()">
+                <li class="navbar-item">
+                    <a th:href="@{/pages/login}">Login</a>
+                </li>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <span th:text="${#authentication.principal.username}"></span>
+
+                <form th:action="@{/logout}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+                    <button type="submit">Logout</button>
+                </form>
+            </div>
         </ul>
     </nav>
 </body>
