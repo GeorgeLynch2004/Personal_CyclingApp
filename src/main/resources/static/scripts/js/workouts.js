@@ -221,6 +221,25 @@ function getIntervalAtTime(structure, time) {
     return null;
 }
 
+function convertTargetZonesToString(element, zones) {
+    const dict = {
+        1: "Active Recovery",
+        2: "Endurance",
+        3: "Tempo",
+        4: "Threshold",
+        5: "VO2 Max",
+        6: "Anaerobic",
+        7: "Neuromuscular"
+    };
+
+    const text = zones
+        .map(z => dict[z])
+        .join(", ");
+
+    element.textContent = text;
+}
+
+
 
 
 

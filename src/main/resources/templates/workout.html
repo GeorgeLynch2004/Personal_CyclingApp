@@ -11,14 +11,13 @@
     <div th:replace="fragments/navbar :: navbar"></div>
     <div class="workout-page">
         <h1 th:text="${workout.name}"></h1>
-
+        <div class="workout-targetZones" th:text="${workout.targetZones}"></div>
         <div class="workout-graph">
             <canvas></canvas>
         </div>
 
         <p class="workout-description" th:text="${workout.description}"></p>
 
-        <div class="workout-targetZones" th:text="${workout.targetZones}"></div>
     </div>
 </body>
 </html>
@@ -26,8 +25,11 @@
 <script th:src="@{/scripts/js/workouts.js}"></script>
 <script th:inline="javascript">
     const canvas = document.querySelector(".workout-graph canvas");
+    const zones = document.querySelector(".workout-targetZones");
 
     const workoutStructure = [[${workout.structure}]];
+    const targetZones = [[${workout.targetZones}]];
 
+    convertTargetZonesToString(zones, targetZones);
     createWorkoutGraph(canvas, workoutStructure);
 </script>

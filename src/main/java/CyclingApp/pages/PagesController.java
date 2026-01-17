@@ -56,4 +56,9 @@ public class PagesController {
     public String signup(){
         return "signup";
     }
+
+    @GetMapping("/profile/{username}")
+    public String profile(@PathVariable String username){
+        return "profile";
+    }
 }
