@@ -1,0 +1,133 @@
+/* =====================================================
+   Favourite Workout Card (Horizontal Layout)
+===================================================== */
+
+.favourite-workout-card--horizontal {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 900px;
+    height: 220px;
+    background: #ffffff;
+    border: 2px solid #000;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 1.2rem;
+}
+
+.favourite-workout-card--horizontal:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+}
+
+.favourite-workout-graph {
+    flex: 1;
+    height: 100%;
+    padding: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+}
+
+.favourite-workout-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.25rem;
+}
+
+.favourite-workout-graph canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+.favourite-workout-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 0.4rem;
+    color: #222;
+}
+
+.favourite-workout-description,
+.favourite-workout-targetZones {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #555;
+    line-height: 1.4;
+    margin: 0.25rem 0;
+}
+
+.favourite-workout-actions {
+    margin-top: auto;              /* ⬇ anchor to bottom */
+    display: flex;
+    gap: 0.75rem;
+
+    max-width: 320px;              /* keeps buttons neat */
+    margin-left: auto;             /* ⬅ push to right */
+}
+
+
+
+
+.favourite-workout-expandButton,
+.favourite-workout-favouriteButton {
+    flex: 1;                       /* ✅ equal width */
+    padding: 0.75rem;
+
+    text-align: center;
+    border-radius: 12px;
+    border: 2px solid #000;
+
+    background: #efefef;
+    color: #000;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+
+
+.favourite-workout-expandButton:hover,
+.favourite-workout-favouriteButton:hover {
+    background: #ff9100;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+
+/* Responsive: stack on mobile */
+@media (max-width: 768px) {
+    .favourite-workout-card--horizontal {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .favourite-workout-graph {
+        width: 100%;
+        height: 180px;
+        border-right: none;
+        border-bottom: 2px solid #000;
+    }
+}
+
+@media (max-width: 480px) {
+    .favourite-workout-actions {
+        max-width: 100%;
+    }
+
+    .favourite-workout-expandButton,
+    .favourite-workout-favouriteButton {
+        flex: 1;
+    }
+}

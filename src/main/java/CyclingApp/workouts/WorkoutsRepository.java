@@ -121,16 +121,4 @@ public class WorkoutsRepository implements IWorkoutsRepository {
                 objectMapper.writeValueAsString(workout.getTargetZones())
         );
     }
-
-    @Override
-    public List<WorkoutEntity> getWorkoutFavouritesById(Long userId){
-        String sql = "SELECT w.* FROM favourites f JOIN workouts w ON f.workout_id = w.id WHERE f.user_id = ?";
-        return jdbcTemplate.query(sql, rowMapper, userId);
-    }
-
-    @Override
-    public void addWorkoutFavourite(Long user_id, Long workout_id){
-        String sql = "INSERT INTO favourites (created_at, user_id, workout_id) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, LocalDateTime.now(), user_id, workout_id);
-    }
 }

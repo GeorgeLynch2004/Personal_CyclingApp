@@ -24,9 +24,11 @@ CREATE TABLE IF NOT EXISTS users (
      usertype ENUM('ADMIN', 'MEMBER', 'USER') NOT NULL DEFAULT 'USER'
 )ENGINE=InnoDB;
 
+drop table if exists favourites;
+
 CREATE TABLE IF NOT EXISTS favourites (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP not null,
-    username BIGINT not null,
+    user_id BIGINT not null,
     workout_id BIGINT not null
 )

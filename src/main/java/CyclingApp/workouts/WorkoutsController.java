@@ -1,12 +1,14 @@
 package CyclingApp.workouts;
 
 import CyclingApp.users.UsersService;
+import CyclingApp.workouts.favourites.FavouriteRequest;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,8 @@ public class WorkoutsController {
         this.workoutsService = workoutsService;
         this.usersService = usersService;
     }
+
+    //region WorkoutEntity's
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/getAll")
@@ -54,18 +58,10 @@ public class WorkoutsController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("#username == authentication.name || hasRole('ADMIN')")
-    @GetMapping("/getWorkoutFavouritesByUsername")
-    public ResponseEntity<List<WorkoutEntity>> getWorkoutFavouritesByUsername(@RequestParam(required = true) String username){
-        return ResponseEntity.ok().body(workoutsService.getWorkoutFavouritesByUsername(username));
-    }
+    //endregion
 
-    @PreAuthorize("#username == authentication.name || hasRole('ADMIN')")
-    @PostMapping("/addWorkoutFavourite")
-    public ResponseEntity<Void> addWorkoutFavourite(@RequestParam(required = true) Long workout_id, UserDetails authenticatedPrincipal){
-        String username = authenticatedPrincipal.getUsername();
-        Long user_id = usersService.getByUsername(username).getId();
-        workoutsService.addWorkoutFavourite(user_id, workout_id);
-        return ResponseEntity.ok().build();
-    }
+    //region Workout Favourite's
+
+
+    //endregion
 }

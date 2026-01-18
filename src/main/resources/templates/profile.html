@@ -6,59 +6,59 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Profile</title>
     <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/workouts.css}">
     <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/favouriteWorkouts.css}">
 </head>
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
-    <div class="workout-page">
-        <h1>Profile</h1>
+    <h1>Profile</h1>
+    <div class="section-container">
         <div class="workout-page">
             <h2 id="username"></h2>
             <h3 id="email"></h3>
             <p id="usertype"></p>
         </div>
+    </div>
+    <h1>Favourite Workouts</h1>
+    <div id="favouriteWorkoutsContainer" class="section-container">
+        <template id="favouriteWorkoutTemplate">
+            <div id="workoutCard" class="favourite-workout-card favourite-workout-card--horizontal">
+                <div id="workoutGraph" class="favourite-workout-graph">
+                    <canvas></canvas>
+                </div>
+                <div class="favourite-workout-content">
+                    <h3 id="workoutName" class="favourite-workout-name"></h3>
+                    <p id="workoutDescription" class="favourite-workout-description"></p>
+                    <p id="workoutTargetZones" class="favourite-workout-targetZones"></p>
+                    <div class="favourite-workout-actions">
+                        <a id="workoutExpandButton" class="favourite-workout-expandButton">View</a>
+                        <button
+                                id="workoutFavouriteButton"
+                                class="favourite-workout-favouriteButton workout-favouriteButton"
+                                type="button"
+                                aria-pressed="false"
+                                aria-label="Add to favourites">
+                            Favourite
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </template>
 
     </div>
-    <div class="workout-page">
-        <h1>Favourited Workouts</h1>
-        <div class="workout-page">
+    <h1>Created Workouts</h1>
+    <div class="section-container">
 
-        </div>
     </div>
-    <div class="workout-page">
-        <h1>Created Workouts</h1>
-        <div class="workout-page">
-
-        </div>
-    </div>
+    <script th:inline="javascript">
+        window.APP_USER = {
+            username: [[${#authentication.name}]]
+        };
+    </script>
+    <script type="module" th:src="@{/scripts/js/pages/profilePage.js}"></script>
+    <script type="module" th:src="@{/scripts/js/components/workoutChart.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
-<script th:inline="javascript">
-    async function getProfile() {
-        const username = [[${#authentication.name}]];
-        const url = `/users/getByUsername?username=${username}`;
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error("Request failed");
-            }
-
-            const data = await response.json();
-            console.log(data);
-            const usernameElement = document.getElementById("username");
-            const emailElement = document.getElementById("email");
-            const usertypeElement = document.getElementById("usertype");
-
-            usernameElement.textContent = "Username: " + data.username;
-            emailElement.textContent = "Email: " + data.email;
-            usertypeElement.textContent = "Access level: " + data.role;
-        } catch (e) {
-            console.error("Profile fetch failed", e);
-        }
-    }
-
-    // Call on page load
-    getProfile();
-</script>

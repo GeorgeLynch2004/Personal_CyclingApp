@@ -42,15 +42,4 @@ public class WorkoutsService implements IWorkoutsService {
         WorkoutEntity newWorkoutEntity = WorkoutsFactory.createWorkoutEntityFromForm(workoutForm);
         return ResponseEntity.ok().build();
     }
-
-    @Override
-    public List<WorkoutEntity> getWorkoutFavouritesByUsername(String username){
-        Long userId = usersRepository.getByUsername(username).getId();
-        return workoutsRepository.getWorkoutFavouritesById(userId);
-    }
-
-    @Override
-    public void addWorkoutFavourite(Long user_id, Long workout_id){
-        workoutsRepository.addWorkoutFavourite(user_id, workout_id);
-    }
 }

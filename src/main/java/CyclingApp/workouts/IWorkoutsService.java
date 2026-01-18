@@ -9,6 +9,4 @@ public interface IWorkoutsService {
     public ResponseEntity<WorkoutEntity> getWorkoutById(long id);
     public ResponseEntity<List<WorkoutEntity>> getWorkoutsByFilter(String name, String description, List<Integer> targetZones);
     public ResponseEntity<Void> addWorkoutFromForm(WorkoutForm workoutForm);
-    public List<WorkoutEntity> getWorkoutFavouritesByUsername(String username);
-    public void addWorkoutFavourite(Long user_id, Long workout_id);
 }
