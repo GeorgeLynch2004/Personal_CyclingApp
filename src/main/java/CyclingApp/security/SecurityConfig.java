@@ -31,12 +31,12 @@ public class SecurityConfig {
 
     private static final String[] ENDPOINTS_WHITELIST = {
             "/scripts/**",
-            "/pages/home",
             "/index.html",
-            "/pages/*",
+            "/pages/**",
             "/error/**",
             "/login",
-            "/users/*"
+            "/users/**",
+            "/workouts/**"
     };
 
     @Bean

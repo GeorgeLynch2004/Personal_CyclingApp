@@ -10,6 +10,8 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +49,6 @@ public class WorkoutsRepository implements IWorkoutsRepository {
             }
         };
     }
-
 
     @Override
     public ResponseEntity<List<WorkoutEntity>> getAllWorkouts() {
@@ -103,10 +104,6 @@ public class WorkoutsRepository implements IWorkoutsRepository {
         );
     }
 
-
-
-
-
     @Override
     public void addWorkout(WorkoutEntity workout) {
         String sql = """
@@ -124,5 +121,4 @@ public class WorkoutsRepository implements IWorkoutsRepository {
                 objectMapper.writeValueAsString(workout.getTargetZones())
         );
     }
-
 }

@@ -2,13 +2,33 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Builder</title>
     <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
     <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/workouts.css}">
 </head>
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
     <h1>Workout Builder</h1>
-    <p>Erm... Coming soon?</p>
+    <div class="section-container">
+        <div class="workout-graph">
+            <canvas></canvas>
+        </div>
+        <div>
+            <form name="addIntervalForm" id="addIntervalForm">
+                <label>
+                    Interval Duration
+                </label>
+                <label>
+                    Target Power Zone
+                </label>
+                <label>
+                    Interval Duration
+                </label>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

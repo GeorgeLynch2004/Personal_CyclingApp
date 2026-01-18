@@ -1,11 +1,15 @@
 package CyclingApp.workouts;
 
+import CyclingApp.users.UsersService;
+import CyclingApp.workouts.favourites.FavouriteRequest;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,12 +18,16 @@ import java.util.List;
 @RequestMapping("/workouts")
 public class WorkoutsController {
 
+    private final UsersService usersService;
     IWorkoutsService workoutsService;
 
     @Autowired
-    public WorkoutsController(IWorkoutsService workoutsService) {
+    public WorkoutsController(IWorkoutsService workoutsService, UsersService usersService) {
         this.workoutsService = workoutsService;
+        this.usersService = usersService;
     }
+
+    //region WorkoutEntity's
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/getAll")
@@ -46,7 +54,14 @@ public class WorkoutsController {
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<Void> addWorkout(@Valid @ModelAttribute WorkoutForm workoutForm) {
-        return workoutsService.addWorkoutFromForm(workoutForm);
+        workoutsService.addWorkoutFromForm(workoutForm);
+        return ResponseEntity.ok().build();
     }
 
+    //endregion
+
+    //region Workout Favourite's
+
+
+    //endregion
 }
