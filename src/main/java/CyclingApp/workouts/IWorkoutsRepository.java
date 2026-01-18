@@ -11,4 +11,6 @@ public interface IWorkoutsRepository
     public ResponseEntity<WorkoutEntity> getWorkoutById(long id);
     public List<WorkoutEntity> getWorkoutsByFilter(String name, String description, List<Integer> targetZones);
     public void addWorkout(WorkoutEntity newWorkoutEntity);
+    public List<WorkoutEntity> getWorkoutFavouritesById(Long userId);
+    public void addWorkoutFavourite(Long user_id, Long workout_id);
 }

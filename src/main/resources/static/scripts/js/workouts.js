@@ -5,12 +5,11 @@ async function getAll(){
         const response = await fetch(url);
         const data = await response.json();
         console.log(data);
-        renderWorkouts(container, template, data);
+        await renderWorkouts(container, template, data);
     } catch (e) {
         console.error("workouts getAll() failed.", e);
     }
 }
-
 async function getFiltered(filterForm) {
     try {
         // 1️⃣ Grab form values
@@ -38,15 +37,13 @@ async function getFiltered(filterForm) {
         console.log("Filtered workouts:", data);
 
         // 5️⃣ Render the workouts using existing function
-        renderWorkouts(data);
+        renderWorkouts(container, template,data);
 
     } catch (err) {
         console.error("Failed to fetch filtered workouts:", err);
     }
 }
-
-
-function renderWorkouts(container, template, workouts) {
+async function renderWorkouts(container, template, workouts) {
 
     // 1️⃣ Remove all rendered workout cards, but keep the template
     Array.from(container.children).forEach(child => {
@@ -63,6 +60,11 @@ function renderWorkouts(container, template, workouts) {
         card.querySelector(".workout-description").textContent = workout.description;
         card.querySelector(".workout-targetZones").textContent = convertTargetZonesToString(workout.targetZones);
         card.querySelector(".workout-expandButton").href = `/pages/workouts/${workout.id}`;
+        const favouriteBtn = card.getElementById("workoutFavouriteForm");
+        favouriteBtn.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await favouriteWorkout(workout.id);
+        })
 
         // Append the cloned card to the container
         container.appendChild(card);
@@ -72,8 +74,6 @@ function renderWorkouts(container, template, workouts) {
         createWorkoutGraph(canvas, workout.structure);
     });
 }
-
-
 function createWorkoutGraph(canvas, structure) {
     const { points, midpoints } = buildPowerSeries(structure);
 
@@ -159,10 +159,6 @@ function createWorkoutGraph(canvas, structure) {
         }
     });
 }
-
-
-
-
 function buildPowerSeries(structure) {
     let time = 0;
     const points = [];
@@ -186,9 +182,6 @@ function buildPowerSeries(structure) {
 
     return { points, midpoints };
 }
-
-
-
 function zoneColor(zone, alpha = 1) {
     const colors = {
         1: `rgba(102, 204, 255, ${alpha})`,
@@ -201,7 +194,6 @@ function zoneColor(zone, alpha = 1) {
     };
     return colors[zone] ?? `rgba(0,0,0,${alpha})`;
 }
-
 function formatDuration(seconds) {
     if (seconds >= 60) {
         const min = seconds / 60;
@@ -211,7 +203,6 @@ function formatDuration(seconds) {
     }
     return `${seconds} sec`;
 }
-
 function getIntervalAtTime(structure, time) {
     let elapsed = 0;
     for (const interval of structure) {
@@ -220,7 +211,6 @@ function getIntervalAtTime(structure, time) {
     }
     return null;
 }
-
 function convertTargetZonesToString(zones) {
     const dict = {
         1: "Active Recovery",
@@ -232,11 +222,26 @@ function convertTargetZonesToString(zones) {
         7: "Neuromuscular"
     };
 
-    const text = zones
+    return zones
         .map(z => dict[z])
         .join(", ");
-
-    return text;
+}
+async function favouriteWorkout(workout_id){
+    const url =`http://localhost:8080/workouts/addWorkoutFavourite`;
+    const formData = new FormData();
+    formData.append("workout_id", workout_id);
+    try {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                [document.querySelector('meta[name="_csrf_header"]').content]:
+                document.querySelector('meta[name="_csrf"]').content
+            },
+            body: formData
+        });
+    } catch (e) {
+        console.log("ERROR favouriteWorkout() failed: " + e);
+    }
 }
 
 

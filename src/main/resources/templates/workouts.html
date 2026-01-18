@@ -2,11 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Workouts</title>
     <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
     <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/workoutFilter.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/workoutCard.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/workouts.css}">
 </head>
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
@@ -62,6 +63,12 @@
                 <p class="workout-description"></p>
                 <p class="workout-targetZones"></p>
                 <a class="workout-expandButton">view</a>
+                <form id="workoutFavouriteForm">
+                    <button type="submit" id="workoutFavouriteButton">
+                        <a class="workout-favouriteButton">favourite</a>
+                    </button>
+                </form>
+
             </div>
         </template>
     </div>
@@ -86,6 +93,8 @@
         e.preventDefault();
         getFiltered(filterForm);
     });
+
+
 
 
 

@@ -1,5 +1,7 @@
 package CyclingApp.workouts;
 
+import CyclingApp.users.IUsersRepository;
+import CyclingApp.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,10 +13,12 @@ import java.util.List;
 public class WorkoutsService implements IWorkoutsService {
 
     private final IWorkoutsRepository workoutsRepository;
+    private final IUsersRepository usersRepository;
 
     @Autowired
-    public WorkoutsService(IWorkoutsRepository workoutsRepository) {
+    public WorkoutsService(IWorkoutsRepository workoutsRepository, UsersRepository usersRepository) {
         this.workoutsRepository = workoutsRepository;
+        this.usersRepository = usersRepository;
     }
 
     @Override
@@ -37,5 +41,16 @@ public class WorkoutsService implements IWorkoutsService {
     public ResponseEntity<Void> addWorkoutFromForm(WorkoutForm workoutForm) {
         WorkoutEntity newWorkoutEntity = WorkoutsFactory.createWorkoutEntityFromForm(workoutForm);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public List<WorkoutEntity> getWorkoutFavouritesByUsername(String username){
+        Long userId = usersRepository.getByUsername(username).getId();
+        return workoutsRepository.getWorkoutFavouritesById(userId);
+    }
+
+    @Override
+    public void addWorkoutFavourite(Long user_id, Long workout_id){
+        workoutsRepository.addWorkoutFavourite(user_id, workout_id);
     }
 }

@@ -2,9 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Profile</title>
     <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/workoutExpanded.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/workouts.css}">
     <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
 </head>
 <body>

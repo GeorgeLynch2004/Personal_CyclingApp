@@ -10,6 +10,8 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +49,6 @@ public class WorkoutsRepository implements IWorkoutsRepository {
             }
         };
     }
-
 
     @Override
     public ResponseEntity<List<WorkoutEntity>> getAllWorkouts() {
@@ -103,10 +104,6 @@ public class WorkoutsRepository implements IWorkoutsRepository {
         );
     }
 
-
-
-
-
     @Override
     public void addWorkout(WorkoutEntity workout) {
         String sql = """
@@ -125,4 +122,15 @@ public class WorkoutsRepository implements IWorkoutsRepository {
         );
     }
 
+    @Override
+    public List<WorkoutEntity> getWorkoutFavouritesById(Long userId){
+        String sql = "SELECT w.* FROM favourites f JOIN workouts w ON f.workout_id = w.id WHERE f.user_id = ?";
+        return jdbcTemplate.query(sql, rowMapper, userId);
+    }
+
+    @Override
+    public void addWorkoutFavourite(Long user_id, Long workout_id){
+        String sql = "INSERT INTO favourites (created_at, user_id, workout_id) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, LocalDateTime.now(), user_id, workout_id);
+    }
 }

@@ -1,0 +1,343 @@
+/* =====================================================
+   Base Layout
+===================================================== */
+
+.page-start {
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+/* =====================================================
+   Workout List (Cards)
+===================================================== */
+
+.workout-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    justify-content: flex-start;
+}
+
+/* -----------------------------------------------------
+   Card
+----------------------------------------------------- */
+
+.workout-card {
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    background: #ffffff;
+
+    border: 2px solid #000;
+    border-radius: 16px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.workout-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* -----------------------------------------------------
+   Card Content
+----------------------------------------------------- */
+
+.workout-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 1rem 1.25rem 0.5rem;
+    color: #222;
+}
+
+.workout-description,
+.workout-targetZones {
+    margin: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* -----------------------------------------------------
+   Card Graph (Small)
+----------------------------------------------------- */
+
+.workout-card .workout-graph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+    padding: 0 1rem 0.5rem;
+}
+
+.workout-graph canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* -----------------------------------------------------
+   Card Buttons
+----------------------------------------------------- */
+
+.workout-expandButton,
+.workout-favouriteButton {
+    margin: auto 1.25rem 1.25rem;
+    align-self: flex-start;
+
+    padding: 0.5rem 1rem;
+    border: 2px solid #000;
+    border-radius: 16px;
+
+    background: #ffffff;
+    color: #000;
+
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.workout-expandButton:hover,
+.workout-favouriteButton:hover {
+    background: #ff9100;
+    transform: translateY(-2px);
+}
+
+/* =====================================================
+   Filter Sidebar
+===================================================== */
+
+/* Toggle Button */
+
+.filter-toggle-btn {
+    padding: 0.6rem 1.2rem;
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: bold;
+
+    background: #ffffff;
+    color: #000;
+
+    border: 2px solid #000;
+    border-radius: 16px;
+
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.filter-toggle-btn:hover {
+    background: #ff9100;
+    transform: translateY(-2px);
+}
+
+/* ================================
+   Workout Filter Sidebar
+================================ */
+
+.workout-filter.sidebar {
+    position: fixed;
+    top: 100px;                      /* below navbar */
+    left: 0;
+
+    width: 340px;
+    height: calc(100% - 100px);
+
+    background: #ffffff;
+    border: 2px solid #000;
+    border-radius: 0 16px 16px 0;
+
+    padding: 1.25rem;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.08);
+
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+
+    z-index: 999;
+}
+
+/* Sidebar visible */
+.workout-filter.sidebar.active {
+    transform: translateX(0);
+}
+
+
+/* -----------------------------------------------------
+   Filter Form Elements
+----------------------------------------------------- */
+
+.workout-filter.sidebar .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.workout-filter.sidebar label {
+    font-size: 0.75rem;
+    text-transform: lowercase;
+    font-weight: bold;
+}
+
+.workout-filter.sidebar input[type="text"] {
+    padding: 0.5rem 0.75rem;
+
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: bold;
+
+    border: 2px solid #000;
+    border-radius: 16px;
+
+    background: #ffffff;
+    outline: none;
+}
+
+.workout-filter.sidebar input[type="text"]:focus {
+    background: #f5f5f5;
+}
+
+/* -----------------------------------------------------
+   Zone Checkboxes
+----------------------------------------------------- */
+
+.zone-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.zone-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.zone-checkbox input {
+    width: 16px;
+    height: 16px;
+}
+
+.zone-checkbox span {
+    padding: 0.3rem 0.5rem;
+
+    background: #ffffff;
+    border: 2px solid #000;
+
+    border-radius: 10px;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.zone-checkbox input:checked + span {
+    background: #ff9100;
+}
+
+.zone-checkbox:hover span {
+    transform: translateY(-1px);
+}
+
+/* -----------------------------------------------------
+   Filter Buttons
+----------------------------------------------------- */
+
+.form-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-submit,
+.filter-form-btn {
+    padding: 0.6rem 1.4rem;
+
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: bold;
+
+    background: #ffffff;
+    color: #000;
+
+    border: 2px solid #000;
+    border-radius: 16px;
+
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.filter-submit:hover,
+.filter-form-btn:hover {
+    background: #ff9100;
+    transform: translateY(-2px);
+}
+
+/* =====================================================
+   Single Workout Page
+===================================================== */
+
+.workout-page {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+
+    background: #ffffff;
+    border: 2px solid #000;
+    border-radius: 20px;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+}
+
+.workout-page h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+/* Large Graph */
+
+.workout-page .workout-graph {
+    width: 90%;
+    height: 400px;
+
+    margin: 0 auto 1.5rem auto;
+    padding: 1rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 2px solid #000;
+    border-radius: 16px;
+    background: #fafafa;
+}
+
+/* =====================================================
+   Responsive
+===================================================== */
+
+@media (max-width: 768px) {
+    .workout-page {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .workout-page .workout-graph {
+        height: 220px;
+        width: 100%;
+    }
+}

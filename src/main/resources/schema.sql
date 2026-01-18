@@ -23,3 +23,10 @@ CREATE TABLE IF NOT EXISTS users (
      password  VARCHAR(255) NOT NULL,
      usertype ENUM('ADMIN', 'MEMBER', 'USER') NOT NULL DEFAULT 'USER'
 )ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS favourites (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP not null,
+    username BIGINT not null,
+    workout_id BIGINT not null
+)
