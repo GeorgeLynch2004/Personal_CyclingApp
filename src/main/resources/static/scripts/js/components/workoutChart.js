@@ -1,18 +1,22 @@
 import { zoneColor } from "../utils/zones.js";
 import { formatDuration } from "../utils/formatters.js";
 
-export function createWorkoutGraph(canvas, structure) {
-    const { points, midpoints } = buildPowerSeries(structure);
+let chart;
+export function createWorkoutGraph(canvas, structure, refreshChart = true) {
+    const { points, totalDuration } = buildPowerSeries(structure);
 
-    new Chart(canvas.getContext("2d"), {
+    if (chart && refreshChart) chart.destroy();
+
+    chart = new Chart(canvas.getContext("2d"), {
         type: "line",
         data: {
             datasets: [{
                 data: points,
-                stepped: true,
+                stepped: "after",
                 fill: true,
                 pointRadius: 0,
                 borderWidth: 2,
+                tension: 0,
                 segment: {
                     borderColor: ctx => zoneColor(ctx.p0.parsed.y),
                     backgroundColor: ctx => zoneColor(ctx.p0.parsed.y, 0.3)
@@ -22,30 +26,21 @@ export function createWorkoutGraph(canvas, structure) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: false,
 
             scales: {
                 x: {
                     type: "linear",
-
-                    grid: {
-                        display: false,
-                        drawBorder: false
-                    },
-                    ticks: {
-                        display: false
-                    }
+                    min: 0,
+                    max: totalDuration,
+                    grid: { display: false },
+                    ticks: { display: false }
                 },
                 y: {
                     min: 0,
                     max: 7,
-
-                    grid: {
-                        display: false,
-                        drawBorder: false
-                    },
-                    ticks: {
-                        display: false
-                    }
+                    grid: { display: false },
+                    ticks: { display: false }
                 }
             },
 
@@ -54,25 +49,22 @@ export function createWorkoutGraph(canvas, structure) {
                 tooltip: { enabled: false }
             }
         }
-
     });
 }
+
 
 function buildPowerSeries(structure) {
     let time = 0;
     const points = [];
-    const midpoints = [];
 
     structure.forEach(interval => {
         points.push({ x: time, y: interval.powerZone });
         time += interval.duration;
         points.push({ x: time, y: interval.powerZone });
-
-        midpoints.push({
-            value: time - interval.duration / 2,
-            label: formatDuration(interval.duration)
-        });
     });
 
-    return { points, midpoints };
+    points.push({ x: time, y: 0 });
+
+    return { points, totalDuration: time };
 }
+

@@ -7,6 +7,8 @@ public class WorkoutsFactory {
     public static WorkoutEntity createWorkoutEntityFromForm(WorkoutForm workoutForm) {
         return new WorkoutEntity(
                 LocalDateTime.now(),
+                workoutForm.getCreatedBy(),
+                WorkoutPrivacy.PRIVATE,
                 workoutForm.getName(),
                 workoutForm.getDescription(),
                 workoutForm.getStructure(),

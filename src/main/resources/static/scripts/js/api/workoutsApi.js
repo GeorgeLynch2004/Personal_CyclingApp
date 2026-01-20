@@ -7,8 +7,32 @@ export async function getAllWorkouts() {
     return res.json();
 }
 
+export async function getPublicWorkouts(){
+    const res = await fetch("/workouts/getPublic");
+    if (!res.ok) throw new Error("Failed to fetch public workouts");
+    return res.json();
+}
+
+export async function getCreatedWorkouts(){
+    const res = await fetch("/workouts/getByCreated");
+    if (!res.ok) throw new Error("Failed to fetch created workouts");
+    return res.json();
+}
+
 export async function filterWorkouts(params) {
     const res = await fetch(`/workouts/filter?${params}`);
     if (!res.ok) throw new Error("Failed to filter workouts");
     return res.json();
+}
+
+export async function postWorkout(workout){
+    return fetch("/workouts/add", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify(workout)
+    });
 }

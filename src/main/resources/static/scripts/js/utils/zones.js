@@ -23,3 +23,18 @@ export function convertTargetZonesToString(zones) {
     };
     return zones.map(z => dict[z]).join(", ");
 }
+
+export function getPresentZones(workout) {
+    const zones = [];
+
+    workout.forEach(interval => {
+        const zone = Number(interval.powerZone);
+
+        if (!zones.includes(zone)) {
+            zones.push(zone);
+        }
+    });
+
+    console.log(zones);
+    return zones;
+}

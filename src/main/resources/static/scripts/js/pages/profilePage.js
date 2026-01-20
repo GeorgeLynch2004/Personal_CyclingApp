@@ -1,6 +1,7 @@
 import { getUser } from "../api/usersApi.js";
 import {renderWorkouts} from "../components/workoutCard.js";
 import {getFavouritesByUsername} from "../api/favouritesApi.js";
+import {getCreatedWorkouts} from "../api/workoutsApi.js";
 
 const { username } = window.APP_USER;
 
@@ -17,14 +18,23 @@ try {
     console.error("Failed to load user", err);
 }
 
-const container = document.getElementById("favouriteWorkoutsContainer");
+const favouritesContainer = document.getElementById("favouriteWorkoutsContainer");
 const template = document.getElementById("favouriteWorkoutTemplate");
 
 try {
     const data = await getFavouritesByUsername(username);
-    await renderWorkouts(container, template, data);
+    await renderWorkouts(favouritesContainer, template, data);
 } catch (err) {
     console.error("Failed to render favourited workouts", err);
+}
+
+const createdContainer = document.getElementById("createdWorkoutsContainer");
+
+try {
+    const data = await getCreatedWorkouts();
+    await renderWorkouts(createdContainer, template, data);
+} catch (err){
+    console.error("Failed to render created workouts", err);
 }
 
 

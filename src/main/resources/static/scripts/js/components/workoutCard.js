@@ -35,7 +35,8 @@ export async function renderWorkouts(container, template, workouts) {
         container.appendChild(card);
         createWorkoutGraph(
             container.lastElementChild.querySelector("canvas"),
-            workout.structure
+            workout.structure,
+            false
         );
     }
 }

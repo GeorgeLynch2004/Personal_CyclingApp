@@ -1,5 +1,5 @@
 /* Page layout */
-.login-page {
+.form-page {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,7 +8,7 @@
 }
 
 /* Login card */
-.login-card {
+.form-card {
     width: 360px;
     background: #ffffff;
 
@@ -24,7 +24,7 @@
 }
 
 /* Title */
-.login-card h1 {
+.form-card h1 {
     margin: 0;
     font-size: 1.5rem;
     font-weight: bold;
@@ -33,19 +33,19 @@
 }
 
 /* Form fields */
-.login-field {
+.form-field {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
 }
 
-.login-field label {
+.form-field label {
     font-size: 0.85rem;
     font-weight: bold;
     color: #555;
 }
 
-.login-field input {
+.form-field input {
     padding: 0.55rem 0.75rem;
     border: 2px solid #000;
     border-radius: 12px;
@@ -53,12 +53,12 @@
     outline: none;
 }
 
-.login-field input:focus {
+.form-field input:focus {
     border-color: #ff9100;
 }
 
 /* Submit button */
-.login-button {
+.form-button {
     margin-top: 0.5rem;
     align-self: flex-start;
 
@@ -75,7 +75,7 @@
     transition: background 0.2s ease, transform 0.1s ease;
 }
 
-.login-button:hover {
+.form-button:hover {
     background: #ff9100;
     transform: translateY(-1px);
 }

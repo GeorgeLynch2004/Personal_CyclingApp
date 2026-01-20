@@ -5,14 +5,14 @@
     <title>Login</title>
     <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
     <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/loginForm.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/form.css}">
 
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<div class="login-page">
-    <div class="login-card">
+<div class="form-page">
+    <div class="form-card">
         <h1>Login</h1>
 
         <form th:action="@{/login}" method="post">
@@ -20,19 +20,19 @@
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}" />
 
-            <div class="login-field">
+            <div class="form-field">
                 <label for="username">Username</label>
                 <input id="username" type="text" name="username" placeholder="username"/>
             </div>
 
-            <div class="login-field">
+            <div class="form-field">
                 <label for="password">Password</label>
                 <input id="password" type="password" name="password" placeholder="password" />
             </div>
             <div id="formFeedback">
 
             </div>
-            <button class="login-button" type="submit">Sign In</button>
+            <button class="form-button" type="submit">Sign In</button>
         </form>
     </div>
 </div>

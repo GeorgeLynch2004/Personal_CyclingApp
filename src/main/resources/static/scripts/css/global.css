@@ -25,3 +25,13 @@
     font-weight: 800;
     margin-bottom: 1.5rem;
 }
+
+
+/*
+    Split two row container
+ */
+.two-row-container{
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
