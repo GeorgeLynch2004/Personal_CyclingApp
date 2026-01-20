@@ -1,9 +1,11 @@
 package CyclingApp.workouts;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
@@ -33,6 +35,8 @@ public class WorkoutsRepository implements IWorkoutsRepository {
                 return new WorkoutEntity(
                         rs.getLong("id"),
                         rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getString("created_by"),
+                        WorkoutPrivacy.valueOf(rs.getString("privacy_status")),
                         rs.getString("name"),
                         rs.getString("description"),
                         objectMapper.readValue(
@@ -51,20 +55,39 @@ public class WorkoutsRepository implements IWorkoutsRepository {
     }
 
     @Override
-    public ResponseEntity<List<WorkoutEntity>> getAllWorkouts() {
+    public List<WorkoutEntity> getAllWorkouts() {
         String sql = "SELECT * FROM workouts";
-        return ResponseEntity.ok().body(jdbcTemplate.query(sql, rowMapper));
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
     @Override
-    public ResponseEntity<WorkoutEntity> getWorkoutById(long id) {
+    public List<WorkoutEntity> getPublicWorkouts(){
+        String sql = "SELECT * FROM workouts WHERE privacy_status='PUBLIC'";
+        try{
+            return jdbcTemplate.query(sql, rowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public WorkoutEntity getWorkoutById(long id) {
         String sql = "SELECT * FROM workouts WHERE id = ?";
 
         try {
-            WorkoutEntity workout = jdbcTemplate.queryForObject(sql, rowMapper, id);
-            return ResponseEntity.ok(workout);
+            return jdbcTemplate.queryForObject(sql, rowMapper, id);
         } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.notFound().build();
+            return null;
+        }
+    }
+
+    @Override
+    public List<WorkoutEntity> getWorkoutsByCreator(User user){
+        String sql = "SELECT * FROM workouts WHERE created_by = ?";
+        try {
+            return jdbcTemplate.query(sql, rowMapper, user.getUsername());
+        } catch (EmptyResultDataAccessException e){
+            return null;
         }
     }
 
@@ -108,13 +131,15 @@ public class WorkoutsRepository implements IWorkoutsRepository {
     public void addWorkout(WorkoutEntity workout) {
         String sql = """
         INSERT INTO workouts
-        (created_at, name, description, structure, target_zones)
-        VALUES (?, ?, ?, ?, ?)
+        (created_at, created_by, privacy_status, name, description, structure, target_zones)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 
         jdbcTemplate.update(
                 sql,
                 Timestamp.valueOf(workout.getCreatedAt()),
+                workout.getCreatedBy(),
+                workout.getPrivacyStatus().toString(),
                 workout.getName(),
                 workout.getDescription(),
                 objectMapper.writeValueAsString(workout.getStructure()),

@@ -80,6 +80,11 @@
 
     </div>
 </body>
+<script th:inline="javascript">
+    window.APP_USER = {
+        username: [[${#authentication.name}]]
+    };
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module" th:src="@{/scripts/js/pages/builderPage.js}"></script>
 </html>

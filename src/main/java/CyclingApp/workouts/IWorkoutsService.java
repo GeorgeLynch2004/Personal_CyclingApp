@@ -1,12 +1,16 @@
 package CyclingApp.workouts;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
 public interface IWorkoutsService {
-    public ResponseEntity<List<WorkoutEntity>> getAllWorkouts();
-    public ResponseEntity<WorkoutEntity> getWorkoutById(long id);
-    public ResponseEntity<List<WorkoutEntity>> getWorkoutsByFilter(String name, String description, List<Integer> targetZones);
+    public List<WorkoutEntity> getAllWorkouts();
+    public List<WorkoutEntity> getPublicWorkouts();
+    public WorkoutEntity getWorkoutById(long id, User user);
+    public List<WorkoutEntity> getWorkoutsByCreator(User user);
+    public List<WorkoutEntity> getWorkoutsByFilter(String name, String description, List<Integer> targetZones);
     public void addWorkoutFromForm(WorkoutForm workoutForm);
 }

@@ -2,6 +2,7 @@ package CyclingApp.workouts.favourites;
 
 import CyclingApp.workouts.Interval;
 import CyclingApp.workouts.WorkoutEntity;
+import CyclingApp.workouts.WorkoutPrivacy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,8 @@ public class WorkoutFavouritesRepository implements IWorkoutFavouritesRepository
                 return new WorkoutEntity(
                         rs.getLong("id"),
                         rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getString("created_by"),
+                        WorkoutPrivacy.valueOf(rs.getString("privacy_status")),
                         rs.getString("name"),
                         rs.getString("description"),
                         objectMapper.readValue(

@@ -1,10 +1,10 @@
-import { getAllWorkouts, filterWorkouts } from "../api/workoutsApi.js";
+import {getAllWorkouts, filterWorkouts, getPublicWorkouts} from "../api/workoutsApi.js";
 import { renderWorkouts } from "../components/workoutCard.js";
 
 const container = document.getElementById("workoutsContainer");
 const template = document.getElementById("workoutCardTemplate");
 
-const workouts = await getAllWorkouts();
+const workouts = await getPublicWorkouts();
 await renderWorkouts(container, template, workouts);
 
 const toggleBtn = document.getElementById('filterToggle');

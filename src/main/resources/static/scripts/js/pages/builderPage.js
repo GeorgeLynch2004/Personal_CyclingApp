@@ -3,6 +3,7 @@ import {validCadence, validPowerZone} from "../utils/validators.js";
 import {getPresentZones} from "../utils/zones.js";
 import {postWorkout} from "../api/workoutsApi.js";
 
+const { username } = window.APP_USER;
 const container = document.getElementById("intervalsList");
 const template = document.getElementById("intervalItemTemplate");
 let intervalList = [];
@@ -57,6 +58,7 @@ document.getElementById("workoutSaveBtn")
 
         const payload = {
             name: document.getElementById("workoutName").value,
+            createdBy: username,
             description: document.getElementById("workoutDescription").value,
             structure: intervalList,
             targetZones: getPresentZones(intervalList)
