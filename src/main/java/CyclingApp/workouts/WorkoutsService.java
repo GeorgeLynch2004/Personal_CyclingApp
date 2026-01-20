@@ -38,8 +38,8 @@ public class WorkoutsService implements IWorkoutsService {
     }
 
     @Override
-    public ResponseEntity<Void> addWorkoutFromForm(WorkoutForm workoutForm) {
+    public void addWorkoutFromForm(WorkoutForm workoutForm) {
         WorkoutEntity newWorkoutEntity = WorkoutsFactory.createWorkoutEntityFromForm(workoutForm);
-        return ResponseEntity.ok().build();
+        workoutsRepository.addWorkout(newWorkoutEntity);
     }
 }

@@ -99,8 +99,7 @@ async function renderWorkouts(container, template, workouts) {
 }
 function createWorkoutGraph(canvas, structure) {
     const { points, midpoints } = buildPowerSeries(structure);
-
-    new Chart(canvas.getContext("2d"), {
+    chart = new Chart(canvas.getContext("2d"), {
         type: "line",
         data: {
             datasets: [{

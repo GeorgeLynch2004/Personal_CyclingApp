@@ -12,3 +12,15 @@ export async function filterWorkouts(params) {
     if (!res.ok) throw new Error("Failed to filter workouts");
     return res.json();
 }
+
+export async function postWorkout(workout){
+    return fetch("/workouts/add", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify(workout)
+    });
+}

@@ -8,5 +8,5 @@ public interface IWorkoutsService {
     public ResponseEntity<List<WorkoutEntity>> getAllWorkouts();
     public ResponseEntity<WorkoutEntity> getWorkoutById(long id);
     public ResponseEntity<List<WorkoutEntity>> getWorkoutsByFilter(String name, String description, List<Integer> targetZones);
-    public ResponseEntity<Void> addWorkoutFromForm(WorkoutForm workoutForm);
+    public void addWorkoutFromForm(WorkoutForm workoutForm);
 }

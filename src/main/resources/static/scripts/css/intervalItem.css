@@ -1,0 +1,46 @@
+.interval-item-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    gap: 1rem;
+
+    padding: 1rem;
+
+    border: 2px solid #000;
+    border-radius: 16px;
+
+    background-color: #ffffff;
+}
+
+.interval-item-actions {
+    flex-basis: 100%;   /* new row */
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.interval-item-data {
+    font-weight: bold;
+    margin: 0;
+}
+
+.interval-item-container {
+    width: 360px;
+    background: #ffffff;
+
+    border: 2px solid #000;
+    border-radius: 16px;
+
+    max-height: 228px;
+    overflow-y: auto;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 1.75rem 2rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}

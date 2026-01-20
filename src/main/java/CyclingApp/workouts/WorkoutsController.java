@@ -53,15 +53,11 @@ public class WorkoutsController {
 
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping("/add")
-    public ResponseEntity<Void> addWorkout(@Valid @ModelAttribute WorkoutForm workoutForm) {
+    public ResponseEntity<Void> addWorkout(@Valid @RequestBody WorkoutForm workoutForm) {
+        System.out.println("Received controller addWorkout(): " + workoutForm.toString());
         workoutsService.addWorkoutFromForm(workoutForm);
         return ResponseEntity.ok().build();
     }
-
-    //endregion
-
-    //region Workout Favourite's
-
 
     //endregion
 }
