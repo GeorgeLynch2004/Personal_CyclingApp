@@ -1,4 +1,5 @@
 import {createWorkoutGraph} from "./workoutChart.js";
+import {getNextId} from "../pages/builderPage.js";
 
 export function renderIntervalItems(container, template, intervals, setIntervals, getIntervals){
     Array.from(container.children).forEach(child => {
@@ -12,6 +13,11 @@ export function renderIntervalItems(container, template, intervals, setIntervals
         intervalItem.getElementById("intervalItemDuration").textContent = "Duration: " + interval.duration;
         intervalItem.getElementById("intervalItemZone").textContent = "Zone: " + interval.powerZone;
         intervalItem.getElementById("intervalItemCadence").textContent = "Cadence: " + interval.targetCadence;
+
+        intervalItem.getElementById("intervalItemDuplicateBtn").addEventListener('click', () => {
+            setIntervals(list => duplicateItem(interval, list));
+        });
+
         intervalItem.getElementById("intervalItemUpBtn").addEventListener('click', () => {
             setIntervals(list =>
                 moveItemUp(
@@ -48,6 +54,22 @@ export function renderIntervalItems(container, template, intervals, setIntervals
     const canvas = document.getElementById("workoutGraphCanvas");
     createWorkoutGraph(canvas, getIntervals(), true);
 }
+
+export function duplicateItem(interval, intervals) {
+    const index = intervals.findIndex(i => i.id === interval.id);
+    if (index === -1) return intervals;
+
+    const duplicated = {
+        ...interval,
+        id: getNextId(intervals)
+    };
+
+    const copy = [...intervals];
+    copy.splice(index + 1, 0, duplicated);
+    return copy;
+}
+
+
 
 export function moveItemUp(index, intervals){
     if (index <= 0) return intervals;

@@ -1,5 +1,5 @@
 import {addItem, renderIntervalItems} from "../components/intervalItemList.js";
-import {validCadence, validPowerZone} from "../utils/validators.js";
+import {validCadence, validPowerZone, validWorkout} from "../utils/validators.js";
 import {getPresentZones} from "../utils/zones.js";
 import {postWorkout} from "../api/workoutsApi.js";
 
@@ -7,8 +7,6 @@ const { username } = window.APP_USER;
 const container = document.getElementById("intervalsList");
 const template = document.getElementById("intervalItemTemplate");
 let intervalList = [];
-
-let id = 0;
 const formDuration = document.getElementById("intervalDuration");
 const formZone = document.getElementById("intervalZone");
 const formCadence = document.getElementById("intervalCadence");
@@ -18,6 +16,11 @@ function setIntervals(updater){
     renderIntervalItems(container, template, intervalList, setIntervals, getIntervals);
 }
 
+export function getNextId(intervals) {
+    return Math.max(0, ...intervals.map(i => i.id)) + 1;
+}
+
+
 function getIntervals(){
     return intervalList;
 }
@@ -26,7 +29,6 @@ document
     .getElementById("intervalSubmitButton")
     .addEventListener("click", (e) => {
         e.preventDefault();
-
         if (
             !validCadence(formCadence.valueAsNumber) ||
             !validPowerZone(formZone.valueAsNumber)
@@ -37,7 +39,7 @@ document
         setIntervals(list =>
             addItem(
                 {
-                    id: id++,
+                    id: getNextId(list),
                     duration: formDuration.valueAsNumber,
                     powerZone: formZone.valueAsNumber,
                     targetCadence: formCadence.valueAsNumber
@@ -63,6 +65,10 @@ document.getElementById("workoutSaveBtn")
             structure: intervalList,
             targetZones: getPresentZones(intervalList)
         };
+
+        if (!validWorkout(payload)){
+            console.error("Payload was invalid and was not sent.");
+        }
 
         console.log("Payload intervals: " + JSON.stringify(payload.structure));
 

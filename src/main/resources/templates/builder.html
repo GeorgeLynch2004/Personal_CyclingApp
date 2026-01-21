@@ -50,6 +50,7 @@
                         <p id="intervalItemZone" class="interval-item-data">Zone: Threshold</p>
                         <p id="intervalItemCadence" class="interval-item-data">Cadence: 00rpm</p>
                         <div class="interval-item-actions">
+                            <button class="workout-expandButton" id="intervalItemDuplicateBtn">⎘</button>
                             <button class="workout-expandButton" id="intervalItemUpBtn">↑</button>
                             <button class="workout-expandButton" id="intervalItemDownBtn">↓</button>
                             <button class="workout-expandButton" id="intervalItemRemoveBtn">X</button>
@@ -72,7 +73,7 @@
                     Add a description</label>
                 <textarea name="workoutDescription" id="workoutDescription" placeholder="Description"></textarea>
             </div>
-            <div>
+            <div class="workout-actions">
                 <button type="submit" name="workoutSave" id="workoutSaveBtn">Save to your collection</button>
                 <button type="submit" name="workoutPost" id="workoutPostBtn">Post to the site</button>
             </div>
