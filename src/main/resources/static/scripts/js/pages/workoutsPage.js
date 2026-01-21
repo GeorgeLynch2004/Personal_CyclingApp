@@ -5,7 +5,15 @@ const container = document.getElementById("workoutsContainer");
 const template = document.getElementById("workoutCardTemplate");
 
 const workouts = await getPublicWorkouts();
-await renderWorkouts(container, template, workouts);
+const elements = {
+    name: "workoutName",
+    description: "workoutDescription",
+    targetZones: "workoutTargetZones",
+    expandButton: "workoutExpandButton",
+    favouriteButton: "workoutFavouriteButton",
+    deleteButton: "workoutDeleteButton"
+}
+await renderWorkouts(container, template, elements, workouts);
 
 const toggleBtn = document.getElementById('filterToggle');
 const sidebar = document.getElementById('filterSidebar');
@@ -47,7 +55,7 @@ async function getFiltered(filterForm) {
         console.log(res);
 
 
-        await renderWorkouts(container, template, res);
+        await renderWorkouts(container, template, elements, res);
     } catch (err) {
         console.error("Failed to fetch filtered workouts:", err);
     }

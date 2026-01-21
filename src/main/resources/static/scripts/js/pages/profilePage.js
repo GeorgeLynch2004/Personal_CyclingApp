@@ -23,16 +23,32 @@ const template = document.getElementById("favouriteWorkoutTemplate");
 
 try {
     const data = await getFavouritesByUsername(username);
-    await renderWorkouts(favouritesContainer, template, data);
+    const elements = {
+        name: "workoutName",
+        description: "workoutDescription",
+        targetZones: "workoutTargetZones",
+        expandButton: "workoutExpandButton",
+        favouriteButton: "workoutFavouriteButton"
+    }
+    await renderWorkouts(favouritesContainer, template,elements, data);
 } catch (err) {
     console.error("Failed to render favourited workouts", err);
 }
 
 const createdContainer = document.getElementById("createdWorkoutsContainer");
+const createdTemplate = document.getElementById("createdWorkoutTemplate");
 
 try {
     const data = await getCreatedWorkouts();
-    await renderWorkouts(createdContainer, template, data);
+    const elements = {
+        name: "createdWorkoutName",
+        description: "createdWorkoutDescription",
+        targetZones: "createdWorkoutTargetZones",
+        expandButton: "createdWorkoutExpandButton",
+        favouriteButton: "createdWorkoutFavouriteButton",
+        deleteButton: "createdWorkoutDeleteButton"
+    }
+    await renderWorkouts(createdContainer, createdTemplate, elements, data);
 } catch (err){
     console.error("Failed to render created workouts", err);
 }

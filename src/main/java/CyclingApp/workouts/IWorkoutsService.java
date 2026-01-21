@@ -13,4 +13,5 @@ public interface IWorkoutsService {
     public List<WorkoutEntity> getWorkoutsByCreator(User user);
     public List<WorkoutEntity> getWorkoutsByFilter(String name, String description, List<Integer> targetZones);
     public void addWorkoutFromForm(WorkoutForm workoutForm);
+    public void deleteWorkout(Long id, User user);
 }

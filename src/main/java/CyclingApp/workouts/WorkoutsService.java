@@ -66,4 +66,9 @@ public class WorkoutsService implements IWorkoutsService {
         WorkoutEntity newWorkoutEntity = WorkoutsFactory.createWorkoutEntityFromForm(workoutForm);
         workoutsRepository.addWorkout(newWorkoutEntity);
     }
+
+    @Override
+    public void deleteWorkout(Long id, User user){
+        workoutsRepository.deleteWorkout(id, user);
+    }
 }

@@ -7,6 +7,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -20,12 +21,14 @@ import java.util.List;
 public class WorkoutsController {
 
     private final UsersService usersService;
+    private final JdbcTemplate jdbcTemplate;
     IWorkoutsService workoutsService;
 
     @Autowired
-    public WorkoutsController(IWorkoutsService workoutsService, UsersService usersService) {
+    public WorkoutsController(IWorkoutsService workoutsService, UsersService usersService, JdbcTemplate jdbcTemplate) {
         this.workoutsService = workoutsService;
         this.usersService = usersService;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     //region WorkoutEntity's
@@ -69,6 +72,12 @@ public class WorkoutsController {
     public ResponseEntity<Void> addWorkout(@Valid @RequestBody WorkoutForm workoutForm) {
         System.out.println("Received createdBy as " + workoutForm.getCreatedBy());
         workoutsService.addWorkoutFromForm(workoutForm);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteWorkout(@RequestBody Long id, @AuthenticationPrincipal User user){
+        workoutsService.deleteWorkout(id, user);
         return ResponseEntity.ok().build();
     }
 

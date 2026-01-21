@@ -36,3 +36,15 @@ export async function postWorkout(workout){
         body: JSON.stringify(workout)
     });
 }
+
+export async function deleteWorkout(id){
+    return fetch("/workouts/delete", {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify(id)
+    });
+}
