@@ -14,4 +14,5 @@ public interface IWorkoutsRepository
     public List<WorkoutEntity> getWorkoutsByCreator(User user);
     public List<WorkoutEntity> getWorkoutsByFilter(String name, String description, List<Integer> targetZones);
     public void addWorkout(WorkoutEntity newWorkoutEntity);
+    public void deleteWorkout(Long id, User user);
 }

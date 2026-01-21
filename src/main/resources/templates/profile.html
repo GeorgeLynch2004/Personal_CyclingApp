@@ -50,7 +50,32 @@
     </div>
     <h1>Created Workouts</h1>
     <div id="createdWorkoutsContainer" class="section-container">
+        <template id="createdWorkoutTemplate">
+            <div id="createdWorkoutCard" class="favourite-workout-card favourite-workout-card--horizontal">
+                <div id="createdWorkoutGraph" class="favourite-workout-graph">
+                    <canvas></canvas>
+                </div>
+                <div class="favourite-workout-content">
+                    <h3 id="createdWorkoutName" class="favourite-workout-name"></h3>
+                    <p id="createdWorkoutDescription" class="favourite-workout-description"></p>
+                    <p id="createdWorkoutTargetZones" class="favourite-workout-targetZones"></p>
+                    <div class="favourite-workout-actions">
+                        <button id="createdWorkoutDeleteButton" class="favourite-workout-expandButton">Delete</button>
+                        <a id="createdWorkoutExpandButton" class="favourite-workout-expandButton">View</a>
+                        <button
+                                id="createdWorkoutFavouriteButton"
+                                class="favourite-workout-favouriteButton workout-favouriteButton"
+                                type="button"
+                                aria-pressed="false"
+                                aria-label="Add to favourites">
+                            Favourite
+                        </button>
+                    </div>
 
+                </div>
+
+            </div>
+        </template>
     </div>
     <script th:inline="javascript">
         window.APP_USER = {

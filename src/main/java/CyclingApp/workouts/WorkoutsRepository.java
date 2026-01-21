@@ -146,4 +146,10 @@ public class WorkoutsRepository implements IWorkoutsRepository {
                 objectMapper.writeValueAsString(workout.getTargetZones())
         );
     }
+
+    @Override
+    public void deleteWorkout(Long id, User user){
+        String sql = "DELETE FROM workouts WHERE id=? AND created_by=?";
+        jdbcTemplate.update(sql, id, user.getUsername());
+    }
 }
