@@ -6,19 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-@Controller
+@RestController
 @RequestMapping("/workouts/download")
 public class WorkoutDownloadController {
 
@@ -32,8 +31,14 @@ public class WorkoutDownloadController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
+    @CrossOrigin(exposedHeaders = HttpHeaders.CONTENT_DISPOSITION)
     public ResponseEntity<Resource> download(@PathVariable Long id, @AuthenticationPrincipal User user) throws IOException, URISyntaxException {
         WorkoutEntity workout = workoutsService.getWorkoutById(id, user);
+
+        if (workout == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         ByteArrayResource resource = workoutDownloadService.createFitWorkout(
                 250,

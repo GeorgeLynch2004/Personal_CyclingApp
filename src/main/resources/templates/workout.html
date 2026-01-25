@@ -12,6 +12,7 @@
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
     <div class="workout-page">
+        <div hidden="hidden" th:text="${workout.id}"></div>
         <h1 th:text="${workout.name}"></h1>
         <div class="workout-targetZones" th:text="${workout.targetZones}"></div>
         <div class="workout-graph">
@@ -19,16 +20,27 @@
         </div>
 
         <p class="workout-description" th:text="${workout.description}"></p>
-
+        <div class="workout-actions">
+            <button class="workout-expandButton" id="workoutDownloadBtn">Download .FIT</button>
+        </div>
     </div>
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script th:src="@{/scripts/js/workouts.js}"></script>
+<script th:src="@{/scripts/js/api/downloadsApi.js}"></script>
 <script th:inline="javascript">
+
+    const workoutId = [[${workout.id}]];
     const workoutStructure = [[${workout.structure}]];
     const targetZones = [[${workout.targetZones}]];
     const canvas = document.querySelector(".workout-graph canvas");
     const zones = document.querySelector(".workout-targetZones").textContent = convertTargetZonesToString(targetZones);
     createWorkoutGraph(canvas, workoutStructure);
+
+    const workoutDownloadBtn = document.getElementById("workoutDownloadBtn");
+
+    workoutDownloadBtn.addEventListener('click', async () => {
+        await downloadWorkout(workoutId);
+    });
 </script>
