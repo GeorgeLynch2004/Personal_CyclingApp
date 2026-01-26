@@ -62,13 +62,30 @@ public class WorkoutsService implements IWorkoutsService {
     }
 
     @Override
-    public void addWorkoutFromForm(WorkoutForm workoutForm) {
+    public void addWorkoutFromForm(WorkoutForm workoutForm, User user) {
+
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN"));
+
+        if (!isAdmin && workoutForm.getPrivacyStatus() == WorkoutPrivacy.PUBLIC) {
+            workoutForm.setPrivacyStatus(WorkoutPrivacy.PENDING_APPROVAL);
+        }
+
         WorkoutEntity newWorkoutEntity = WorkoutsFactory.createWorkoutEntityFromForm(workoutForm);
         workoutsRepository.addWorkout(newWorkoutEntity);
     }
 
     @Override
     public void deleteWorkout(Long id, User user){
-        workoutsRepository.deleteWorkout(id, user);
+
+        WorkoutEntity workout = workoutsRepository.getWorkoutById(id);
+
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN"));
+
+
+        if (isAdmin || workout.getCreatedBy().equals(user.getUsername())) {
+            workoutsRepository.deleteWorkout(id, user);
+        }
     }
 }

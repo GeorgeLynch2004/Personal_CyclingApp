@@ -23,6 +23,9 @@ public class WorkoutForm {
     @NotBlank(message = "description cannot be blank")
     private String description;
 
+    @NotNull(message = "privacy status cannot be null")
+    private WorkoutPrivacy privacyStatus;
+
     @NotEmpty(message = "structureJson cannot be empty")
     private List<Interval> structure;
 

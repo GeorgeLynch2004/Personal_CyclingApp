@@ -21,14 +21,12 @@ import java.util.List;
 public class WorkoutsController {
 
     private final UsersService usersService;
-    private final JdbcTemplate jdbcTemplate;
     IWorkoutsService workoutsService;
 
     @Autowired
-    public WorkoutsController(IWorkoutsService workoutsService, UsersService usersService, JdbcTemplate jdbcTemplate) {
+    public WorkoutsController(IWorkoutsService workoutsService, UsersService usersService) {
         this.workoutsService = workoutsService;
         this.usersService = usersService;
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     //region WorkoutEntity's
@@ -69,12 +67,13 @@ public class WorkoutsController {
 
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping("/add")
-    public ResponseEntity<Void> addWorkout(@Valid @RequestBody WorkoutForm workoutForm) {
+    public ResponseEntity<Void> addWorkout(@Valid @RequestBody WorkoutForm workoutForm, @AuthenticationPrincipal User user) {
         System.out.println("Received createdBy as " + workoutForm.getCreatedBy());
-        workoutsService.addWorkoutFromForm(workoutForm);
+        workoutsService.addWorkoutFromForm(workoutForm, user);
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteWorkout(@RequestBody Long id, @AuthenticationPrincipal User user){
         workoutsService.deleteWorkout(id, user);

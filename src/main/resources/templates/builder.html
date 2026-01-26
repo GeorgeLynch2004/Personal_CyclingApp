@@ -73,9 +73,17 @@
                     Add a description</label>
                 <textarea name="workoutDescription" id="workoutDescription" placeholder="Description"></textarea>
             </div>
+            <div class="form-field">
+                <label for="workoutPrivacy">
+                    Manage your Workouts Privacy Preference
+                </label>
+                <select name="workoutPrivacy" id="workoutPrivacy">
+                    <option value="PRIVATE">private</option>
+                    <option value="PUBLIC">public</option>
+                </select>
+            </div>
             <div class="workout-actions">
                 <button type="submit" name="workoutSave" id="workoutSaveBtn">Save to your collection</button>
-                <button type="submit" name="workoutPost" id="workoutPostBtn">Post to the site</button>
             </div>
         </form>
 
