@@ -41,6 +41,8 @@
     const workoutDownloadBtn = document.getElementById("workoutDownloadBtn");
 
     workoutDownloadBtn.addEventListener('click', async () => {
+        workoutDownloadBtn.disabled = true;
         await downloadWorkout(workoutId);
+        workoutDownloadBtn.disabled = false;
     });
 </script>

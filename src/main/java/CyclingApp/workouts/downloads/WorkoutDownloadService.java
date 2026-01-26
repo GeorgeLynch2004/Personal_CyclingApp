@@ -3,25 +3,32 @@ import CyclingApp.workouts.Interval;
 import CyclingApp.workouts.WorkoutEntity;
 import com.garmin.fit.*;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 
 @Service
 public class WorkoutDownloadService implements IWorkoutDownloadService {
 
     @Override
-    public ByteArrayResource createFitWorkout(int ftp, WorkoutEntity workout) throws RuntimeException, IOException, URISyntaxException {
+    public ByteArrayResource createFitWorkout(int ftp, WorkoutEntity workout)
+        throws IOException {
+
+        Path tempFile = null;
 
         try {
-            String filename = workout.getName().replace(" ", "_") + ".fit";
-            java.io.File file = new java.io.File(filename);
+            String filename = workout.getName().replace(" ", "_");
+
+            tempFile = Files.createTempFile(filename, ".fit");
+            java.io.File file = tempFile.toFile();
 
             FileEncoder encoder = new FileEncoder(file, Fit.ProtocolVersion.V1_0);
 
-            // ---- FILE ID ----
             FileIdMesg fileId = new FileIdMesg();
             fileId.setType(File.WORKOUT);
             fileId.setManufacturer(Manufacturer.GARMIN);
@@ -29,7 +36,6 @@ public class WorkoutDownloadService implements IWorkoutDownloadService {
             fileId.setTimeCreated(new DateTime(new Date()));
             encoder.write(fileId);
 
-            // ---- WORKOUT META ----
             WorkoutMesg workoutMesg = new WorkoutMesg();
             workoutMesg.setWktName(workout.getName());
             workoutMesg.setSport(Sport.CYCLING);
@@ -37,7 +43,6 @@ public class WorkoutDownloadService implements IWorkoutDownloadService {
             workoutMesg.setNumValidSteps(workout.getStructure().size());
             encoder.write(workoutMesg);
 
-            // ---- WORKOUT STEPS ----
             int index = 0;
             for (Interval interval : workout.getStructure()) {
                 encoder.write(createWorkoutStepMessage(ftp, index++, interval));
@@ -45,11 +50,14 @@ public class WorkoutDownloadService implements IWorkoutDownloadService {
 
             encoder.close();
 
-            byte[] bytes = Files.readAllBytes(file.toPath());
+            byte[] bytes = Files.readAllBytes(tempFile);
+
             return new ByteArrayResource(bytes);
 
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create FIT workout", e);
+        } finally {
+            if (tempFile != null) {
+                deleteFile(tempFile);
+            }
         }
     }
 
@@ -83,6 +91,16 @@ public class WorkoutDownloadService implements IWorkoutDownloadService {
             case 7 -> new int[]{(int)(ftp * 1.51), (int)(ftp * 2.00)};
             default -> throw new IllegalArgumentException("Invalid zone");
         };
+    }
+
+    @Async
+    public void deleteFile(Path path) {
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            // log, don't crash
+            System.err.println("Failed to delete file: " + path);
+        }
     }
 }
 

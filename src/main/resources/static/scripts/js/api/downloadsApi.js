@@ -2,6 +2,7 @@ async function downloadWorkout(id) {
     const res = await fetch(`/workouts/download/${id}`);
 
     if (!res.ok) {
+        alert("There was a problem downloading workout. \nPlease try again later.");
         throw new Error("Failed to download workout");
     }
 

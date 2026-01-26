@@ -7,8 +7,10 @@ import org.springframework.core.io.ByteArrayResource;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 
 public interface IWorkoutDownloadService {
     public ByteArrayResource createFitWorkout(int ftp, WorkoutEntity workout) throws RuntimeException, IOException, URISyntaxException;
     public WorkoutStepMesg createWorkoutStepMessage(int ftp, int index, Interval interval);
+    public void deleteFile(Path path) throws IOException;
 }
