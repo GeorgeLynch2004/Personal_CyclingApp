@@ -8,7 +8,7 @@ public class WorkoutsFactory {
         return new WorkoutEntity(
                 LocalDateTime.now(),
                 workoutForm.getCreatedBy(),
-                WorkoutPrivacy.PRIVATE,
+                workoutForm.getPrivacyStatus(),
                 workoutForm.getName(),
                 workoutForm.getDescription(),
                 workoutForm.getStructure(),

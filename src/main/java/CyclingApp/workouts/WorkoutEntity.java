@@ -39,7 +39,7 @@ public class WorkoutEntity {
     public WorkoutEntity(LocalDateTime now, @NotBlank(message = "createdBy cannot be blank on form") String createdBy, WorkoutPrivacy workoutPrivacy, @NotBlank(message = "name cannot be blank") String name, @NotBlank(message = "description cannot be blank") String description, @NotEmpty(message = "structureJson cannot be empty") List<Interval> structure, @NotEmpty(message = "targetZones cannot be empty") List<Integer> targetZones) {
         this.createdAt = now;
         this.createdBy = createdBy;
-        this.privacyStatus = workoutPrivacy;
+        this.privacyStatus = WorkoutPrivacy.valueOf(workoutPrivacy.toString());
         this.name=name;
         this.description = description;
         this.structure = structure;

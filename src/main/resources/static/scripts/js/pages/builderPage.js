@@ -62,6 +62,7 @@ document.getElementById("workoutSaveBtn")
             name: document.getElementById("workoutName").value,
             createdBy: username,
             description: document.getElementById("workoutDescription").value,
+            privacyStatus: document.getElementById("workoutPrivacy").value,
             structure: intervalList,
             targetZones: getPresentZones(intervalList)
         };
