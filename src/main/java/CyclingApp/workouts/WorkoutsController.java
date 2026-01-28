@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class WorkoutsController {
 
     //region WorkoutEntity's
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAll")
     public ResponseEntity<List<WorkoutEntity>> getAllWorkouts() {
         return ResponseEntity.ok().body( workoutsService.getAllWorkouts());
@@ -60,9 +61,23 @@ public class WorkoutsController {
     public ResponseEntity<List<WorkoutEntity>> getAllWorkoutsByFilter(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String description,
-            @RequestParam(required = false) List<Integer> targetZones
+            @RequestParam(required = false) List<Integer> targetZones,
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) LocalDateTime createdAt,
+            @RequestParam(required = false) String createdBy,
+            @RequestParam(required = false) String workoutPrivacy
     ) {
-        return ResponseEntity.ok().body( workoutsService.getWorkoutsByFilter(name, description, targetZones));
+        return ResponseEntity.ok().body(
+                workoutsService
+                        .getWorkoutsByFilter(
+                                name,
+                                description,
+                                targetZones,
+                                id,
+                                createdAt,
+                                createdBy,
+                                WorkoutPrivacy.valueOf(workoutPrivacy)
+                        ));
     }
 
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")

@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UsersController {
@@ -13,6 +15,13 @@ public class UsersController {
 
     public UsersController(IUsersService usersService){
         this.usersService = usersService;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getAll")
+    public ResponseEntity<List<UserEntity>> getAllUsers(){
+        List<UserEntity> users = usersService.getAllUsers();
+        return ResponseEntity.ok().body(users);
     }
 
     @PreAuthorize("#username == authentication.name")

@@ -36,20 +36,25 @@ filterForm.addEventListener("submit", (e) => {
 
 async function getFiltered(filterForm) {
     try {
-        // 1️⃣ Grab form values
-        const name = filterForm.querySelector("#filterWorkoutName").value.trim();
-        const description = filterForm.querySelector("#filterWorkoutDesc").value.trim();
-
-        // 2️⃣ Grab checked target zones
+        const name = filterForm.getElementById("filterWorkoutName").value.trim();
+        const description = filterForm.getElementById("filterWorkoutDesc").value.trim();
         const targetZones = Array.from(
             filterForm.querySelectorAll(".zone-checkbox input:checked")
         ).map(cb => cb.value);
+        const id = filterForm.getElementById("filterWorkoutId").valueAsNumber;
+        const createdAt = filterForm.getElementById("filterWorkoutCreatedAt").getDate();
+        const createdBy = filterForm.getElementById("filterWorkoutCreatedBy").value;
+        const workoutPrivacy = filterForm.getElementById("filterWorkoutPrivacyStatus").value;
 
-        // 3️⃣ Build query string
+
         const params = new URLSearchParams();
         if (name) params.append("name", name);
         if (description) params.append("description", description);
         targetZones.forEach(zone => params.append("targetZones", zone));
+        if (id) params.append("id", id);
+        if(createdAt) params.append("createdAt", createdAt);
+        if(createdBy) params.append("createdBy", createdBy);
+        if(workoutPrivacy) params.append("workoutPrivacy", workoutPrivacy);
 
         const res = await filterWorkouts(params);
         console.log(res);

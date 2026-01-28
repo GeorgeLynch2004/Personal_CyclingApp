@@ -95,8 +95,13 @@ public class WorkoutsRepository implements IWorkoutsRepository {
     public List<WorkoutEntity> getWorkoutsByFilter(
             String name,
             String description,
-            List<Integer> targetZones
+            List<Integer> targetZones,
+            Long id,
+            LocalDateTime createdAt,
+            String createdBy,
+            WorkoutPrivacy workoutPrivacy
     ) {
+
         StringBuilder sql = new StringBuilder("""
         SELECT *
         FROM workouts
@@ -105,19 +110,43 @@ public class WorkoutsRepository implements IWorkoutsRepository {
 
         List<Object> params = new ArrayList<>();
 
+        if (id != null) {
+            sql.append(" AND id = ?");
+            params.add(id);
+        }
+
         if (name != null && !name.isBlank()) {
-            sql.append(" AND LOWER(name) LIKE ?");
-            params.add("%" + name.toLowerCase() + "%");
+            sql.append(" AND name LIKE ?");
+            params.add("%" + name.trim() + "%");
         }
 
         if (description != null && !description.isBlank()) {
-            sql.append(" AND LOWER(description) LIKE ?");
-            params.add("%" + description.toLowerCase() + "%");
+            sql.append(" AND description LIKE ?");
+            params.add("%" + description.trim() + "%");
         }
 
         if (targetZones != null && !targetZones.isEmpty()) {
             sql.append(" AND JSON_OVERLAPS(target_zones, ?)");
             params.add(objectMapper.writeValueAsString(targetZones));
+        }
+
+        if (createdAt != null) {
+            LocalDateTime startOfDay = createdAt.toLocalDate().atStartOfDay();
+            LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+            sql.append(" AND created_at >= ? AND created_at < ?");
+            params.add(startOfDay);
+            params.add(endOfDay);
+        }
+
+        if (createdBy != null && !createdBy.isBlank()) {
+            sql.append(" AND created_by = ?");
+            params.add(createdBy.trim());
+        }
+
+        if (workoutPrivacy != null) {
+            sql.append(" AND privacy_status = ?");
+            params.add(workoutPrivacy.name());
         }
 
         return jdbcTemplate.query(
@@ -126,6 +155,7 @@ public class WorkoutsRepository implements IWorkoutsRepository {
                 params.toArray()
         );
     }
+
 
     @Override
     public void addWorkout(WorkoutEntity workout) {

@@ -2,6 +2,7 @@ package CyclingApp.users;
 
 import CyclingApp.workouts.Interval;
 import CyclingApp.workouts.WorkoutEntity;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,6 +39,16 @@ public class UsersRepository implements IUsersRepository{
                 throw new SQLException("Failed to parse user from db", e);
             }
         };
+    }
+
+    @Override
+    public List<UserEntity> getAllUsers(){
+        String sql = "SELECT * FROM users";
+        try{
+            return jdbcTemplate.query(sql, rowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

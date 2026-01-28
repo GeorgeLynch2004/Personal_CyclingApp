@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Admin</title>
+    <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <h1>Admin</h1>
+    <div class="section-container">
+        <h1>Workouts</h1>
+        <div id="workoutsTableContainer" class="table">
+
+        </div>
+    </div>
+    <div class="section-container">
+        <h1>Users</h1>
+        <div id="usersTableContainer" class="table">
+
+        </div>
+    </div>
+    <script th:inline="javascript">
+        window.APP_USER = {
+            username: [[${#authentication.name}]]
+        };
+    </script>
+    <script type="module" th:src="@{/scripts/js/pages/adminPage.js}"></script>
+    <script type="module" th:src="@{/scripts/js/components/workoutChart.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

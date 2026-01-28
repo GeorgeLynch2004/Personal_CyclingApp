@@ -33,7 +33,10 @@
             </div>
 
             <div class="filter-group">
-                <span class="filter-label">target zones</span>
+                <label>
+                    <span class="filter-label">target zones</span>
+                </label>
+
                 <div class="zone-checkboxes">
                     <label class="zone-checkbox"><input type="checkbox" value="1"><span>zone 1</span></label>
                     <label class="zone-checkbox"><input type="checkbox" value="2"><span>zone 2</span></label>
@@ -43,6 +46,24 @@
                     <label class="zone-checkbox"><input type="checkbox" value="6"><span>zone 6</span></label>
                     <label class="zone-checkbox"><input type="checkbox" value="7"><span>zone 7</span></label>
                 </div>
+            </div>
+
+            <div class="filter-group">
+                <label for="filterWorkoutCreatedBy">Created By</label>
+                <input type="text" id="filterWorkoutCreatedBy" placeholder="Creator">
+            </div>
+
+            <div class="filter-group">
+                <label for="filterWorkoutCreatedAt">Created At</label>
+                <input type="date" id="filterWorkoutCreatedAt" name="filterWorkoutCreatedAt">
+            </div>
+
+            <div class="filter-group">
+                <label for="filterWorkoutPrivacyStatus">Privacy Status</label>
+                <select name="filterWorkoutPrivacyStatus" id="filterWorkoutPrivacyStatus">
+                    <option value="PRIVATE">private</option>
+                    <option value="PUBLIC">public</option>
+                </select>
             </div>
 
             <!-- Buttons row -->
