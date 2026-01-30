@@ -1,0 +1,121 @@
+/* Filter bar container */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+
+    background: #ffffff;
+    border: 2px solid #000;
+    border-radius: 16px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* Individual filter blocks */
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    min-width: 150px;
+    flex: 1 1 160px;
+}
+
+/* Labels */
+.filter-item label {
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Inputs */
+.filter-item input[type="text"],
+.filter-item input[type="date"] {
+    padding: 0.45rem 0.55rem;
+
+    border: 2px solid #000;
+    border-radius: 8px;
+
+    font-size: 0.8rem;
+    background: #fff;
+}
+
+/* Zone filter */
+.zone-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    flex: 2 1 260px;
+}
+
+.zone-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+}
+
+/* Checkbox pills */
+.zone-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    padding: 0.25rem 0.5rem;
+
+    border: 2px solid #000;
+    border-radius: 20px;
+
+    font-size: 0.7rem;
+    cursor: pointer;
+    background: #f9f9f9;
+}
+
+.zone-checkbox input {
+    margin: 0;
+}
+
+/* Buttons group */
+.filter-actions {
+    display: flex;
+    gap: 0.6rem;
+
+    margin-left: auto;
+}
+
+/* Buttons */
+.filter-btn {
+    padding: 0.45rem 0.8rem;
+
+    border: 2px solid #000;
+    border-radius: 10px;
+
+    background: #fff;
+    font-size: 0.75rem;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filter-btn:hover {
+    background: #fff6eb;
+    transform: translateY(-1px);
+}
+
+/* Small screens → stacked */
+@media (max-width: 650px) {
+    .filter-bar {
+        flex-direction: column;
+    }
+
+    .filter-actions {
+        margin-left: 0;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}

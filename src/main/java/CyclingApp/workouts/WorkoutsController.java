@@ -64,8 +64,7 @@ public class WorkoutsController {
             @RequestParam(required = false) List<Integer> targetZones,
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) LocalDateTime createdAt,
-            @RequestParam(required = false) String createdBy,
-            @RequestParam(required = false) String workoutPrivacy
+            @RequestParam(required = false) String createdBy
     ) {
         return ResponseEntity.ok().body(
                 workoutsService
@@ -76,7 +75,7 @@ public class WorkoutsController {
                                 id,
                                 createdAt,
                                 createdBy,
-                                WorkoutPrivacy.valueOf(workoutPrivacy)
+                                WorkoutPrivacy.PUBLIC
                         ));
     }
 

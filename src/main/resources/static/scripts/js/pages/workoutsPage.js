@@ -4,7 +4,6 @@ import { renderWorkouts } from "../components/workoutCard.js";
 const container = document.getElementById("workoutsContainer");
 const template = document.getElementById("workoutCardTemplate");
 
-const workouts = await getPublicWorkouts();
 const elements = {
     name: "workoutName",
     description: "workoutDescription",
@@ -13,7 +12,7 @@ const elements = {
     favouriteButton: "workoutFavouriteButton",
     deleteButton: "workoutDeleteButton"
 }
-await renderWorkouts(container, template, elements, workouts);
+await renderWorkouts(container, template, elements, await getPublicWorkouts());
 
 const toggleBtn = document.getElementById('filterToggle');
 const sidebar = document.getElementById('filterSidebar');
@@ -29,36 +28,66 @@ backBtn.addEventListener('click', () => {
 
 const filterForm = document.getElementById("workoutFilterForm");
 
-filterForm.addEventListener("submit", (e) => {
+filterForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    getFiltered(filterForm);
+
+    const name = document.getElementById("filterWorkoutName").value.trim();
+    const description = document.getElementById("filterWorkoutDesc").value.trim();
+
+    const targetZones = Array.from(
+        filterForm.querySelectorAll(".zone-checkbox input:checked")
+    ).map(cb => cb.value);
+
+    const createdAt = document.getElementById("filterWorkoutCreatedAt").value;
+    const dateEntered = createdAt ? new Date(createdAt) : null;
+
+    const createdBy = document.getElementById("filterWorkoutCreatedBy").value.trim();
+
+    const form = {
+        name,
+        description,
+        targetZones,
+        dateEntered,
+        createdBy
+    };
+
+    await getFiltered(form);
 });
 
-async function getFiltered(filterForm) {
+
+const clearFilterBtn = document.getElementById("clearFilterBtn");
+clearFilterBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    await clearFilters();
+});
+
+async function clearFilters() {
+    // Clear text inputs
+    document.getElementById("filterWorkoutName").value = "";
+    document.getElementById("filterWorkoutDesc").value = "";
+    document.getElementById("filterWorkoutCreatedAt").value = "";
+    document.getElementById("filterWorkoutCreatedBy").value = "";
+
+    // Uncheck all checkboxes
+    filterForm.querySelectorAll(".zone-checkbox input").forEach(cb => {
+        cb.checked = false;
+    });
+
+    await renderWorkouts(container, template, elements, await getPublicWorkouts());
+}
+
+
+async function getFiltered(form) {
     try {
-        const name = filterForm.getElementById("filterWorkoutName").value.trim();
-        const description = filterForm.getElementById("filterWorkoutDesc").value.trim();
-        const targetZones = Array.from(
-            filterForm.querySelectorAll(".zone-checkbox input:checked")
-        ).map(cb => cb.value);
-        const id = filterForm.getElementById("filterWorkoutId").valueAsNumber;
-        const createdAt = filterForm.getElementById("filterWorkoutCreatedAt").getDate();
-        const createdBy = filterForm.getElementById("filterWorkoutCreatedBy").value;
-        const workoutPrivacy = filterForm.getElementById("filterWorkoutPrivacyStatus").value;
-
-
         const params = new URLSearchParams();
-        if (name) params.append("name", name);
-        if (description) params.append("description", description);
-        targetZones.forEach(zone => params.append("targetZones", zone));
-        if (id) params.append("id", id);
-        if(createdAt) params.append("createdAt", createdAt);
-        if(createdBy) params.append("createdBy", createdBy);
-        if(workoutPrivacy) params.append("workoutPrivacy", workoutPrivacy);
+        if (form.name) params.append("name", form.name);
+        if (form.description) params.append("description", form.description);
+        form.targetZones.forEach(zone => params.append("targetZones", form.targetZones));
+        if(form.dateEntered) params.append("createdAt", form.dateEntered.toISOString());
+        if(form.createdBy) params.append("createdBy", form.createdBy.value);
 
         const res = await filterWorkouts(params);
-        console.log(res);
-
 
         await renderWorkouts(container, template, elements, res);
     } catch (err) {
