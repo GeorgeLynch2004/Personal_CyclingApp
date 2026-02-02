@@ -10,7 +10,7 @@
     <link rel="stylesheet" th:href="@{/scripts/css/workouts.css}">
 </head>
 <body>
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
     <div class="workout-page">
         <div hidden="hidden" th:text="${workout.id}"></div>
         <h1 th:text="${workout.name}"></h1>

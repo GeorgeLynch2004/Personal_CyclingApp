@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Admin</title>
+    <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/filterBar.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <h1>Admin</h1>
+    <div class="section-container">
+        <h1>Workouts</h1>
+        <form id="workoutFilterForm" class="filter-bar">
+
+            <div class="filter-item">
+                <label for="filterWorkoutName">name</label>
+                <input type="text" id="filterWorkoutName" placeholder="name">
+            </div>
+
+            <div class="filter-item">
+                <label for="filterWorkoutDesc">description</label>
+                <input type="text" id="filterWorkoutDesc" placeholder="description">
+            </div>
+
+
+
+            <div class="filter-item">
+                <label for="filterWorkoutCreatedBy">created by</label>
+                <input type="text" id="filterWorkoutCreatedBy" placeholder="creator">
+            </div>
+
+            <div class="filter-item">
+                <label for="filterWorkoutCreatedAt">created at</label>
+                <input type="date" id="filterWorkoutCreatedAt">
+            </div>
+
+            <div class="filter-item zone-filter">
+                <label>target zones</label>
+
+                <div class="zone-checkboxes">
+                    <label class="zone-checkbox"><input type="checkbox" value="1"><span>zone 1</span></label>
+                    <label class="zone-checkbox"><input type="checkbox" value="2"><span>zone 2</span></label>
+                    <label class="zone-checkbox"><input type="checkbox" value="3"><span>zone 3</span></label>
+                    <label class="zone-checkbox"><input type="checkbox" value="4"><span>zone 4</span></label>
+                    <label class="zone-checkbox"><input type="checkbox" value="5"><span>zone 5</span></label>
+                    <label class="zone-checkbox"><input type="checkbox" value="6"><span>zone 6</span></label>
+                    <label class="zone-checkbox"><input type="checkbox" value="7"><span>zone 7</span></label>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button type="button" id="clearFilterBtn" class="filter-btn">clear</button>
+                <button type="submit" id="filterFormSubmit" class="filter-btn">filter</button>
+            </div>
+
+        </form>
+        <div id="workoutsTableContainer" class="table">
+
+        </div>
+    </div>
+    <div class="section-container">
+        <h1>Users</h1>
+        <form id="usersFilterForm" class="filter-bar">
+
+            <div class="filter-item">
+                <label for="filterUserId">id</label>
+                <input type="number" id="filterUserId" placeholder="id">
+            </div>
+
+            <div class="filter-item">
+                <label for="filterUserName">name</label>
+                <input type="text" id="filterUserName" placeholder="name">
+            </div>
+
+            <div class="filter-item">
+                <label for="filterUserEmail">email</label>
+                <input type="text" id="filterUserEmail" placeholder="email">
+            </div>
+
+            <div class="filter-item">
+                <label for="filterUserRole">role</label>
+                <input type="text" id="filterUserRole" placeholder="role">
+            </div>
+
+            <div class="filter-actions">
+                <button type="button" id="clearUserFilterBtn" class="filter-btn">clear</button>
+                <button type="submit" id="userFilterFormSubmit" class="filter-btn">filter</button>
+            </div>
+
+        </form>
+        <div id="usersTableContainer" class="table">
+
+        </div>
+    </div>
+    <script th:inline="javascript">
+        window.APP_USER = {
+            username: [[${#authentication.name}]]
+        };
+    </script>
+    <script type="module" th:src="@{/scripts/js/pages/adminPage.js}"></script>
+    <script type="module" th:src="@{/scripts/js/components/workoutChart.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

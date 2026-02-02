@@ -2,6 +2,7 @@ package CyclingApp.users;
 
 import CyclingApp.workouts.Interval;
 import CyclingApp.workouts.WorkoutEntity;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,6 +12,7 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -41,6 +43,16 @@ public class UsersRepository implements IUsersRepository{
     }
 
     @Override
+    public List<UserEntity> getAllUsers(){
+        String sql = "SELECT * FROM users";
+        try{
+            return jdbcTemplate.query(sql, rowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
     public UserEntity getByUsername(String username){
         String sql = "SELECT id, created_at, username, email, password, usertype FROM users WHERE username=?";
         try{
@@ -63,5 +75,32 @@ public class UsersRepository implements IUsersRepository{
     public void addUser(UserEntity user){
         String sql = "INSERT INTO users (created_at, username, email, password) VALUES (?, ?, ?, ?)";
         jdbcTemplate.update(sql, user.getCreatedAt(), user.getUsername(), user.getEmail(), user.getPassword());
+    }
+
+    @Override
+    public List<UserEntity> getUsersByFilter(Long id, String name, String email, String role){
+        StringBuilder sql = new StringBuilder("SELECT * FROM users WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+        if(id != null){
+            sql.append(" AND id = ?");
+            params.add(id);
+        }
+        if(name != null){
+            sql.append(" AND username LIKE ?");
+            params.add("%" + name.trim() + "%");
+        }
+        if(email != null){
+            sql.append(" AND email LIKE ?");
+            params.add("%"+email.trim()+"%");
+        }
+        if(role != null){
+            sql.append(" AND usertype = ?");
+            params.add("%"+role.trim()+"%");
+        }
+        try{
+            return jdbcTemplate.query(sql.toString(), params.toArray(), rowMapper);
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
     }
 }

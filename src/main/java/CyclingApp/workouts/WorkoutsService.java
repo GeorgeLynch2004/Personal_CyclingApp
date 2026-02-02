@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,9 +57,26 @@ public class WorkoutsService implements IWorkoutsService {
     }
 
     @Override
-    public List<WorkoutEntity> getWorkoutsByFilter(String name, String description, List<Integer> targetZones) {
+    public List<WorkoutEntity> getWorkoutsByFilter(
+            String name,
+            String description,
+            List<Integer> targetZones,
+            Long id,
+            LocalDateTime createdAt,
+            String createdBy,
+            WorkoutPrivacy workoutPrivacy
+    ) {
 
-        return workoutsRepository.getWorkoutsByFilter(name, description, targetZones);
+        return workoutsRepository
+                .getWorkoutsByFilter(
+                        name,
+                        description,
+                        targetZones,
+                        id,
+                        createdAt,
+                        createdBy,
+                        workoutPrivacy
+                );
     }
 
     @Override

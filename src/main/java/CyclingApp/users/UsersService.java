@@ -3,6 +3,8 @@ package CyclingApp.users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsersService implements IUsersService{
 
@@ -11,6 +13,11 @@ public class UsersService implements IUsersService{
     @Autowired
     public UsersService(IUsersRepository usersRepository){
         this.usersRepository = usersRepository;
+    }
+
+    @Override
+    public List<UserEntity> getAllUsers(){
+        return usersRepository.getAllUsers();
     }
 
     @Override
@@ -25,5 +32,10 @@ public class UsersService implements IUsersService{
     public void addUser(SignupForm signupForm){
         UserEntity user = UsersFactory.signupFormToUserEntity(signupForm);
         usersRepository.addUser(user);
+    }
+
+    @Override
+    public List<UserEntity> getUsersByFilter(Long id, String name, String email, String role){
+        return usersRepository.getUsersByFilter(id, name, email, role);
     }
 }

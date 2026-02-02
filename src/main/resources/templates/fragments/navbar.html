@@ -19,7 +19,13 @@
             </li>
             <li class="navbar-item" sec:authorize="isAuthenticated()">
                 <a th:href="@{/pages/profile/{username}(username=${#authentication.name})}">
+                    <span>Profile: </span>
                     <span th:text="${#authentication.name}"></span>
+                </a>
+            </li>
+            <li class="navbar-item" sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/pages/admin}">
+                    Administrator
                 </a>
             </li>
             <li sec:authorize="isAuthenticated()">

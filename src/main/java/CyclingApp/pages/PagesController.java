@@ -69,4 +69,10 @@ public class PagesController {
     public String profile(@PathVariable String username){
         return "profile";
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin")
+    public String admin(){
+        return "admin";
+    }
 }

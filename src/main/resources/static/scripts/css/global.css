@@ -35,3 +35,74 @@
     flex: 1;
     justify-content: center;
 }
+
+.table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    background: #ffffff;
+    border: 2px solid #000;
+    border-radius: 12px;
+
+    font-size: 0.85rem;
+    color: #222;
+}
+
+/* Header */
+.table thead th {
+    padding: 0.65rem 0.75rem;
+    font-weight: bold;
+    text-align: left;
+
+    background: #f9f9f9;
+    border-bottom: 2px solid #000;
+}
+
+/* Cells */
+.table th,
+.table td {
+    padding: 0.6rem 0.75rem;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+
+    white-space: normal;
+}
+
+/* Remove right border on last column */
+.table th:last-child,
+.table td:last-child {
+    border-right: none;
+}
+
+/* Remove bottom border on last row */
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Rounded corners */
+.table thead th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.table thead th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+/* Subtle row hover */
+.table tbody tr:hover {
+    background: #fff6eb; /* soft orange tint */
+}
+
+.table td {
+    word-break: break-word;
+}
