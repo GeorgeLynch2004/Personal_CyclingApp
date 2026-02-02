@@ -126,6 +126,11 @@
     transform: translateY(-2px);
 }
 
+.workout-favouriteButton.active {
+    background: #ff9100;
+    color: white;
+}
+
 /* =====================================================
    Filter Sidebar
 ===================================================== */

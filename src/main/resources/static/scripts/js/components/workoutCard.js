@@ -2,6 +2,7 @@ import { createWorkoutGraph } from "./workoutChart.js";
 import { convertTargetZonesToString } from "../utils/zones.js";
 import { isFavourite, addFavourite, removeFavourite } from "../api/favouritesApi.js";
 import {deleteWorkout, getCreatedWorkouts} from "../api/workoutsApi.js";
+import {dislikeWorkout, isDisliked, isLiked, likeWorkout, undislikeWorkout, unlikeWorkout} from "../api/likesApi.js";
 
 export async function renderWorkouts(container, template, elements, workouts) {
     container.querySelectorAll(":not(template)").forEach(el => el.remove());
@@ -22,20 +23,47 @@ export async function renderWorkouts(container, template, elements, workouts) {
 
         const favBtn = card.getElementById(elements.favouriteButton);
         if (favBtn){
-            updateUI(favBtn, await isFavourite(workout.id));
+            updateFavouriteUI(favBtn, await isFavourite(workout.id));
 
             favBtn.addEventListener("click", async () => {
                 const isFav = favBtn.getAttribute("aria-pressed") === "true";
-                updateUI(favBtn, !isFav);
+                updateFavouriteUI(favBtn, !isFav);
 
                 const res = isFav
                     ? await removeFavourite(workout.id)
                     : await addFavourite(workout.id);
 
-                if (!res.ok) updateUI(favBtn, isFav);
+                if (!res.ok) updateFavouriteUI(favBtn, isFav);
             });
         }
 
+        const likeBtn = card.getElementById("likeWorkoutBtn");
+
+        if (likeBtn){
+            updateLikeUI(likeBtn, await isLiked(workout.id));
+            likeBtn.addEventListener('click', async (e) => {
+                const liked = likeBtn.getAttribute("aria-pressed") === "true";
+
+                updateLikeUI(likeBtn, !liked);
+
+                const res = liked ? await unlikeWorkout(workout.id) : await likeWorkout(workout.id);
+                if (!res.ok) updateLikeUI(likeBtn, liked);
+            });
+        }
+
+        const dislikeBtn = card.getElementById("dislikeWorkoutButton");
+
+        if (dislikeBtn){
+            updateLikeUI(dislikeBtn, await isDisliked(workout.id));
+            dislikeBtn.addEventListener('click', async (e) => {
+                const disliked = dislikeBtn.getAttribute("aria-pressed") === "true";
+                 updateLikeUI(dislikeBtn, !disliked);
+
+                 const res = disliked ? await undislikeWorkout(workout.id) : await dislikeWorkout(workout.id);
+                 if (!res.ok) updateLikeUI(dislikeBtn, disliked);
+
+            });
+        }
 
         const deleteBtn = card.getElementById(elements.deleteButton);
         if (deleteBtn){
@@ -55,7 +83,22 @@ export async function renderWorkouts(container, template, elements, workouts) {
     }
 }
 
-function updateUI(btn, isFav) {
+function updateFavouriteUI(btn, isFav) {
     btn.setAttribute("aria-pressed", isFav);
     btn.textContent = isFav ? "Unfavourite" : "Favourite";
+    if (isFav){
+        btn.classList.add('active');
+    }
+
+}
+
+function updateLikeUI(btn, isActive){
+    btn.setAttribute("aria-pressed", isActive);
+    if (isActive){
+        btn.classList.add('active');
+    }
+    else{
+        btn.classList.remove('active');
+    }
+
 }

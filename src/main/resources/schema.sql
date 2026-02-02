@@ -27,4 +27,18 @@ CREATE TABLE IF NOT EXISTS favourites (
     created_at TIMESTAMP not null,
     user_id BIGINT not null,
     workout_id BIGINT not null
-)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS likes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP not null,
+    user_id BIGINT not null,
+    workout_id BIGINT not null
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS dislikes (
+     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+     created_at TIMESTAMP not null,
+     user_id BIGINT not null,
+     workout_id BIGINT not null
+) ENGINE=InnoDB;
