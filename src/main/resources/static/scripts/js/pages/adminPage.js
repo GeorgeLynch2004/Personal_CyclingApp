@@ -1,5 +1,5 @@
 import {filterWorkouts, getAllWorkouts, getPublicWorkouts} from "../api/workoutsApi.js";
-import {getAllUsers} from "../api/usersApi.js";
+import {filterUsers, getAllUsers} from "../api/usersApi.js";
 
 function renderDbVisualisation(div, content) {
     if (!div || !Array.isArray(content) || content.length === 0) {
@@ -73,7 +73,8 @@ filterForm.addEventListener("submit", async (e) => {
         createdBy
     };
 
-    await getFiltered(form);
+    const res = await filterWorkouts(form);
+    renderDbVisualisation(document.getElementById("workoutsTableContainer"), res);
 });
 
 
@@ -81,10 +82,10 @@ const clearFilterBtn = document.getElementById("clearFilterBtn");
 clearFilterBtn.addEventListener('click', async (e) => {
     e.preventDefault();
 
-    await clearFilters();
+    await clearWorkoutFilters();
 });
 
-async function clearFilters() {
+async function clearWorkoutFilters() {
     // Clear text inputs
     document.getElementById("filterWorkoutName").value = "";
     document.getElementById("filterWorkoutDesc").value = "";
@@ -99,21 +100,40 @@ async function clearFilters() {
     renderDbVisualisation(document.getElementById("workoutsTableContainer"),await getPublicWorkouts());
 }
 
+const userFilterForm = document.getElementById("usersFilterForm");
 
-async function getFiltered(form) {
-    try {
-        const params = new URLSearchParams();
-        if (form.name) params.append("name", form.name);
-        if (form.description) params.append("description", form.description);
-        form.targetZones.forEach(zone => params.append("targetZones", form.targetZones));
-        if(form.dateEntered) params.append("createdAt", form.dateEntered.toISOString());
-        if(form.createdBy) params.append("createdBy", form.createdBy);
+userFilterForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        const res = await filterWorkouts(params);
+    const id = document.getElementById("filterUserId").valueAsNumber;
+    const name = document.getElementById("filterUserName").value.trim();
+    const email = document.getElementById("filterUserEmail").value.trim();
+    const role = document.getElementById("filterUserRole").value.trim();
 
-        await renderDbVisualisation(document.getElementById("workoutsTableContainer"), res);
-    } catch (err) {
-        console.error("Failed to fetch filtered workouts:", err);
+    const form = {
+        id,
+        name,
+        email,
+        role
     }
-}
 
+    const res = await filterUsers(form);
+    renderDbVisualisation(document.getElementById("usersTableContainer"),res);
+});
+
+const userFilterClearBtn = document.getElementById("clearUserFilterBtn");
+
+userFilterClearBtn.addEventListener("click", async (e) =>{
+    e.preventDefault();
+
+    await clearUserFilters();
+});
+
+async function clearUserFilters(){
+    const id = document.getElementById("filterUserId").value = "";
+    const name = document.getElementById("filterUserName").value = "";
+    const email = document.getElementById("filterUserEmail").value = "";
+    const role = document.getElementById("filterUserRole").value = "";
+
+    renderDbVisualisation(document.getElementById("usersTableContainer"),await getAllUsers());
+}

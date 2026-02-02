@@ -8,4 +8,5 @@ public interface IUsersService
     public UserEntity getByUsername(String username);
     public UserEntity getByEmail(String email);
     public void addUser(SignupForm signupForm);
+    public List<UserEntity> getUsersByFilter(Long id, String name, String email, String role);
 }

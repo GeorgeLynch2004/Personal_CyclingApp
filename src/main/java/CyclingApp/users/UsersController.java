@@ -59,4 +59,17 @@ public class UsersController {
         usersService.addUser(signupForm);
         return ResponseEntity.ok().build();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/filter")
+    public ResponseEntity<List<UserEntity>> getUsersByFilter(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String role
+    ){
+        return ResponseEntity.ok().body(
+                usersService.getUsersByFilter(id, name, email, role)
+        );
+    }
 }

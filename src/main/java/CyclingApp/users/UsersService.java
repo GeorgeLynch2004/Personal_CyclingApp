@@ -33,4 +33,9 @@ public class UsersService implements IUsersService{
         UserEntity user = UsersFactory.signupFormToUserEntity(signupForm);
         usersRepository.addUser(user);
     }
+
+    @Override
+    public List<UserEntity> getUsersByFilter(Long id, String name, String email, String role){
+        return usersRepository.getUsersByFilter(id, name, email, role);
+    }
 }

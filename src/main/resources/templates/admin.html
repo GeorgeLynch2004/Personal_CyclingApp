@@ -10,7 +10,7 @@
     <link rel="stylesheet" th:href="@{/scripts/css/filterBar.css}">
 </head>
 <body>
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
     <h1>Admin</h1>
     <div class="section-container">
         <h1>Workouts</h1>
@@ -67,7 +67,7 @@
 
             <div class="filter-item">
                 <label for="filterUserId">id</label>
-                <input type="text" id="filterUserId" placeholder="id">
+                <input type="number" id="filterUserId" placeholder="id">
             </div>
 
             <div class="filter-item">

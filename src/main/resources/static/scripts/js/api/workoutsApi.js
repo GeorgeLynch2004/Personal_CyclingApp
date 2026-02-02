@@ -19,7 +19,14 @@ export async function getCreatedWorkouts(){
     return res.json();
 }
 
-export async function filterWorkouts(params) {
+export async function filterWorkouts(form) {
+    const params = new URLSearchParams();
+    if (form.name) params.append("name", form.name);
+    if (form.description) params.append("description", form.description);
+    form.targetZones.forEach(zone => params.append("targetZones", form.targetZones));
+    if(form.dateEntered) params.append("createdAt", form.dateEntered.toISOString());
+    if(form.createdBy) params.append("createdBy", form.createdBy);
+
     const res = await fetch(`/workouts/filter?${params}`);
     if (!res.ok) throw new Error("Failed to filter workouts");
     return res.json();

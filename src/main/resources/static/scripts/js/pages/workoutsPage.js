@@ -51,7 +51,8 @@ filterForm.addEventListener("submit", async (e) => {
         createdBy
     };
 
-    await getFiltered(form);
+    const res = await filterWorkouts(form);
+    await renderWorkouts(container, template, elements, res);
 });
 
 
@@ -77,23 +78,6 @@ async function clearFilters() {
     await renderWorkouts(container, template, elements, await getPublicWorkouts());
 }
 
-
-async function getFiltered(form) {
-    try {
-        const params = new URLSearchParams();
-        if (form.name) params.append("name", form.name);
-        if (form.description) params.append("description", form.description);
-        form.targetZones.forEach(zone => params.append("targetZones", form.targetZones));
-        if(form.dateEntered) params.append("createdAt", form.dateEntered.toISOString());
-        if(form.createdBy) params.append("createdBy", form.createdBy.value);
-
-        const res = await filterWorkouts(params);
-
-        await renderWorkouts(container, template, elements, res);
-    } catch (err) {
-        console.error("Failed to fetch filtered workouts:", err);
-    }
-}
 
 
 
