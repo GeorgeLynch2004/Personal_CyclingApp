@@ -8,7 +8,26 @@
 </head>
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
-    <h1>Home Page</h1>
-    <p>paragraph paragraph</p>
+    <section class="section-container">
+        <h1>Pedal 4 Progress</h1>
+        <h3>The free, lightweight workout creation and downloading platform.</h3>
+        <a th:href="@{/pages/workouts}">View workouts</a>
+    </section>
+    <section class="section-container">
+        <h2>How it Works</h2>
+        <div class="section-container">
+            <h3>Download Workouts</h3>
+            <p>Download premade workouts easily into .FIT format, ready for plug and play with Garmin, Wahoo, & Hammerhead bike computers.</p>
+        </div>
+        <div class="section-container">
+            <h3>Create Workouts</h3>
+            <p>Design interval sessions, from recovery to HIIT using an intuitive visualisation tool to save and download them for future use.</p>
+        </div>
+        <div class="section-container">
+            <h3>Like and Favourite Workouts</h3>
+            <p>Leave feedback and favourite public workouts and view them on your individual profile for future quick access.</p>
+        </div>
+    </section>
+
 </body>
 </html>
