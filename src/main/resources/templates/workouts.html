@@ -10,7 +10,7 @@
     <link rel="stylesheet" th:href="@{/scripts/css/workouts.css}">
 </head>
 <body>
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
     <div class="page-start">
         <h1>Workouts</h1>
 
@@ -77,6 +77,26 @@
                 <p id="workoutDescription" class="workout-description"></p>
                 <p id="workoutTargetZones" class="workout-targetZones"></p>
                 <div class="workout-actions">
+                    <button
+                            class="workout-favouriteButton"
+                            aria-pressed="false"
+                            type="button"
+                            id="likeWorkoutBtn"
+                            aria-label="Like workout"
+                    >
+                        00
+                        👍
+                    </button>
+                    <button
+                            class="workout-favouriteButton"
+                            type="button"
+                            id="dislikeWorkoutButton"
+                            aria-pressed="false"
+                            aria-label="Dislike workout"
+                    >
+                        00
+                        👎
+                    </button>
                     <a id="workoutExpandButton" class="workout-expandButton" href="">view</a>
                     <button
                             class="workout-favouriteButton"

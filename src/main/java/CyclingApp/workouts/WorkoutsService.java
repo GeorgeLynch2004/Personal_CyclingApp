@@ -106,4 +106,5 @@ public class WorkoutsService implements IWorkoutsService {
             workoutsRepository.deleteWorkout(id, user);
         }
     }
+
 }
