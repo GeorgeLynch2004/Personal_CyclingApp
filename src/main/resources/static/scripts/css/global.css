@@ -2,19 +2,24 @@
     font-family: Consolas, "Courier New", monospace;
 }
 
+body {
+    background: #0f0f0f;
+    color: #e0e0e0;
+}
+
 /*
-    Standard section container
+    Standard section container - Dark Mode
  */
 .section-container {
     max-width: 900px;
     margin: 2rem auto;
     padding: 2rem;
 
-    background: #ffffff;
-    border: 2px solid #000;
+    background: #1e1e1e;
+    border: 1px solid #3a3a3a;
     border-radius: 20px;
 
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
 }
 
 /*
@@ -24,6 +29,7 @@
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 1.5rem;
+    color: #ffffff;
 }
 
 
@@ -42,12 +48,12 @@
     border-collapse: separate;
     border-spacing: 0;
 
-    background: #ffffff;
-    border: 2px solid #000;
+    background: #1e1e1e;
+    border: 1px solid #3a3a3a;
     border-radius: 12px;
 
     font-size: 0.85rem;
-    color: #222;
+    color: #e0e0e0;
 }
 
 /* Header */
@@ -56,16 +62,17 @@
     font-weight: bold;
     text-align: left;
 
-    background: #f9f9f9;
-    border-bottom: 2px solid #000;
+    background: #2a2a2a;
+    border-bottom: 1px solid #3a3a3a;
+    color: #ffffff;
 }
 
 /* Cells */
 .table th,
 .table td {
     padding: 0.6rem 0.75rem;
-    border-right: 1px solid #000;
-    border-bottom: 1px solid #000;
+    border-right: 1px solid #3a3a3a;
+    border-bottom: 1px solid #3a3a3a;
 
     white-space: normal;
 }
@@ -100,11 +107,10 @@
 
 /* Subtle row hover */
 .table tbody tr:hover {
-    background: #fff6eb; /* soft orange tint */
+    background: #2a3a4a;
 }
 
 .table td {
     word-break: break-word;
+    color: #ffffff;
 }
-
-
