@@ -9,4 +9,6 @@ public interface IWorkoutLikesService {
     public void undislikeWorkout(Long id, User user);
     public boolean usersLikedWorkout(Long id,  User user);
     public boolean usersDislikedWorkout(Long id, User user);
+    public Integer getLikesCount(Long id);
+    public Integer getDislikesCount(Long id);
 }

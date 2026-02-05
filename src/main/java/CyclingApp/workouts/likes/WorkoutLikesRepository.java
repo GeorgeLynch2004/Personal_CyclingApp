@@ -136,4 +136,26 @@ public class WorkoutLikesRepository implements IWorkoutLikesRepository {
             return false;
         }
     }
+
+    @Override
+    public Integer getLikesCount(Long id){
+        String sql = "select count(*) from likes where workout_id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class, id);
+        }
+        catch (EmptyResultDataAccessException e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public Integer getDislikesCount(Long id){
+        String sql = "select count(*) from dislikes where workout_id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class, id);
+        }
+        catch (EmptyResultDataAccessException e) {
+            return 0;
+        }
+    }
 }

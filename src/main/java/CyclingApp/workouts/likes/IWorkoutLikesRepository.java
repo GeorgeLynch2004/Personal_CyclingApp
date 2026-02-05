@@ -11,4 +11,7 @@ public interface IWorkoutLikesRepository {
     public void removeDislike(Long userId, Long workoutId);
     public boolean userLikedWorkout(Long userId, Long workoutId);
     public boolean userDislikedWorkout(Long userId, Long workoutId);
+    public Integer getDislikesCount(Long id);
+    public Integer getLikesCount(Long id);
+
 }

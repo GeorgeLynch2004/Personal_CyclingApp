@@ -62,4 +62,16 @@ public class WorkoutLikesController {
     public ResponseEntity<Boolean> usersDislikedWorkout(@PathVariable Long workout_id, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(workoutLikesService.usersDislikedWorkout(workout_id, user));
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{workout_id}/likes")
+    public ResponseEntity<Integer> getLikes(@PathVariable Long workout_id) {
+        return ResponseEntity.ok().body(workoutLikesService.getLikesCount(workout_id));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{workout_id}/dislikes")
+    public ResponseEntity<Integer> getDislikes(@PathVariable Long workout_id) {
+        return ResponseEntity.ok().body(workoutLikesService.getDislikesCount(workout_id));
+    }
 }

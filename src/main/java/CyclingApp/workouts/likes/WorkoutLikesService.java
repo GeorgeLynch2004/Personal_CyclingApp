@@ -48,4 +48,14 @@ public class WorkoutLikesService implements IWorkoutLikesService {
         return workoutLikesRepository.userDislikedWorkout(usersRepository.getByUsername(user.getUsername()).getId(), id);
     }
 
+    @Override
+    public Integer getLikesCount(Long id){
+        return workoutLikesRepository.getLikesCount(id);
+    }
+
+    @Override
+    public Integer getDislikesCount(Long id){
+        return workoutLikesRepository.getDislikesCount(id);
+    }
+
 }

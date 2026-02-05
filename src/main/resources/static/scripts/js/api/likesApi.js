@@ -61,3 +61,15 @@ export async function isDisliked(workoutId){
     if (!res.ok) throw new Error("Failed to check if workout is disliked");
     return res.json();
 }
+
+export async function getLikes(workoutId){
+    const res = await fetch(`/workouts/likes/${workoutId}/likes`);
+    if (!res.ok) throw new Error("Failed to get likes count");
+    return res.json();
+}
+
+export async function getDislikes(workoutId){
+    const res = await fetch(`/workouts/likes/${workoutId}/dislikes`);
+    if (!res.ok) throw new Error("Failed to get dislikes count");
+    return res.json();
+}
