@@ -14,6 +14,7 @@ public class UserEntity {
     String email;
     String password;
     String role;
+    int ftp;
 
     public UserEntity(LocalDateTime createdAt, String username, String email, String password){
         this.createdAt = createdAt;
@@ -21,4 +22,5 @@ public class UserEntity {
         this.email = email;
         this.password = password;
     }
+
 }

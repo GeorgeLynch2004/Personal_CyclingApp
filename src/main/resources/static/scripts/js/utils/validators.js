@@ -130,3 +130,19 @@ export function validWorkout(payload) {
     return true;
 }
 
+export function validateFtp(ftp) {
+    // Required
+    if (!Number.isInteger(ftp)) {
+        console.error("FTP must be a whole number.");
+        return false;
+    }
+
+    // Realistic cycling range
+    if (ftp < 80 || ftp > 600) {
+        console.error("FTP must be between 80 and 600 watts.");
+        return false;
+    }
+
+    return true;
+}
+

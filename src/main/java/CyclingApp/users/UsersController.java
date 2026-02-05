@@ -3,6 +3,8 @@ package CyclingApp.users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -71,5 +73,12 @@ public class UsersController {
         return ResponseEntity.ok().body(
                 usersService.getUsersByFilter(id, name, email, role)
         );
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/setUserFtp")
+    public ResponseEntity<Void> setUserFtp(@RequestBody UpdateFtpRequest request, @AuthenticationPrincipal User user){
+        usersService.setUserFtp(request.getFtp(), user);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,7 @@
 package CyclingApp.workouts.downloads;
 
+import CyclingApp.users.IUsersRepository;
+import CyclingApp.users.IUsersService;
 import CyclingApp.workouts.IWorkoutsService;
 import CyclingApp.workouts.WorkoutEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,13 @@ public class WorkoutDownloadController {
 
     public IWorkoutDownloadService workoutDownloadService;
     public IWorkoutsService workoutsService;
+    private final IUsersService usersService;
 
     @Autowired
-    public WorkoutDownloadController(IWorkoutDownloadService workoutDownloadService, IWorkoutsService workoutsService){
+    public WorkoutDownloadController(IWorkoutDownloadService workoutDownloadService, IWorkoutsService workoutsService, IUsersService usersService){
         this.workoutDownloadService = workoutDownloadService;
         this.workoutsService = workoutsService;
+        this.usersService = usersService;
     }
 
     @GetMapping("/{id}")
@@ -41,7 +45,7 @@ public class WorkoutDownloadController {
         }
 
         ByteArrayResource resource = workoutDownloadService.createFitWorkout(
-                250,
+                usersService.getByUsername(user.getUsername()).getFtp(),
                 workout
         );
         return ResponseEntity.ok()
