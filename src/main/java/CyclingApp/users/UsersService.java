@@ -1,6 +1,7 @@
 package CyclingApp.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,5 +38,10 @@ public class UsersService implements IUsersService{
     @Override
     public List<UserEntity> getUsersByFilter(Long id, String name, String email, String role){
         return usersRepository.getUsersByFilter(id, name, email, role);
+    }
+
+    @Override
+    public void setUserFtp(int ftp, User user){
+        usersRepository.setUserFtpById(ftp, usersRepository.getByUsername(user.getUsername()).getId());
     }
 }

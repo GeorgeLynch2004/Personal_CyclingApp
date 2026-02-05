@@ -1,7 +1,9 @@
 package CyclingApp.workouts.downloads;
+import CyclingApp.users.IUsersRepository;
 import CyclingApp.workouts.Interval;
 import CyclingApp.workouts.WorkoutEntity;
 import com.garmin.fit.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

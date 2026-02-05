@@ -19,7 +19,9 @@ CREATE TABLE IF NOT EXISTS users (
      username VARCHAR(40) not null unique ,
      email     VARCHAR(150) NOT NULL UNIQUE,
      password  VARCHAR(255) NOT NULL,
-     usertype ENUM('ADMIN', 'MEMBER', 'USER') NOT NULL DEFAULT 'USER'
+     usertype ENUM('ADMIN', 'MEMBER', 'USER') NOT NULL DEFAULT 'USER',
+
+     ftp smallint unsigned not null default 200
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS favourites (

@@ -9,4 +9,5 @@ public interface IUsersRepository
     public UserEntity getByEmail(String email);
     public void addUser(UserEntity user);
     public List<UserEntity> getUsersByFilter(Long id, String name, String email, String role);
+    public void setUserFtpById(int ftp, Long id);
 }

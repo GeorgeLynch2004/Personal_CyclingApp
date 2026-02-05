@@ -35,7 +35,8 @@ public class UsersRepository implements IUsersRepository{
                         rs.getString("username"),
                         rs.getString("email"),
                         rs.getString("password"),
-                        rs.getString("usertype"));
+                        rs.getString("usertype"),
+                        rs.getInt("ftp"));
             } catch (Exception e) {
                 throw new SQLException("Failed to parse user from db", e);
             }
@@ -54,7 +55,7 @@ public class UsersRepository implements IUsersRepository{
 
     @Override
     public UserEntity getByUsername(String username){
-        String sql = "SELECT id, created_at, username, email, password, usertype FROM users WHERE username=?";
+        String sql = "SELECT * FROM users WHERE username=?";
         try{
             return jdbcTemplate.queryForObject(sql, rowMapper, username); // returns a EmptyResultDataAccessException rather than null
         } catch (EmptyResultDataAccessException e){
@@ -63,7 +64,7 @@ public class UsersRepository implements IUsersRepository{
     }
     @Override
     public UserEntity getByEmail(String email){
-        String sql = "SELECT id, created_at, username, email, password, usertype FROM users WHERE email=?";
+        String sql = "SELECT * FROM users WHERE email=?";
         try{
             return jdbcTemplate.queryForObject(sql, rowMapper, email);
         } catch (EmptyResultDataAccessException e){
@@ -101,6 +102,15 @@ public class UsersRepository implements IUsersRepository{
             return jdbcTemplate.query(sql.toString(), params.toArray(), rowMapper);
         } catch (EmptyResultDataAccessException e){
             return null;
+        }
+    }
+
+    @Override
+    public void setUserFtpById(int ftp, Long id){
+        String sql = "UPDATE users SET ftp=? WHERE id=?";
+        try {
+            jdbcTemplate.update(sql, ftp, id);
+        } catch (Exception ignored){
         }
     }
 }
