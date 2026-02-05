@@ -20,6 +20,11 @@ public class WorkoutLikesService implements IWorkoutLikesService {
 
     @Override
     public void likeWorkout(Long id, User user){
+        // If the workout is already disliked we must ensure that the client cannot also like the workout, instead we undislike the workout to ensure consistency
+        if (workoutLikesRepository.userDislikedWorkout(usersRepository.getByUsername(user.getUsername()).getId(), id)){
+            workoutLikesRepository.removeDislike(usersRepository.getByUsername(user.getUsername()).getId(), id);
+        }
+
         workoutLikesRepository.addLike(usersRepository.getByUsername(user.getUsername()).getId(), id);
     }
 
@@ -30,6 +35,11 @@ public class WorkoutLikesService implements IWorkoutLikesService {
 
     @Override
     public void dislikeWorkout(Long id, User user){
+        // If workout is already liked we must ensure that the client cannot also dislike the workout, instead we unlike before dislike
+        if (workoutLikesRepository.userLikedWorkout(usersRepository.getByUsername(user.getUsername()).getId(), id)){
+            workoutLikesRepository.removeLike(usersRepository.getByUsername(user.getUsername()).getId(), id);
+        }
+
         workoutLikesRepository.addDislike(usersRepository.getByUsername(user.getUsername()).getId(), id);
     }
 

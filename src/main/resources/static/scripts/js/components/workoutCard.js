@@ -46,34 +46,75 @@ export async function renderWorkouts(container, template, elements, workouts) {
         }
 
         const likeBtn = card.getElementById("likeWorkoutBtn");
-
-        if (likeBtn){
-            updateLikeUI(likeBtn, await isLiked(workout.id), await getLikes(workout.id) + "👍");
-            likeBtn.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const liked = likeBtn.getAttribute("aria-pressed") === "true";
-                const res = liked ? await unlikeWorkout(workout.id) : await likeWorkout(workout.id);
-                const likesDisplay = await getLikes(workout.id);
-                updateLikeUI(likeBtn, !liked, likesDisplay + "👍");
-            });
-        }
-
         const dislikeBtn = card.getElementById("dislikeWorkoutButton");
 
-        if (dislikeBtn){
-            updateLikeUI(dislikeBtn, await isDisliked(workout.id), await getDislikes(workout.id) + "👎");
-            dislikeBtn.addEventListener('click', async (e) => {
+// Initialize button states
+        async function initializeButtons() {
+            const [liked, disliked, likes, dislikes] = await Promise.all([
+                isLiked(workout.id),
+                isDisliked(workout.id),
+                getLikes(workout.id),
+                getDislikes(workout.id)
+            ]);
+
+            if (likeBtn) {
+                updateLikeUI(likeBtn, liked, `${likes}👍`);
+            }
+            if (dislikeBtn) {
+                updateLikeUI(dislikeBtn, disliked, `${dislikes}👎`);
+            }
+        }
+
+// Shared handler for both buttons
+        async function handleVote(type) {
+            const isLike = type === 'like';
+            const currentBtn = isLike ? likeBtn : dislikeBtn;
+            const otherBtn = isLike ? dislikeBtn : likeBtn;
+
+            const isCurrentlyActive = currentBtn.getAttribute("aria-pressed") === "true";
+
+            if (isCurrentlyActive) {
+                // Remove current vote
+                await (isLike ? unlikeWorkout(workout.id) : undislikeWorkout(workout.id));
+            } else {
+                // Check if opposite is active and remove it
+                if (otherBtn?.getAttribute("aria-pressed") === "true") {
+                    await (isLike ? undislikeWorkout(workout.id) : unlikeWorkout(workout.id));
+                    const otherCount = await (isLike ? getDislikes(workout.id) : getLikes(workout.id));
+                    updateLikeUI(otherBtn, false, `${otherCount}${isLike ? '👎' : '👍'}`);
+                }
+                // Add new vote
+                await (isLike ? likeWorkout(workout.id) : dislikeWorkout(workout.id));
+            }
+
+            // Update current button
+            const currentCount = await (isLike ? getLikes(workout.id) : getDislikes(workout.id));
+            updateLikeUI(currentBtn, !isCurrentlyActive, `${currentCount}${isLike ? '👍' : '👎'}`);
+        }
+
+// Attach event listeners
+        if (likeBtn) {
+            likeBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
-                const disliked = dislikeBtn.getAttribute("aria-pressed") === "true";
-                const res = disliked ? await undislikeWorkout(workout.id) : await dislikeWorkout(workout.id);
-                const dislikesDisplay = await getDislikes(workout.id);
-                updateLikeUI(dislikeBtn, !disliked, dislikesDisplay + "👎");
-                //This is the logic problem, the likes arent updating on teh database before it updates ui so it wont show the new like amount, better off doing it client side adding or minusing -1 so that it always remains consistent and refreshing the page removes that logic entirely and updates via database
-
-
-
+                await handleVote('like');
             });
         }
+
+        if (dislikeBtn) {
+            dislikeBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await handleVote('dislike');
+            });
+        }
+
+        function updateLikeUI(btn, isActive, textDisplay) {
+            btn.setAttribute("aria-pressed", isActive);
+            btn.textContent = textDisplay;
+            btn.classList.toggle('active', isActive);
+        }
+
+// Initialize
+        await initializeButtons();
 
         const deleteBtn = card.getElementById(elements.deleteButton);
         if (deleteBtn){
@@ -98,17 +139,7 @@ function updateFavouriteUI(btn, isFav) {
     btn.textContent = isFav ? "Unfavourite" : "Favourite";
     if (isFav){
         btn.classList.add('active');
-    }
-
-}
-
-function updateLikeUI(btn, isActive, textDisplay){
-    btn.setAttribute("aria-pressed", isActive);
-    btn.textContent = textDisplay;
-    if (isActive){
-        btn.classList.add('active');
-    }
-    else{
+    }else{
         btn.classList.remove('active');
     }
 
