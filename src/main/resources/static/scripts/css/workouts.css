@@ -1,10 +1,11 @@
 /* =====================================================
-   Base Layout
+   Base Layout - Dark Mode
 ===================================================== */
 
 .page-start {
     gap: 1.5rem;
     padding: 1.5rem;
+    background: #0f0f0f;
 }
 
 /* =====================================================
@@ -28,22 +29,23 @@
     display: flex;
     flex-direction: column;
     width: 340px;
-    background: #ffffff;
+    background: #1e1e1e;
 
     padding: 1rem;
 
-    border: 2px solid #000;
+    border: 1px solid #3a3a3a;
     border-radius: 16px;
 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     overflow: hidden;
 
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .workout-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8);
+    border-color: #4a9eff;
 }
 
 /* -----------------------------------------------------
@@ -54,7 +56,7 @@
     font-size: 1.2rem;
     font-weight: bold;
     margin: 1rem 1.25rem 0.5rem;
-    color: #222;
+    color: #ffffff;
 }
 
 .workout-description,
@@ -62,7 +64,7 @@
     margin: 0.5rem 1.25rem;
     font-size: 0.9rem;
     font-weight: bold;
-    color: #555;
+    color: #e0e0e0;
     line-height: 1.4;
 }
 
@@ -88,25 +90,25 @@
 ----------------------------------------------------- */
 
 .workout-actions {
-    margin-top: auto;              /* ⬇ anchor to bottom */
+    margin-top: auto;
     display: flex;
     gap: 0.75rem;
 
-    max-width: 320px;              /* keeps buttons neat */
-    margin-left: auto;             /* ⬅ push to right */
+    max-width: 320px;
+    margin-left: auto;
 }
 
 .workout-expandButton,
 .workout-favouriteButton {
-    flex: 1;                       /* ✅ equal width */
+    flex: 1;
     padding: 0.75rem;
 
     text-align: center;
     border-radius: 12px;
-    border: 2px solid #000;
+    border: 1px solid #3a3a3a;
 
-    background: #efefef;
-    color: #000;
+    background: #2a2a2a;
+    color: #ffffff;
 
     font-size: 0.85rem;
     font-weight: 600;
@@ -117,18 +119,95 @@
 }
 
 .workout-favouriteButton[aria-pressed="true"]{
-    color: #00bbff;
+    color: #ffffff;
+    background: #1e5a9e;
+    border-color: #4a9eff;
 }
 
-.workout-expandButton:hover,
-.workout-favouriteButton:hover {
-    background: #ff9100;
+.workout-expandButton:hover {
+    background: #d4a017;
+    border-color: #f4c430;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 196, 48, 0.3);
+}
+
+.workout-favouriteButton:hover {
+    background: #1e5a9e;
+    border-color: #4a9eff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
 }
 
 .workout-favouriteButton.active {
-    background: #ff9100;
-    color: white;
+    background: #1e5a9e;
+    color: #ffffff;
+    border-color: #4a9eff;
+}
+
+/* Thumbs up button - Green */
+.workout-thumbsUpButton {
+    flex: 1;
+    padding: 0.75rem;
+
+    text-align: center;
+    border-radius: 12px;
+    border: 1px solid #3a3a3a;
+
+    background: #2a2a2a;
+    color: #ffffff;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.workout-thumbsUpButton:hover {
+    background: #2c9a2c;
+    border-color: #60dc64;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Thumbs down button - Red */
+.workout-thumbsDownButton {
+    flex: 1;
+    padding: 0.75rem;
+
+    text-align: center;
+    border-radius: 12px;
+    border: 1px solid #3a3a3a;
+
+    background: #2a2a2a;
+    color: #ffffff;
+
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.workout-thumbsDownButton:hover {
+    background: #f12424;
+    border-color: #fd4b3e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.workout-thumbsUpButton.active {
+    background: #2d7a2d;
+    color: #ffffff;
+    border-color: #4caf50;
+}
+
+.workout-thumbsDownButton.active {
+    background: #b71c1c;
+    color: #ffffff;
+    border-color: #f44336;
 }
 
 /* =====================================================
@@ -144,19 +223,21 @@
     font-size: 0.9rem;
     font-weight: bold;
 
-    background: #ffffff;
-    color: #000;
+    background: #2a2a2a;
+    color: #ffffff;
 
-    border: 2px solid #000;
+    border: 1px solid #3a3a3a;
     border-radius: 16px;
 
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .filter-toggle-btn:hover {
-    background: #ff9100;
+    background: #3a5a7a;
+    border-color: #4a9eff;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
 }
 
 /* ================================
@@ -165,14 +246,14 @@
 
 .workout-filter.sidebar {
     position: fixed;
-    top: 100px;                      /* below navbar */
+    top: 100px;
     left: 0;
 
     width: 340px;
     height: calc(100% - 100px);
 
-    background: #ffffff;
-    border: 2px solid #000;
+    background: #1e1e1e;
+    border: 1px solid #3a3a3a;
     border-radius: 0 16px 16px 0;
 
     padding: 1.25rem;
@@ -182,7 +263,7 @@
     flex-direction: column;
     gap: 1rem;
 
-    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
 
     transform: translateX(-100%);
     transition: transform 0.3s ease;
@@ -211,6 +292,7 @@
     font-size: 0.75rem;
     text-transform: lowercase;
     font-weight: bold;
+    color: #ffffff;
 }
 
 .workout-filter.sidebar input[type="text"] {
@@ -220,15 +302,19 @@
     font-size: 0.85rem;
     font-weight: bold;
 
-    border: 2px solid #000;
+    border: 1px solid #3a3a3a;
     border-radius: 16px;
 
-    background: #ffffff;
+    background: #2a2a2a;
+    color: #ffffff;
     outline: none;
+    transition: all 0.2s ease;
 }
 
 .workout-filter.sidebar input[type="text"]:focus {
-    background: #f5f5f5;
+    background: #323232;
+    border-color: #4a9eff;
+    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
 }
 
 /* -----------------------------------------------------
@@ -259,19 +345,23 @@
 .zone-checkbox span {
     padding: 0.3rem 0.5rem;
 
-    background: #ffffff;
-    border: 2px solid #000;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    color: #ffffff;
 
     border-radius: 10px;
-    transition: background 0.15s ease, transform 0.15s ease;
+    transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
 }
 
 .zone-checkbox input:checked + span {
-    background: #ff9100;
+    background: #3a5a7a;
+    border-color: #4a9eff;
+    color: #ffffff;
 }
 
 .zone-checkbox:hover span {
     transform: translateY(-1px);
+    border-color: #4a9eff;
 }
 
 /* -----------------------------------------------------
@@ -291,20 +381,22 @@
     font-size: 0.85rem;
     font-weight: bold;
 
-    background: #ffffff;
-    color: #000;
+    background: #2a2a2a;
+    color: #ffffff;
 
-    border: 2px solid #000;
+    border: 1px solid #3a3a3a;
     border-radius: 16px;
 
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .filter-submit:hover,
 .filter-form-btn:hover {
-    background: #ff9100;
+    background: #3a5a7a;
+    border-color: #4a9eff;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
 }
 
 /* =====================================================
@@ -316,17 +408,18 @@
     margin: 2rem auto;
     padding: 2rem;
 
-    background: #ffffff;
-    border: 2px solid #000;
+    background: #1e1e1e;
+    border: 1px solid #3a3a3a;
     border-radius: 20px;
 
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
 }
 
 .workout-page h1 {
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 1.5rem;
+    color: #ffffff;
 }
 
 /* Large Graph */
@@ -342,9 +435,9 @@
     justify-content: center;
     align-items: center;
 
-    border: 2px solid #000;
+    border: 1px solid #3a3a3a;
     border-radius: 16px;
-    background: #fafafa;
+    background: #2a2a2a;
 }
 
 /* =====================================================
