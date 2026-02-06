@@ -1,4 +1,4 @@
-import {filterWorkouts, getAllWorkouts, getPublicWorkouts} from "../api/workoutsApi.js";
+import {filterAllWorkouts, getAllWorkouts, getPublicWorkouts, getWorkoutPrivacyOptions} from "../api/workoutsApi.js";
 import {filterUsers, getAllUsers} from "../api/usersApi.js";
 
 function renderDbVisualisation(div, content) {
@@ -25,6 +25,10 @@ function renderDbVisualisation(div, content) {
         headerRow.appendChild(th);
     });
 
+    const editCol = document.createElement('th');
+    editCol.textContent = "options";
+    headerRow.appendChild(editCol);
+
     thead.appendChild(headerRow);
 
     // Create rows
@@ -36,6 +40,15 @@ function renderDbVisualisation(div, content) {
             td.textContent = record[key] ?? '';
             row.appendChild(td);
         });
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "edit";
+        editBtn.name = "editRowBtn";
+        editBtn.addEventListener('click', (e) => {
+            
+        });
+
+        row.appendChild(editBtn);
 
         tbody.appendChild(row);
     });
@@ -49,6 +62,16 @@ renderDbVisualisation(document.getElementById("workoutsTableContainer"),await ge
 renderDbVisualisation(document.getElementById("usersTableContainer"),await getAllUsers());
 
 const filterForm = document.getElementById("workoutFilterForm");
+
+const workoutPrivacyOptions = await getWorkoutPrivacyOptions();
+const workoutPrivacyElement = document.getElementById("filterWorkoutPrivacy");
+console.log(workoutPrivacyOptions);
+workoutPrivacyOptions.forEach(option => {
+    const opt = document.createElement("option");
+    opt.value = option.value ?? option;
+    opt.textContent = option.label ?? option;
+    workoutPrivacyElement.appendChild(opt);
+});
 
 filterForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -64,16 +87,18 @@ filterForm.addEventListener("submit", async (e) => {
     const dateEntered = createdAt ? new Date(createdAt) : null;
 
     const createdBy = document.getElementById("filterWorkoutCreatedBy").value.trim();
+    const workoutPrivacy = document.getElementById("filterWorkoutPrivacy").value.trim();
 
     const form = {
         name,
         description,
         targetZones,
         dateEntered,
-        createdBy
+        createdBy,
+        workoutPrivacy
     };
 
-    const res = await filterWorkouts(form);
+    const res = await filterAllWorkouts(form);
     renderDbVisualisation(document.getElementById("workoutsTableContainer"), res);
 });
 

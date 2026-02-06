@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -45,20 +46,8 @@ public class WorkoutsController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/getById")
-    public ResponseEntity<WorkoutEntity> getWorkoutById(@RequestParam("id") Long id, @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok().body(workoutsService.getWorkoutById(id, user));
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/getByCreated")
-    public ResponseEntity<List<WorkoutEntity>> getWorkoutsByCreated(@AuthenticationPrincipal User user){
-        return ResponseEntity.ok().body(workoutsService.getWorkoutsByCreator(user));
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/filter")
-    public ResponseEntity<List<WorkoutEntity>> getAllWorkoutsByFilter(
+    @GetMapping("/filterPublic")
+    public ResponseEntity<List<WorkoutEntity>> getPublicWorkoutsByFilter(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) List<Integer> targetZones,
@@ -79,6 +68,42 @@ public class WorkoutsController {
                         ));
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/getById")
+    public ResponseEntity<WorkoutEntity> getWorkoutById(@RequestParam("id") Long id, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok().body(workoutsService.getWorkoutById(id, user));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/getByCreated")
+    public ResponseEntity<List<WorkoutEntity>> getWorkoutsByCreated(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok().body(workoutsService.getWorkoutsByCreator(user));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/filter")
+    public ResponseEntity<List<WorkoutEntity>> getAllWorkoutsByFilter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) List<Integer> targetZones,
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) LocalDateTime createdAt,
+            @RequestParam(required = false) String createdBy,
+            @RequestParam(required=false) WorkoutPrivacy privacy
+    ) {
+        return ResponseEntity.ok().body(
+                workoutsService
+                        .getWorkoutsByFilter(
+                                name,
+                                description,
+                                targetZones,
+                                id,
+                                createdAt,
+                                createdBy,
+                                privacy
+                        ));
+    }
+
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<Void> addWorkout(@Valid @RequestBody WorkoutForm workoutForm, @AuthenticationPrincipal User user) {
@@ -93,6 +118,12 @@ public class WorkoutsController {
         workoutsService.deleteWorkout(id, user);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/getWorkoutPrivacyOptions")
+    public ResponseEntity<List<WorkoutPrivacy>> getWorkoutPrivacyOptions(){
+        return ResponseEntity.ok().body(Arrays.stream(WorkoutPrivacy.values()).toList());
+    }
+
 
     //endregion
 }
