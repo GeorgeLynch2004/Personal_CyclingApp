@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
     <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/scripts/css/favouriteWorkouts.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/form.css}">
 </head>
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
@@ -19,11 +20,14 @@
             <h3 id="email"></h3>
             <p id="usertype"></p>
             <form id="profileForm" name="profileForm">
-                <label for="profileFtp">
-                    Functional Threshold Power
-                    <input name="profileFtp" id="profileFtp" type="number" placeholder="FTP">
-                </label>
-                <button type="submit" id="profileFormSubmitBtn">Update</button>
+                <div class="form-field">
+                    <label for="profileFtp">
+                        Functional Threshold Power
+                        <input class="" name="profileFtp" id="profileFtp" type="number" placeholder="FTP">
+                    </label>
+
+                </div>
+                <button type="submit" id="profileFormSubmitBtn" class="form-button">Update</button>
             </form>
         </div>
     </div>
