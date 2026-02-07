@@ -112,6 +112,9 @@ public class WorkoutsController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN') || #authenticat")
+
+
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteWorkout(@RequestBody Long id, @AuthenticationPrincipal User user){

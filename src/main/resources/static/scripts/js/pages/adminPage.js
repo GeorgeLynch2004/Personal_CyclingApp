@@ -1,5 +1,6 @@
 import {filterAllWorkouts, getAllWorkouts, getPublicWorkouts, getWorkoutPrivacyOptions} from "../api/workoutsApi.js";
 import {filterUsers, getAllUsers} from "../api/usersApi.js";
+import {openPopup} from "../components/popup.js";
 
 function renderDbVisualisation(div, content) {
     if (!div || !Array.isArray(content) || content.length === 0) {
@@ -44,8 +45,38 @@ function renderDbVisualisation(div, content) {
         const editBtn = document.createElement("button");
         editBtn.textContent = "edit";
         editBtn.name = "editRowBtn";
+
         editBtn.addEventListener('click', (e) => {
-            
+            const editForm = document.createElement('form');
+            editForm.name = "editRecordForm";
+            editForm.id = "editRecordForm";
+
+            headers.forEach(key => {
+                const colDiv = document.createElement('div');
+                colDiv.className = "filter-item";
+                const colLabel = document.createElement("label");
+                colLabel.htmlFor = `${key}Element`;
+                colLabel.textContent = key;
+                const colElement = document.createElement('input');
+                colElement.value = record[key];
+                colElement.id = `${key}Element`;
+                colElement.name = `${key}Element`;
+                colDiv.appendChild(colLabel);
+                colDiv.appendChild(colElement);
+                editForm.appendChild(colDiv);
+            });
+
+            openPopup({
+                title: 'Edit Row',
+                content: editForm,
+                buttons: [{
+                        label: "submit", onClick: submit => console.log("pretend submit")
+                    },
+                    {
+                        label: "cancel", onClick: close => close()
+                    }
+                ]
+            });
         });
 
         row.appendChild(editBtn);
