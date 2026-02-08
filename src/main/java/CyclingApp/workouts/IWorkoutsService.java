@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface IWorkoutsService {
     );
     public void addWorkoutFromForm(WorkoutForm workoutForm, User user);
     public void deleteWorkout(Long id, User user);
-
+    public void updateWorkout(Long id, WorkoutEntity workout) throws AccessDeniedException;
 
 }
 

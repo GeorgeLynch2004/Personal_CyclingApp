@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -112,7 +113,11 @@ public class WorkoutsController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('ADMIN') || #authenticat")
+    @PreAuthorize("hasRole('ADMIN') || @workoutSecurity.isCreator(#workoutId, authentication)")
+    public ResponseEntity<Void> updateWorkout(@PathVariable Long workoutId, @RequestBody WorkoutEntity workout) throws AccessDeniedException {
+        workoutsService.updateWorkout(workoutId, workout);
+        return ResponseEntity.ok().build();
+    }
 
 
     @PreAuthorize("isAuthenticated()")

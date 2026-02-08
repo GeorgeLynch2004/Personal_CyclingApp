@@ -55,16 +55,28 @@ function renderDbVisualisation(div, content) {
                 const colDiv = document.createElement('div');
                 colDiv.className = "filter-item";
                 const colLabel = document.createElement("label");
-                colLabel.htmlFor = `${key}Element`;
+                colLabel.htmlFor = `${key}`;
                 colLabel.textContent = key;
                 const colElement = document.createElement('input');
                 colElement.value = record[key];
-                colElement.id = `${key}Element`;
+                colElement.id = `${key}EditForm`;
                 colElement.name = `${key}Element`;
                 colDiv.appendChild(colLabel);
                 colDiv.appendChild(colElement);
                 editForm.appendChild(colDiv);
             });
+
+            const workoutUpdatePayload = {
+                id: document.getElementById("idEditForm").valueAsNumber,
+                createdAt: document.getElementById("createdAtEditForm").Date(),
+                createdBy: document.getElementById("createdByEditForm").value.trim(),
+                privacyStatus: document.getElementById("privacyStatusEditForm").value.trim(),
+                name: document.getElementById("nameEditForm").value.trim(),
+                description: document.getElementById("descriptionEditForm").value.trim(),
+                structure: document.getElementById("structureEditForm").value.trim(), // this will cause problem as json not rendered correctly ([Object object], [Object object])
+                targetZones: document.getElementById()
+
+            };
 
             openPopup({
                 title: 'Edit Row',
