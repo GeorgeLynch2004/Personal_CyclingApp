@@ -45,7 +45,10 @@ public class WorkoutsService implements IWorkoutsService {
         }
 
         if (workout.getPrivacyStatus() == WorkoutPrivacy.PUBLIC ||
-                workout.getCreatedBy().equals(user.getUsername())) {
+                workout.getCreatedBy().equals(user.getUsername()) ||
+                user.getAuthorities().stream()
+                        .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN"))
+        ) {
             return workout;
         }
 

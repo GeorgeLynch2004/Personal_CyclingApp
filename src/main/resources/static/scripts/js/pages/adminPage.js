@@ -52,7 +52,7 @@ function renderDbVisualisation(div, content) {
         editBtn.textContent = "edit";
         editBtn.name = "editRowBtn";
 
-        editBtn.addEventListener('click', (e) => {
+        editBtn.addEventListener('click', async (e) => {
             const editForm = document.createElement('form');
             editForm.name = "editRecordForm";
             editForm.id = "editRecordForm";
@@ -63,7 +63,14 @@ function renderDbVisualisation(div, content) {
             const privLabel = document.createElement('label');
             privLabel.htmlFor = 'workoutPrivacyEdit';
             privLabel.textContent = 'Workout Privacy';
-            const privElement = document.createElement('input');
+            const privElement = document.createElement('select');
+            const privacyOptions = await getWorkoutPrivacyOptions();
+            privacyOptions.forEach(option => {
+                const opt = document.createElement("option");
+                opt.value = option.value ?? option;
+                opt.textContent = option.label ?? option;
+                privElement.appendChild(opt);
+            });
             privElement.value = record['privacyStatus'];
             privElement.id = 'workoutPrivacyEdit';
             privDiv.appendChild(privLabel);
@@ -99,19 +106,26 @@ function renderDbVisualisation(div, content) {
             const feedbackDiv = document.createElement('div');
             editForm.appendChild(feedbackDiv);
 
-            function requestUpdate(payload, feedbackDiv){
-                const res = patchWorkout({
+            async function requestUpdate(payload, feedbackDiv) {
+                const res = await patchWorkout({
                     id: record['id'],
                     privacyStatus: document.getElementById("workoutPrivacyEdit").value.trim(),
                     name: document.getElementById("workoutNameEdit").value.trim(),
                     description: document.getElementById("workoutDescEdit").value.trim(),
                 });
 
-                if (res.ok) feedbackDiv.appendChild(
-                    document.createElement('p').textContent="Update Successful"
-                );
-                else{
-                    document.createElement('p').textContent="Update Unsuccessful"
+                while (feedbackDiv.firstChild) {
+                    feedbackDiv.removeChild(feedbackDiv.firstChild);
+                }
+
+                if (res.ok) {
+                    const p = document.createElement('p');
+                    p.textContent = "Update Successful";
+                    feedbackDiv.appendChild(p);
+                } else {
+                    const p = document.createElement('p');
+                    p.textContent = "Update Unsuccessful";
+                    feedbackDiv.appendChild(p);
                 }
             }
 
@@ -119,21 +133,28 @@ function renderDbVisualisation(div, content) {
                 title: 'Edit Row',
                 content: editForm,
                 buttons: [{
-                        label: "submit", onClick: submit => requestUpdate({
+                    label: "submit", onClick: submit => requestUpdate({
                         id: record['id'],
                         privacyStatus: document.getElementById("workoutPrivacyEdit").value.trim(),
                         name: document.getElementById("workoutNameEdit").value.trim(),
                         description: document.getElementById("workoutDescEdit").value.trim(),
                     }, feedbackDiv)
-                    },
+                },
                     {
                         label: "cancel", onClick: close => close()
                     }
                 ]
             });
         });
-
         row.appendChild(editBtn);
+
+        const viewBtn = document.createElement("button");
+        viewBtn.textContent = "view";
+        viewBtn.name = "viewRowBtn";
+        viewBtn.addEventListener('click', ()=>{
+            window.location.href = `/pages/workouts/${record.id}`;
+        });
+        row.appendChild(viewBtn);
 
         tbody.appendChild(row);
     });
@@ -150,7 +171,6 @@ const filterForm = document.getElementById("workoutFilterForm");
 
 const workoutPrivacyOptions = await getWorkoutPrivacyOptions();
 const workoutPrivacyElement = document.getElementById("filterWorkoutPrivacy");
-console.log(workoutPrivacyOptions);
 workoutPrivacyOptions.forEach(option => {
     const opt = document.createElement("option");
     opt.value = option.value ?? option;
