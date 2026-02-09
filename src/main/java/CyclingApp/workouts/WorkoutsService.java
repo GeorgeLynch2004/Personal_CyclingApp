@@ -109,17 +109,17 @@ public class WorkoutsService implements IWorkoutsService {
     }
 
     @Override
-    public void updateWorkout(Long id, WorkoutEntity workout) throws AccessDeniedException {
-        if (id == null || workout == null) return;
+    public void updateWorkout(WorkoutUpdateRequest updateRequest) throws AccessDeniedException {
+        if (updateRequest == null) return;
 
-        int updated = workoutsRepository.updateWorkout(id, workout);
+        int updated = workoutsRepository.updateWorkout(updateRequest);
 
         if (updated == 0) {
             throw new AccessDeniedException("Not allowed to update this workout");
         }
         if (updated > 1){
             throw new IllegalStateException(
-                    "CRITICAL: Updated multiple rows for workout id=" + id
+                    "CRITICAL: Updated multiple rows for workout"
             );
         }
     }

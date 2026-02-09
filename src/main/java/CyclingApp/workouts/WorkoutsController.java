@@ -113,9 +113,10 @@ public class WorkoutsController {
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('ADMIN') || @workoutSecurity.isCreator(#workoutId, authentication)")
-    public ResponseEntity<Void> updateWorkout(@PathVariable Long workoutId, @RequestBody WorkoutEntity workout) throws AccessDeniedException {
-        workoutsService.updateWorkout(workoutId, workout);
+    @PreAuthorize("hasRole('ADMIN') || @workoutSecurity.isCreator(#updateRequest.getId(), authentication)")
+    @PatchMapping("/update")
+    public ResponseEntity<Void> updateWorkout(@RequestBody WorkoutUpdateRequest updateRequest) throws AccessDeniedException {
+        workoutsService.updateWorkout(updateRequest);
         return ResponseEntity.ok().build();
     }
 

@@ -61,7 +61,7 @@ export async function postWorkout(workout){
 
 export async function patchWorkout(workout){
     return fetch("/workouts/update", {
-        method: "POST",
+        method: "PATCH",
         credentials: "include",
         headers: {
             "Content-Type": "application/json",

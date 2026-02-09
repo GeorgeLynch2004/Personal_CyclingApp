@@ -184,16 +184,14 @@ public class WorkoutsRepository implements IWorkoutsRepository {
     }
 
     @Override
-    public int updateWorkout(Long id, WorkoutEntity workout) {
+    public int updateWorkout(WorkoutUpdateRequest workout) {
 
         String sql = """
         UPDATE workouts
         SET
             name = ?,
             description = ?,
-            privacy_status = ?,
-            structure = CAST(? AS JSON),
-            target_zones = CAST(? AS JSON)
+            privacy_status = ?
         WHERE id = ?
         """;
 
@@ -202,9 +200,7 @@ public class WorkoutsRepository implements IWorkoutsRepository {
                 workout.getName(),
                 workout.getDescription(),
                 workout.getPrivacyStatus().name(),
-                workout.getStructure(),
-                workout.getTargetZones(),
-                id
+                workout.getId()
         );
     }
 

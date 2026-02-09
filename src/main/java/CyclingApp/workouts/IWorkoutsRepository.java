@@ -19,5 +19,5 @@ public interface IWorkoutsRepository
                                                    WorkoutPrivacy workoutPrivacy);
     public void addWorkout(WorkoutEntity newWorkoutEntity);
     public void deleteWorkout(Long id, User user);
-    public int updateWorkout(Long id, WorkoutEntity workout);
+    public int updateWorkout(WorkoutUpdateRequest workout);
 }

@@ -24,7 +24,7 @@ public interface IWorkoutsService {
     );
     public void addWorkoutFromForm(WorkoutForm workoutForm, User user);
     public void deleteWorkout(Long id, User user);
-    public void updateWorkout(Long id, WorkoutEntity workout) throws AccessDeniedException;
+    public void updateWorkout(WorkoutUpdateRequest workout) throws AccessDeniedException;
 
 }
 

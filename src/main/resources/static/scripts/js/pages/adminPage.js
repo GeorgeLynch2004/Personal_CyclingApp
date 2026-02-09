@@ -1,4 +1,10 @@
-import {filterAllWorkouts, getAllWorkouts, getPublicWorkouts, getWorkoutPrivacyOptions} from "../api/workoutsApi.js";
+import {
+    filterAllWorkouts,
+    getAllWorkouts,
+    getPublicWorkouts,
+    getWorkoutPrivacyOptions,
+    patchWorkout
+} from "../api/workoutsApi.js";
 import {filterUsers, getAllUsers} from "../api/usersApi.js";
 import {openPopup} from "../components/popup.js";
 
@@ -51,38 +57,74 @@ function renderDbVisualisation(div, content) {
             editForm.name = "editRecordForm";
             editForm.id = "editRecordForm";
 
-            headers.forEach(key => {
-                const colDiv = document.createElement('div');
-                colDiv.className = "filter-item";
-                const colLabel = document.createElement("label");
-                colLabel.htmlFor = `${key}`;
-                colLabel.textContent = key;
-                const colElement = document.createElement('input');
-                colElement.value = record[key];
-                colElement.id = `${key}EditForm`;
-                colElement.name = `${key}Element`;
-                colDiv.appendChild(colLabel);
-                colDiv.appendChild(colElement);
-                editForm.appendChild(colDiv);
-            });
+            // Edit workout privacy form field
+            const privDiv = document.createElement('div');
+            privDiv.className = "filter-item";
+            const privLabel = document.createElement('label');
+            privLabel.htmlFor = 'workoutPrivacyEdit';
+            privLabel.textContent = 'Workout Privacy';
+            const privElement = document.createElement('input');
+            privElement.value = record['privacyStatus'];
+            privElement.id = 'workoutPrivacyEdit';
+            privDiv.appendChild(privLabel);
+            privDiv.appendChild(privElement);
+            editForm.appendChild(privDiv);
 
-            const workoutUpdatePayload = {
-                id: document.getElementById("idEditForm").valueAsNumber,
-                createdAt: document.getElementById("createdAtEditForm").Date(),
-                createdBy: document.getElementById("createdByEditForm").value.trim(),
-                privacyStatus: document.getElementById("privacyStatusEditForm").value.trim(),
-                name: document.getElementById("nameEditForm").value.trim(),
-                description: document.getElementById("descriptionEditForm").value.trim(),
-                structure: document.getElementById("structureEditForm").value.trim(), // this will cause problem as json not rendered correctly ([Object object], [Object object])
-                targetZones: document.getElementById()
+            // Edit workout name form field
+            const nameDiv = document.createElement('div');
+            nameDiv.className = "filter-item";
+            const nameLabel = document.createElement('label');
+            nameLabel.htmlFor = 'workoutNameEdit';
+            nameLabel.textContent = 'Workout Name';
+            const nameElement = document.createElement('input');
+            nameElement.value = record['name'];
+            nameElement.id = 'workoutNameEdit';
+            nameDiv.appendChild(nameLabel);
+            nameDiv.appendChild(nameElement);
+            editForm.appendChild(nameDiv);
 
-            };
+            // Edit workout description form field
+            const descDiv = document.createElement('div');
+            descDiv.className = "filter-item";
+            const descLabel = document.createElement('label');
+            descLabel.htmlFor = 'workoutDescEdit';
+            descLabel.textContent = 'Workout Description';
+            const descElement = document.createElement('input');
+            descElement.value = record['description'];
+            descElement.id = 'workoutDescEdit';
+            descDiv.appendChild(descLabel);
+            descDiv.appendChild(descElement);
+            editForm.appendChild(descDiv);
+
+            const feedbackDiv = document.createElement('div');
+            editForm.appendChild(feedbackDiv);
+
+            function requestUpdate(payload, feedbackDiv){
+                const res = patchWorkout({
+                    id: record['id'],
+                    privacyStatus: document.getElementById("workoutPrivacyEdit").value.trim(),
+                    name: document.getElementById("workoutNameEdit").value.trim(),
+                    description: document.getElementById("workoutDescEdit").value.trim(),
+                });
+
+                if (res.ok) feedbackDiv.appendChild(
+                    document.createElement('p').textContent="Update Successful"
+                );
+                else{
+                    document.createElement('p').textContent="Update Unsuccessful"
+                }
+            }
 
             openPopup({
                 title: 'Edit Row',
                 content: editForm,
                 buttons: [{
-                        label: "submit", onClick: submit => console.log("pretend submit")
+                        label: "submit", onClick: submit => requestUpdate({
+                        id: record['id'],
+                        privacyStatus: document.getElementById("workoutPrivacyEdit").value.trim(),
+                        name: document.getElementById("workoutNameEdit").value.trim(),
+                        description: document.getElementById("workoutDescEdit").value.trim(),
+                    }, feedbackDiv)
                     },
                     {
                         label: "cancel", onClick: close => close()
