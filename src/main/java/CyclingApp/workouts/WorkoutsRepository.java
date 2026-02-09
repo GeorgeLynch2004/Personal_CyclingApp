@@ -182,4 +182,26 @@ public class WorkoutsRepository implements IWorkoutsRepository {
         String sql = "DELETE FROM workouts WHERE id=? AND created_by=?";
         jdbcTemplate.update(sql, id, user.getUsername());
     }
+
+    @Override
+    public int updateWorkout(WorkoutUpdateRequest workout) {
+
+        String sql = """
+        UPDATE workouts
+        SET
+            name = ?,
+            description = ?,
+            privacy_status = ?
+        WHERE id = ?
+        """;
+
+        return jdbcTemplate.update(
+                sql,
+                workout.getName(),
+                workout.getDescription(),
+                workout.getPrivacyStatus().name(),
+                workout.getId()
+        );
+    }
+
 }

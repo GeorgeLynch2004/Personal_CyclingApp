@@ -1,4 +1,4 @@
-import {getAllWorkouts, filterWorkouts, getPublicWorkouts} from "../api/workoutsApi.js";
+import {getAllWorkouts, getPublicWorkouts, filterPublicWorkouts} from "../api/workoutsApi.js";
 import { renderWorkouts } from "../components/workoutCard.js";
 
 const container = document.getElementById("workoutsContainer");
@@ -51,7 +51,7 @@ filterForm.addEventListener("submit", async (e) => {
         createdBy
     };
 
-    const res = await filterWorkouts(form);
+    const res = await filterPublicWorkouts(form);
     await renderWorkouts(container, template, elements, res);
 });
 

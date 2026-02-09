@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,10 @@ public class WorkoutsService implements IWorkoutsService {
         }
 
         if (workout.getPrivacyStatus() == WorkoutPrivacy.PUBLIC ||
-                workout.getCreatedBy().equals(user.getUsername())) {
+                workout.getCreatedBy().equals(user.getUsername()) ||
+                user.getAuthorities().stream()
+                        .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN"))
+        ) {
             return workout;
         }
 
@@ -107,4 +111,19 @@ public class WorkoutsService implements IWorkoutsService {
         }
     }
 
+    @Override
+    public void updateWorkout(WorkoutUpdateRequest updateRequest) throws AccessDeniedException {
+        if (updateRequest == null) return;
+
+        int updated = workoutsRepository.updateWorkout(updateRequest);
+
+        if (updated == 0) {
+            throw new AccessDeniedException("Not allowed to update this workout");
+        }
+        if (updated > 1){
+            throw new IllegalStateException(
+                    "CRITICAL: Updated multiple rows for workout"
+            );
+        }
+    }
 }
