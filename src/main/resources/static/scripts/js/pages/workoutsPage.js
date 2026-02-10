@@ -1,8 +1,12 @@
-import {getAllWorkouts, getPublicWorkouts, filterPublicWorkouts} from "../api/workoutsApi.js";
+import {getWorkouts} from "../api/workoutsApi.js";
 import { renderWorkouts } from "../components/workoutCard.js";
+import {renderPagination} from "../components/pagination.js";
 
 const container = document.getElementById("workoutsContainer");
 const template = document.getElementById("workoutCardTemplate");
+
+let currentPage = 0;
+let pageSize = 10;
 
 const elements = {
     name: "workoutName",
@@ -12,7 +16,9 @@ const elements = {
     favouriteButton: "workoutFavouriteButton",
     deleteButton: "workoutDeleteButton"
 }
-await renderWorkouts(container, template, elements, await getPublicWorkouts());
+const data = await getWorkouts({page: currentPage, size: pageSize});
+await renderWorkouts(container, template, elements, data);
+renderPagination(data.length);
 
 const toggleBtn = document.getElementById('filterToggle');
 const sidebar = document.getElementById('filterSidebar');
@@ -43,15 +49,14 @@ filterForm.addEventListener("submit", async (e) => {
 
     const createdBy = document.getElementById("filterWorkoutCreatedBy").value.trim();
 
-    const form = {
-        name,
-        description,
-        targetZones,
-        dateEntered,
-        createdBy
-    };
 
-    const res = await filterPublicWorkouts(form);
+    const res = await getWorkouts({
+        name: name,
+        description: description,
+        targetZones: targetZones,
+        createdAt: dateEntered,
+        createdBy: createdBy,
+    });
     await renderWorkouts(container, template, elements, res);
 });
 
@@ -75,8 +80,10 @@ async function clearFilters() {
         cb.checked = false;
     });
 
-    await renderWorkouts(container, template, elements, await getPublicWorkouts());
+    await renderWorkouts(container, template, elements, await getWorkouts());
 }
+
+
 
 
 

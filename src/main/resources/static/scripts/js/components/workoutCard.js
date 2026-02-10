@@ -1,7 +1,7 @@
 import { createWorkoutGraph } from "./workoutChart.js";
 import { convertTargetZonesToString } from "../utils/zones.js";
 import { isFavourite, addFavourite, removeFavourite } from "../api/favouritesApi.js";
-import {deleteWorkout, getCreatedWorkouts} from "../api/workoutsApi.js";
+import {deleteWorkout, getWorkouts} from "../api/workoutsApi.js";
 import {
     dislikeWorkout, getDislikes,
     getLikes,
@@ -120,7 +120,7 @@ export async function renderWorkouts(container, template, elements, workouts) {
         if (deleteBtn){
             deleteBtn.addEventListener('click', async () => {
                 await deleteWorkout(workout.id);
-                await renderWorkouts(container, template, elements, await getCreatedWorkouts());
+                await renderWorkouts(container, template, elements, await getWorkouts({createdBy: workout.createdBy}));
             });
         }
 

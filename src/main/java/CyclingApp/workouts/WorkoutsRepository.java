@@ -55,105 +55,62 @@ public class WorkoutsRepository implements IWorkoutsRepository {
     }
 
     @Override
-    public List<WorkoutEntity> getAllWorkouts() {
-        String sql = "SELECT * FROM workouts";
-        return jdbcTemplate.query(sql, rowMapper);
-    }
-
-    @Override
-    public List<WorkoutEntity> getPublicWorkouts(){
-        String sql = "SELECT * FROM workouts WHERE privacy_status='PUBLIC'";
-        try{
-            return jdbcTemplate.query(sql, rowMapper);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public WorkoutEntity getWorkoutById(long id) {
-        String sql = "SELECT * FROM workouts WHERE id = ?";
-
-        try {
-            return jdbcTemplate.queryForObject(sql, rowMapper, id);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public List<WorkoutEntity> getWorkoutsByCreator(User user){
-        String sql = "SELECT * FROM workouts WHERE created_by = ?";
-        try {
-            return jdbcTemplate.query(sql, rowMapper, user.getUsername());
-        } catch (EmptyResultDataAccessException e){
-            return null;
-        }
-    }
-
-    @Override
-    public List<WorkoutEntity> getWorkoutsByFilter(
+    public List<WorkoutEntity> getWorkouts(
+            Long id,
             String name,
             String description,
             List<Integer> targetZones,
-            Long id,
-            LocalDateTime createdAt,
             String createdBy,
-            WorkoutPrivacy workoutPrivacy
+            WorkoutPrivacy privacy,
+            int page,
+            int size
     ) {
 
+
         StringBuilder sql = new StringBuilder("""
-        SELECT *
-        FROM workouts
-        WHERE 1=1
-        """);
+            SELECT *
+            FROM workouts
+            WHERE 1=1
+            """);
+
 
         List<Object> params = new ArrayList<>();
 
-        if (id != null) {
-            sql.append(" AND id = ?");
-            params.add(id);
-        }
 
         if (name != null && !name.isBlank()) {
             sql.append(" AND name LIKE ?");
             params.add("%" + name.trim() + "%");
         }
 
+
         if (description != null && !description.isBlank()) {
             sql.append(" AND description LIKE ?");
             params.add("%" + description.trim() + "%");
         }
+
 
         if (targetZones != null && !targetZones.isEmpty()) {
             sql.append(" AND JSON_OVERLAPS(target_zones, ?)");
             params.add(objectMapper.writeValueAsString(targetZones));
         }
 
-        if (createdAt != null) {
-            LocalDateTime startOfDay = createdAt.toLocalDate().atStartOfDay();
-            LocalDateTime endOfDay = startOfDay.plusDays(1);
-
-            sql.append(" AND created_at >= ? AND created_at < ?");
-            params.add(startOfDay);
-            params.add(endOfDay);
-        }
 
         if (createdBy != null && !createdBy.isBlank()) {
             sql.append(" AND created_by = ?");
             params.add(createdBy.trim());
         }
 
-        if (workoutPrivacy != null) {
+        if (privacy != null) {
             sql.append(" AND privacy_status = ?");
-            params.add(workoutPrivacy.name());
+            params.add(privacy.name());
         }
 
-        return jdbcTemplate.query(
-                sql.toString(),
-                rowMapper,
-                params.toArray()
-        );
+        sql.append(" LIMIT ? OFFSET ?");
+        params.add(size);
+        params.add(page * size);
+
+
+        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
 
@@ -202,6 +159,14 @@ public class WorkoutsRepository implements IWorkoutsRepository {
                 workout.getPrivacyStatus().name(),
                 workout.getId()
         );
+    }
+
+    @Override
+    public WorkoutEntity getWorkoutById(Long id) {
+        String sql = """
+        SELECT * from workouts WHERE id = ?;
+        """;
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
 }

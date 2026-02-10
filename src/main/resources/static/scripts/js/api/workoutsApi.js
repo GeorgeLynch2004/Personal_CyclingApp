@@ -1,51 +1,31 @@
 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
-export async function getAllWorkouts() {
-    const res = await fetch("/workouts/getAll");
-    if (!res.ok) throw new Error("Failed to fetch workouts");
-    return res.json();
-}
-
-export async function getPublicWorkouts(){
-    const res = await fetch("/workouts/getPublic");
-    if (!res.ok) throw new Error("Failed to fetch public workouts");
-    return res.json();
-}
-
-export async function getCreatedWorkouts(){
-    const res = await fetch("/workouts/getByCreated");
-    if (!res.ok) throw new Error("Failed to fetch created workouts");
-    return res.json();
-}
-
-export async function filterPublicWorkouts(form) {
+export async function getWorkouts(filters = {}) {
     const params = new URLSearchParams();
-    if (form.name) params.append("name", form.name);
-    if (form.description) params.append("description", form.description);
-    form.targetZones.forEach(zone => params.append("targetZones", form.targetZones));
-    if(form.dateEntered) params.append("createdAt", form.dateEntered.toISOString());
-    if(form.createdBy) params.append("createdBy", form.createdBy);
 
-    const res = await fetch(`/workouts/filterPublic?${params}`);
-    if (!res.ok) throw new Error("Failed to filter workouts");
+    Object.entries(filters).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === "") return;
+
+        if (Array.isArray(value)) {
+            value.forEach(v => params.append(key, v));
+        } else if (value instanceof Date) {
+            params.append(key, value.toISOString());
+        } else {
+            params.append(key, value);
+        }
+    });
+
+    const query = params.toString();
+    const res = await fetch(`/workouts${query ? `?${query}` : ""}`);
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch workouts: ${res.status}`);
+    }
+
     return res.json();
 }
 
-// this endpoint is admin filtering
-export async function filterAllWorkouts(form) {
-    const params = new URLSearchParams();
-    if (form.name) params.append("name", form.name);
-    if (form.description) params.append("description", form.description);
-    form.targetZones.forEach(zone => params.append("targetZones", form.targetZones));
-    if(form.dateEntered) params.append("createdAt", form.dateEntered.toISOString());
-    if(form.createdBy) params.append("createdBy", form.createdBy);
-    if (form.workoutPrivacy) params.append("privacy", form.workoutPrivacy);
-
-    const res = await fetch(`/workouts/filter?${params}`);
-    if (!res.ok) throw new Error("Failed to filter workouts");
-    return res.json();
-}
 
 export async function postWorkout(workout){
     return fetch("/workouts/add", {

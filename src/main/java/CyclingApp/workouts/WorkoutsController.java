@@ -34,75 +34,32 @@ public class WorkoutsController {
 
     //region WorkoutEntity's
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/getAll")
-    public ResponseEntity<List<WorkoutEntity>> getAllWorkouts() {
-        return ResponseEntity.ok().body( workoutsService.getAllWorkouts());
-    }
-
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/getPublic")
-    public ResponseEntity<List<WorkoutEntity>> getPublicWorkouts() {
-        return ResponseEntity.ok().body(workoutsService.getPublicWorkouts());
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/filterPublic")
-    public ResponseEntity<List<WorkoutEntity>> getPublicWorkoutsByFilter(
+    @GetMapping
+    public ResponseEntity<List<WorkoutEntity>> getWorkouts(
+            @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) List<Integer> targetZones,
-            @RequestParam(required = false) Long id,
-            @RequestParam(required = false) LocalDateTime createdAt,
-            @RequestParam(required = false) String createdBy
-    ) {
-        return ResponseEntity.ok().body(
-                workoutsService
-                        .getWorkoutsByFilter(
-                                name,
-                                description,
-                                targetZones,
-                                id,
-                                createdAt,
-                                createdBy,
-                                WorkoutPrivacy.PUBLIC
-                        ));
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/getById")
-    public ResponseEntity<WorkoutEntity> getWorkoutById(@RequestParam("id") Long id, @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok().body(workoutsService.getWorkoutById(id, user));
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/getByCreated")
-    public ResponseEntity<List<WorkoutEntity>> getWorkoutsByCreated(@AuthenticationPrincipal User user){
-        return ResponseEntity.ok().body(workoutsService.getWorkoutsByCreator(user));
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/filter")
-    public ResponseEntity<List<WorkoutEntity>> getAllWorkoutsByFilter(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false) List<Integer> targetZones,
-            @RequestParam(required = false) Long id,
-            @RequestParam(required = false) LocalDateTime createdAt,
             @RequestParam(required = false) String createdBy,
-            @RequestParam(required=false) WorkoutPrivacy privacy
+            @RequestParam(required = false) WorkoutPrivacy privacy,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok().body(
-                workoutsService
-                        .getWorkoutsByFilter(
-                                name,
-                                description,
-                                targetZones,
-                                id,
-                                createdAt,
-                                createdBy,
-                                privacy
-                        ));
+        return ResponseEntity.ok(
+                workoutsService.getWorkouts(
+                        id,
+                        name,
+                        description,
+                        targetZones,
+                        createdBy,
+                        privacy,
+                        page,
+                        size,
+                        user
+                )
+        );
     }
 
     @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN')")

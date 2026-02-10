@@ -1,7 +1,7 @@
 import {getUser, updateUserFtp} from "../api/usersApi.js";
 import {renderWorkouts} from "../components/workoutCard.js";
 import {getFavouritesByUsername} from "../api/favouritesApi.js";
-import {getCreatedWorkouts} from "../api/workoutsApi.js";
+import {getWorkouts} from "../api/workoutsApi.js";
 import {validateFtp} from "../utils/validators.js";
 
 const { username } = window.APP_USER;
@@ -57,7 +57,7 @@ const createdContainer = document.getElementById("createdWorkoutsContainer");
 const createdTemplate = document.getElementById("createdWorkoutTemplate");
 
 try {
-    const data = await getCreatedWorkouts();
+    const data = await getWorkouts({createdBy: username});
     const elements = {
         name: "createdWorkoutName",
         description: "createdWorkoutDescription",

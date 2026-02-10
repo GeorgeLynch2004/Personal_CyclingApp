@@ -1,7 +1,5 @@
 import {
-    filterAllWorkouts,
-    getAllWorkouts,
-    getPublicWorkouts,
+    getWorkouts,
     getWorkoutPrivacyOptions,
     patchWorkout
 } from "../api/workoutsApi.js";
@@ -164,7 +162,7 @@ function renderDbVisualisation(div, content) {
     div.appendChild(table);
 }
 
-renderDbVisualisation(document.getElementById("workoutsTableContainer"),await getAllWorkouts());
+renderDbVisualisation(document.getElementById("workoutsTableContainer"),await getWorkouts());
 renderDbVisualisation(document.getElementById("usersTableContainer"),await getAllUsers());
 
 const filterForm = document.getElementById("workoutFilterForm");
@@ -194,16 +192,14 @@ filterForm.addEventListener("submit", async (e) => {
     const createdBy = document.getElementById("filterWorkoutCreatedBy").value.trim();
     const workoutPrivacy = document.getElementById("filterWorkoutPrivacy").value.trim();
 
-    const form = {
-        name,
-        description,
-        targetZones,
-        dateEntered,
-        createdBy,
-        workoutPrivacy
-    };
-
-    const res = await filterAllWorkouts(form);
+    const res = await getWorkouts({
+        name: name,
+        description: description,
+        targetZones: targetZones,
+        createdAt: dateEntered,
+        createdBy: createdBy,
+        workoutPrivacy: workoutPrivacy
+    });
     renderDbVisualisation(document.getElementById("workoutsTableContainer"), res);
 });
 
@@ -227,7 +223,7 @@ async function clearWorkoutFilters() {
         cb.checked = false;
     });
 
-    renderDbVisualisation(document.getElementById("workoutsTableContainer"),await getPublicWorkouts());
+    renderDbVisualisation(document.getElementById("workoutsTableContainer"),await getWorkouts());
 }
 
 const userFilterForm = document.getElementById("usersFilterForm");
