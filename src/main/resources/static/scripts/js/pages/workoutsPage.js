@@ -5,7 +5,7 @@ const container = document.getElementById("workoutsContainer");
 const template = document.getElementById("workoutCardTemplate");
 
 let currentPage = 0;
-let pageSize = 10;
+let defaultPageSize = 50;
 let currentFilters = {privacy:"PUBLIC"};
 let totalPages=  0;
 
@@ -17,7 +17,7 @@ const elements = {
     favouriteButton: "workoutFavouriteButton",
     deleteButton: "workoutDeleteButton"
 }
-const data = await getWorkouts({page: currentPage, size: pageSize, privacy: "PUBLIC"});
+const data = await getWorkouts({page: currentPage, size: defaultPageSize, privacy: "PUBLIC"});
 await loadWorkouts(currentPage);
 
 const toggleBtn = document.getElementById('filterToggle');
@@ -49,15 +49,20 @@ filterForm.addEventListener("submit", async (e) => {
 
     const createdBy = document.getElementById("filterWorkoutCreatedBy").value.trim();
 
+    const size = Number(
+        document.getElementById("filterWorkoutPageSize").value
+    );
+
+
     currentFilters = {
         name: name,
         description: description,
         targetZones: targetZones,
-        createdAt: dateEntered,
         createdBy: createdBy,
-        privacy: "PUBLIC"
+        privacy: "PUBLIC",
+        size:size
     }
-
+    console.log(currentFilters);
     await loadWorkouts(0);
 });
 
@@ -89,9 +94,7 @@ async function loadWorkouts(page) {
 
     const data = await getWorkouts({
         ...currentFilters,
-        page: currentPage,
-        size: pageSize,
-        privacy: "PUBLIC"
+        page: currentPage
     });
     totalPages = data.totalPages;
     await renderWorkouts(container, template, elements, data.content);

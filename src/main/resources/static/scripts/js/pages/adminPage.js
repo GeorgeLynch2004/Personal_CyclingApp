@@ -162,8 +162,18 @@ function renderDbVisualisation(div, content) {
     div.appendChild(table);
 }
 
-renderDbVisualisation(document.getElementById("workoutsTableContainer"),await getWorkouts());
-renderDbVisualisation(document.getElementById("usersTableContainer"),await getAllUsers());
+document.addEventListener("DOMContentLoaded", async () => {
+    const data = await getWorkouts({ page: 0, size: 20 });
+    renderDbVisualisation(
+        document.getElementById("workoutsTableContainer"),
+        data.content
+    );
+
+    renderDbVisualisation(
+        document.getElementById("usersTableContainer"),
+        await getAllUsers()
+    );
+});
 
 const filterForm = document.getElementById("workoutFilterForm");
 
@@ -192,15 +202,20 @@ filterForm.addEventListener("submit", async (e) => {
     const createdBy = document.getElementById("filterWorkoutCreatedBy").value.trim();
     const workoutPrivacy = document.getElementById("filterWorkoutPrivacy").value.trim();
 
+    const currentPage = document.getElementById("filterWorkoutCurrentPage").valueAsNumber;
+    const pageSize = document.getElementById("filterWorkoutPageSize").valueAsNumber;
+
     const res = await getWorkouts({
         name: name,
         description: description,
         targetZones: targetZones,
         createdAt: dateEntered,
         createdBy: createdBy,
-        workoutPrivacy: workoutPrivacy
+        workoutPrivacy: workoutPrivacy,
+        page: currentPage,
+        size: pageSize
     });
-    renderDbVisualisation(document.getElementById("workoutsTableContainer"), res);
+    renderDbVisualisation(document.getElementById("workoutsTableContainer"), res.content);
 });
 
 
@@ -217,13 +232,16 @@ async function clearWorkoutFilters() {
     document.getElementById("filterWorkoutDesc").value = "";
     document.getElementById("filterWorkoutCreatedAt").value = "";
     document.getElementById("filterWorkoutCreatedBy").value = "";
+    document.getElementById("filterWorkoutCurrentPage").value = 0;
+    document.getElementById("filterWorkoutPageSize").value = 20;
 
     // Uncheck all checkboxes
     filterForm.querySelectorAll(".zone-checkbox input").forEach(cb => {
         cb.checked = false;
     });
 
-    renderDbVisualisation(document.getElementById("workoutsTableContainer"),await getWorkouts());
+    const data = await getWorkouts();
+    renderDbVisualisation(document.getElementById("workoutsTableContainer"),data.content);
 }
 
 const userFilterForm = document.getElementById("usersFilterForm");
