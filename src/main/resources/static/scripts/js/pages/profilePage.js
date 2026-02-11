@@ -66,7 +66,7 @@ try {
         favouriteButton: "createdWorkoutFavouriteButton",
         deleteButton: "createdWorkoutDeleteButton"
     }
-    await renderWorkouts(createdContainer, createdTemplate, elements, data);
+    await renderWorkouts(createdContainer, createdTemplate, elements, data.content);
 } catch (err){
     console.error("Failed to render created workouts", err);
 }

@@ -24,18 +24,18 @@
                     <div class="form-field">
                         <label for="intervalDuration">
                             Interval Duration</label>
-                        <input type="number" name="intervalDuration" id="intervalDuration" placeholder="Duration"/>
+                        <input type="number" name="intervalDuration" id="intervalDuration" placeholder="Duration" required/>
                     </div>
                     <div class="form-field">
                         <label for="intervalZone">
                             Target Power Zone</label>
-                        <input type="number" name="intervalZone" id="intervalZone" placeholder="Power Zone"/>
+                        <input type="number" name="intervalZone" id="intervalZone" placeholder="Power Zone" required/>
 
                     </div>
                     <div class="form-field">
                         <label for="intervalCadence">
                             Target Cadence</label>
-                        <input type="number" name="intervalCadence" id="intervalCadence" placeholder="Cadence"/>
+                        <input type="number" name="intervalCadence" id="intervalCadence" placeholder="Cadence" required/>
 
                     </div>
 
@@ -66,19 +66,19 @@
             <div class="form-field">
                 <label for="workoutName">
                     Name your masterpiece</label>
-                <input type="text" name="workoutName" id="workoutName" placeholder="Name"/>
+                <input type="text" name="workoutName" id="workoutName" placeholder="Name" required/>
             </div>
             <div class="form-field">
                 <label for="workoutDescription">
                     Add a description</label>
-                <textarea name="workoutDescription" id="workoutDescription" placeholder="Description"></textarea>
+                <textarea name="workoutDescription" id="workoutDescription" placeholder="Description" required></textarea>
             </div>
             <div class="form-field">
                 <label for="workoutPrivacy">
                     Manage your Workouts Privacy Preference
                 </label>
-                <select name="workoutPrivacy" id="workoutPrivacy">
-                    <option value="PRIVATE">private</option>
+                <select name="workoutPrivacy" id="workoutPrivacy" required>
+                    <option value="PRIVATE" selected>private</option>
                     <option value="PUBLIC">public</option>
                 </select>
             </div>

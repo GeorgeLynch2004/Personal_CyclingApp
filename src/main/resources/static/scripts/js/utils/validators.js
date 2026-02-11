@@ -1,3 +1,5 @@
+import {openPopup} from "../components/popup.js";
+
 export function validPowerZone(powerZone) {
     if (powerZone >= 1 && powerZone <= 7) {
         return true;
@@ -17,118 +19,105 @@ export function validCadence(cadence) {
 }
 
 export function validWorkout(payload) {
-    if (!payload) {
-        console.error("Workout validation failed: payload is null or undefined");
+    const fail = (message, logValue) => {
+        console.error("Workout validation failed:", message, logValue);
+
+        openPopup({
+            title: "Validation Error",
+            content: message,
+            buttons: [
+                {
+                    label: "OK",
+                    className: "popup-btn primary",
+                    onClick: (close) => close()
+                }
+            ]
+        });
+
         return false;
+    };
+
+    if (!payload) {
+        return fail("Workout data is missing.", payload);
     }
 
     // Name
     if (typeof payload.name !== "string") {
-        console.error("Workout validation failed: name is not a string", payload.name);
-        return false;
+        return fail("Workout name is invalid.", payload.name);
     }
     if (payload.name.trim().length === 0) {
-        console.error("Workout validation failed: name is blank");
-        return false;
+        return fail("Workout name cannot be empty.");
     }
     if (payload.name.length > 64) {
-        console.error("Workout validation failed: name exceeds 64 characters", payload.name.length);
-        return false;
+        return fail("Workout name must not exceed 64 characters.");
     }
 
     // Description
     if (typeof payload.description !== "string") {
-        console.error("Workout validation failed: description is not a string", payload.description);
-        return false;
+        return fail("Workout description is invalid.", payload.description);
     }
     if (payload.description.trim().length === 0) {
-        console.error("Workout validation failed: description is blank");
-        return false;
+        return fail("Workout description cannot be empty.");
     }
     if (payload.description.length > 256) {
-        console.error("Workout validation failed: description exceeds 256 characters", payload.description.length);
-        return false;
+        return fail("Workout description must not exceed 256 characters.");
     }
 
     // Created by
     if (typeof payload.createdBy !== "string") {
-        console.error("Workout validation failed: createdBy is not a string", payload.createdBy);
-        return false;
+        return fail("Workout creator is invalid.", payload.createdBy);
     }
     if (payload.createdBy.trim().length === 0) {
-        console.error("Workout validation failed: createdBy is blank");
-        return false;
+        return fail("Workout creator cannot be empty.");
     }
     if (payload.createdBy.length > 40) {
-        console.error("Workout validation failed: createdBy exceeds 40 characters", payload.createdBy.length);
-        return false;
+        return fail("Creator name must not exceed 40 characters.");
     }
-
 
     // Structure
     if (!Array.isArray(payload.structure)) {
-        console.error("Workout validation failed: structure is not an array", payload.structure);
-        return false;
+        return fail("Workout structure is invalid.", payload.structure);
     }
     if (payload.structure.length === 0) {
-        console.error("Workout validation failed: structure is empty");
-        return false;
+        return fail("Workout must contain at least one interval.");
     }
 
     for (let i = 0; i < payload.structure.length; i++) {
         const interval = payload.structure[i];
 
         if (typeof interval !== "object" || interval === null) {
-            console.error(`Workout validation failed: interval at index ${i} is not an object`, interval);
-            return false;
+            return fail(`Interval ${i + 1} is invalid.`, interval);
         }
 
         if (typeof interval.duration !== "number" || interval.duration <= 0) {
-            console.error(
-                `Workout validation failed: invalid duration at interval ${i}`,
-                interval.duration
-            );
-            return false;
+            return fail(`Interval ${i + 1} has invalid duration.`, interval.duration);
         }
 
         if (typeof interval.powerZone !== "number") {
-            console.error(
-                `Workout validation failed: invalid powerZone at interval ${i}`,
-                interval.powerZone
-            );
-            return false;
+            return fail(`Interval ${i + 1} has invalid power zone.`, interval.powerZone);
         }
 
         if (typeof interval.targetCadence !== "number") {
-            console.error(
-                `Workout validation failed: invalid targetCadence at interval ${i}`,
-                interval.targetCadence
-            );
-            return false;
+            return fail(`Interval ${i + 1} has invalid target cadence.`, interval.targetCadence);
         }
     }
 
     // Target zones
     if (!Array.isArray(payload.targetZones)) {
-        console.error("Workout validation failed: targetZones is not an array", payload.targetZones);
-        return false;
+        return fail("Target zones data is invalid.", payload.targetZones);
     }
 
     if (payload.targetZones.length === 0) {
-        console.error("Workout validation failed: targetZones is empty");
-        return false;
+        return fail("Workout must contain at least one target zone.");
     }
 
     if (!payload.targetZones.every(z => Number.isInteger(z))) {
-        console.error(
-            "Workout validation failed: targetZones contains non-integer values",
-            payload.targetZones
-        );
-        return false;
+        return fail("Target zones contain invalid values.", payload.targetZones);
     }
 
     return true;
 }
+
 
 export function validateFtp(ftp) {
     // Required
