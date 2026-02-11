@@ -17,11 +17,7 @@ export function openPopup({
     popupTitle.className = 'popup-title';
     popupTitle.textContent = title;
 
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'popup-close';
-    closeBtn.textContent = '✕';
-
-    header.append(popupTitle, closeBtn);
+    header.append(popupTitle);
 
     // Body
     const body = document.createElement('div');

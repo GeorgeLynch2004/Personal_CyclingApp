@@ -2,6 +2,7 @@ import {addItem, renderIntervalItems} from "../components/intervalItemList.js";
 import {validCadence, validPowerZone, validWorkout} from "../utils/validators.js";
 import {getPresentZones} from "../utils/zones.js";
 import {postWorkout} from "../api/workoutsApi.js";
+import {openPopup} from "../components/popup.js";
 
 const { username } = window.APP_USER;
 const container = document.getElementById("intervalsList");
@@ -69,9 +70,40 @@ document.getElementById("workoutSaveBtn")
 
         if (!validWorkout(payload)){
             console.error("Payload was invalid and was not sent.");
+            return;
         }
 
         console.log("Payload intervals: " + JSON.stringify(payload.structure));
 
-        await postWorkout(payload);
+        const res = await postWorkout(payload);
+
+        if (res.ok) {
+            openPopup({
+                title: "Save Workout",
+                content: "Workout was saved successfully.",
+                buttons: [
+                    {
+                        label: "Go to Profile",
+                        className: "popup-btn primary",
+                        onClick: (close) => {
+                            close();
+                            window.location.href = `/pages/profile/${username}#created-workouts`;
+                        }
+                    }
+                ]
+            });
+        } else {
+            openPopup({
+                title: "Save Workout",
+                content: "Server was not able to save workout, please try again.",
+                buttons: [
+                    {
+                        label: "OK",
+                        className: "popup-btn",
+                        onClick: (close) => close()
+                    }
+                ]
+            });
+        }
+
     });

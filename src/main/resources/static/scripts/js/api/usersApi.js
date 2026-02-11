@@ -13,6 +13,19 @@ export async function getAllUsers(){
     return res.json();
 }
 
+export async function login(){
+    const res = await fetch(`/users/setUserFtp`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify({ ftp })
+
+    });
+}
+
 export async function filterUsers(form){
     const params = new URLSearchParams();
     if (form.id) params.append("id", form.id);
