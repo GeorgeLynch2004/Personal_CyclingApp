@@ -2,6 +2,7 @@ package CyclingApp.pages;
 
 import CyclingApp.workouts.IWorkoutsService;
 import CyclingApp.workouts.WorkoutEntity;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -55,7 +57,29 @@ public class PagesController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login(
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "logout", required = false) String logout,
+            HttpServletRequest request,
+            Model model) {
+
+        // Handle error parameter from failed login
+        if (error != null) {
+            String errorMessage = (String) request.getSession().getAttribute("errorMessage");
+            if (errorMessage != null) {
+                model.addAttribute("errorMessage", errorMessage);
+                // Clean up session after displaying
+                request.getSession().removeAttribute("errorMessage");
+            } else {
+                model.addAttribute("errorMessage", "Invalid credentials. Please try again.");
+            }
+        }
+
+        // Handle logout parameter (optional)
+        if (logout != null) {
+            model.addAttribute("logoutMessage", "You have been successfully logged out.");
+        }
+
         return "login";
     }
 
