@@ -1,5 +1,6 @@
 package CyclingApp.workouts;
 
+import CyclingApp.common.pagination.PageResponse;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class WorkoutsRepository implements IWorkoutsRepository {
     }
 
     @Override
-    public List<WorkoutEntity> getWorkouts(
+    public PageResponse<WorkoutEntity> getWorkouts(
             Long id,
             String name,
             String description,
@@ -66,52 +67,75 @@ public class WorkoutsRepository implements IWorkoutsRepository {
             int size
     ) {
 
-
-        StringBuilder sql = new StringBuilder("""
-            SELECT *
-            FROM workouts
-            WHERE 1=1
-            """);
-
+        StringBuilder baseSql = new StringBuilder("""
+        FROM workouts
+        WHERE 1=1
+    """);
 
         List<Object> params = new ArrayList<>();
 
+        if (id != null) {
+            baseSql.append(" AND id = ?");
+            params.add(id);
+        }
 
         if (name != null && !name.isBlank()) {
-            sql.append(" AND name LIKE ?");
+            baseSql.append(" AND name LIKE ?");
             params.add("%" + name.trim() + "%");
         }
 
-
         if (description != null && !description.isBlank()) {
-            sql.append(" AND description LIKE ?");
+            baseSql.append(" AND description LIKE ?");
             params.add("%" + description.trim() + "%");
         }
 
-
         if (targetZones != null && !targetZones.isEmpty()) {
-            sql.append(" AND JSON_OVERLAPS(target_zones, ?)");
+            baseSql.append(" AND JSON_OVERLAPS(target_zones, ?)");
             params.add(objectMapper.writeValueAsString(targetZones));
         }
 
-
         if (createdBy != null && !createdBy.isBlank()) {
-            sql.append(" AND created_by = ?");
+            baseSql.append(" AND created_by = ?");
             params.add(createdBy.trim());
         }
 
         if (privacy != null) {
-            sql.append(" AND privacy_status = ?");
+            baseSql.append(" AND privacy_status = ?");
             params.add(privacy.name());
         }
 
-        sql.append(" LIMIT ? OFFSET ?");
+        // -------- COUNT QUERY --------
+        long total = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) " + baseSql,
+                params.toArray(),
+                Long.class
+        );
+
+        // -------- DATA QUERY --------
+        String dataSql = """
+        SELECT *
+    """ + baseSql + """
+        ORDER BY created_at DESC
+        LIMIT ? OFFSET ?
+    """;
+
         params.add(size);
         params.add(page * size);
 
+        List<WorkoutEntity> content =
+                jdbcTemplate.query(dataSql, rowMapper, params.toArray());
 
-        return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
+        int totalPages = (int) Math.ceil((double) total / size);
+
+        return new PageResponse<>(
+                content,
+                page,
+                size,
+                total,
+                totalPages
+        );
     }
+
 
 
     @Override

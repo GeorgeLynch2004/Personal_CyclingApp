@@ -120,7 +120,8 @@ export async function renderWorkouts(container, template, elements, workouts) {
         if (deleteBtn){
             deleteBtn.addEventListener('click', async () => {
                 await deleteWorkout(workout.id);
-                await renderWorkouts(container, template, elements, await getWorkouts({createdBy: workout.createdBy}));
+                const data = await getWorkouts({createdBy: workout.createdBy});
+                await renderWorkouts(container, template, elements, data.content);
             });
         }
 

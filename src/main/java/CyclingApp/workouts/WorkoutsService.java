@@ -1,5 +1,6 @@
 package CyclingApp.workouts;
 
+import CyclingApp.common.pagination.PageResponse;
 import CyclingApp.users.IUsersRepository;
 import CyclingApp.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class WorkoutsService implements IWorkoutsService {
     }
 
     @Override
-    public List<WorkoutEntity> getWorkouts(
+    public PageResponse<WorkoutEntity> getWorkouts(
             Long id,
             String name,
             String description,

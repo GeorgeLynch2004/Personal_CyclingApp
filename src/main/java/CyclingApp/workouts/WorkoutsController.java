@@ -1,8 +1,11 @@
 package CyclingApp.workouts;
 
+import CyclingApp.common.pagination.PageResponse;
 import CyclingApp.users.UsersService;
 import CyclingApp.workouts.favourites.FavouriteRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,15 +39,15 @@ public class WorkoutsController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping
-    public ResponseEntity<List<WorkoutEntity>> getWorkouts(
+    public ResponseEntity<PageResponse<WorkoutEntity>> getWorkouts(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) List<Integer> targetZones,
             @RequestParam(required = false) String createdBy,
             @RequestParam(required = false) WorkoutPrivacy privacy,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "0")@Min(0) int page,
+            @RequestParam(defaultValue = "20")@Min(1)@Max(100) int size,
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(
