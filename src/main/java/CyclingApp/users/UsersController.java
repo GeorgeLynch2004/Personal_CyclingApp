@@ -21,21 +21,21 @@ public class UsersController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAll")
-    public ResponseEntity<List<UserEntity>> getAllUsers(){
-        List<UserEntity> users = usersService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
+        List<UserDTO> users = usersService.getAllUsers();
         return ResponseEntity.ok().body(users);
     }
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/getByUsername")
-    public ResponseEntity<UserEntity> getByUsername(@RequestParam(required = true) String username){
-        UserEntity user = usersService.getByUsername(username);
+    public ResponseEntity<UserDTO> getByUsername(@RequestParam(required = true) String username){
+        UserDTO user = usersService.getByUsername(username);
         return ResponseEntity.ok().body(user);
     }
 
     @GetMapping("/usernameExists")
     public ResponseEntity<Boolean> usernameExists(@RequestParam(required = true) String username){
-        UserEntity user = usersService.getByUsername(username);
+        UserDTO user = usersService.getByUsername(username);
         if (user != null) {
             return ResponseEntity.ok().body(true);
         }
@@ -46,7 +46,7 @@ public class UsersController {
 
     @GetMapping("/emailExists")
     public ResponseEntity<Boolean> emailExists(@RequestParam(required = true) String email){
-        UserEntity user = usersService.getByEmail(email);
+        UserDTO user = usersService.getByEmail(email);
         if (user != null){
             return ResponseEntity.ok().body(true);
         }
@@ -64,7 +64,7 @@ public class UsersController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/filter")
-    public ResponseEntity<List<UserEntity>> getUsersByFilter(
+    public ResponseEntity<List<UserDTO>> getUsersByFilter(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,

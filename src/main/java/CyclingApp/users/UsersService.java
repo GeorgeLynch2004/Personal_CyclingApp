@@ -1,7 +1,9 @@
 package CyclingApp.users;
 
+import CyclingApp.workouts.WorkoutEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +19,37 @@ public class UsersService implements IUsersService{
     }
 
     @Override
-    public List<UserEntity> getAllUsers(){
-        return usersRepository.getAllUsers();
+    public List<UserDTO> getAllUsers() {
+        return usersRepository.getAllUsers()
+                .stream()
+                .map(UsersFactory::UserEntityToUserDTO)
+                .toList();
+    }
+
+
+    @Override
+    public UserDTO getByUsername(String username) {
+        UserEntity entity = usersRepository.getByUsername(username);
+
+        if (entity == null){
+            throw new UsernameNotFoundException("User was not found.");
+        }
+
+        return UsersFactory.UserEntityToUserDTO(entity);
     }
 
     @Override
-    public UserEntity getByUsername(String username){
-        return usersRepository.getByUsername(username);
+    public UserDTO getByEmail(String email) {
+        UserEntity entity = usersRepository.getByEmail(email);
+
+        if (entity == null){
+            throw new UsernameNotFoundException("User was not found.");
+        }
+
+        return UsersFactory.UserEntityToUserDTO(entity);
     }
 
-    @Override
-    public UserEntity getByEmail(String email) {return usersRepository.getByEmail(email);}
+
 
     @Override
     public void addUser(SignupForm signupForm){
@@ -36,8 +58,10 @@ public class UsersService implements IUsersService{
     }
 
     @Override
-    public List<UserEntity> getUsersByFilter(Long id, String name, String email, String role){
-        return usersRepository.getUsersByFilter(id, name, email, role);
+    public List<UserDTO> getUsersByFilter(Long id, String name, String email, String role){
+        return usersRepository.getUsersByFilter(id, name, email, role).stream()
+                .map(UsersFactory::UserEntityToUserDTO)
+                .toList();
     }
 
     @Override

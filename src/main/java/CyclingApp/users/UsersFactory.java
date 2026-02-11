@@ -15,4 +15,16 @@ public class UsersFactory {
             encoder.encode(form.getPassword())
         );
     }
+
+    public static UserDTO UserEntityToUserDTO(UserEntity user) {
+        return new UserDTO(
+                user.getId(),
+                user.getCreatedAt(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole(),
+                user.getFtp()
+        );
+    }
+
 }
