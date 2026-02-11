@@ -1,5 +1,6 @@
 package CyclingApp.workouts;
 
+import CyclingApp.common.pagination.PageResponse;
 import CyclingApp.users.IUsersRepository;
 import CyclingApp.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,61 +28,61 @@ public class WorkoutsService implements IWorkoutsService {
     }
 
     @Override
-    public List<WorkoutEntity> getAllWorkouts() {
-        return workoutsRepository.getAllWorkouts();
-    }
+    public PageResponse<WorkoutEntity> getWorkouts(
+            Long id,
+            String name,
+            String description,
+            List<Integer> targetZones,
+            String createdBy,
+            WorkoutPrivacy privacy,
+            int page,
+            int size,
+            User user
+    ) {
 
-    @Override
-    public List<WorkoutEntity> getPublicWorkouts(){
-        return workoutsRepository.getPublicWorkouts();
-    }
 
-    @Override
-    public WorkoutEntity getWorkoutById(long id, User user) {
-        WorkoutEntity workout = workoutsRepository.getWorkoutById(id);
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        if (workout == null) {
-            return null;
+
+        // 🔒 Enforce access rules
+        if (!isAdmin) {
+            // Non-admins may ONLY ever see PUBLIC workouts
+            privacy = WorkoutPrivacy.PUBLIC;
         }
 
-        if (workout.getPrivacyStatus() == WorkoutPrivacy.PUBLIC ||
-                workout.getCreatedBy().equals(user.getUsername()) ||
-                user.getAuthorities().stream()
-                        .anyMatch(a -> Objects.equals(a.getAuthority(), "ROLE_ADMIN"))
-        ) {
+
+        return workoutsRepository.getWorkouts(
+                id,
+                name,
+                description,
+                targetZones,
+                createdBy,
+                privacy,
+                page,
+                size
+        );
+    }
+
+    @Override
+    public WorkoutEntity getWorkoutById(Long id, User user) {
+
+        WorkoutEntity workout = workoutsRepository.getWorkoutById(id);
+
+        if (workout == null) return null;
+
+        boolean isAdmin = user.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (workout.getPrivacyStatus() == WorkoutPrivacy.PUBLIC
+                || workout.getCreatedBy().equals(user.getUsername())
+                || isAdmin) {
             return workout;
         }
 
         return null;
     }
 
-    @Override
-    public List<WorkoutEntity> getWorkoutsByCreator(User user){
-        return workoutsRepository.getWorkoutsByCreator(user);
-    }
-
-    @Override
-    public List<WorkoutEntity> getWorkoutsByFilter(
-            String name,
-            String description,
-            List<Integer> targetZones,
-            Long id,
-            LocalDateTime createdAt,
-            String createdBy,
-            WorkoutPrivacy workoutPrivacy
-    ) {
-
-        return workoutsRepository
-                .getWorkoutsByFilter(
-                        name,
-                        description,
-                        targetZones,
-                        id,
-                        createdAt,
-                        createdBy,
-                        workoutPrivacy
-                );
-    }
 
     @Override
     public void addWorkoutFromForm(WorkoutForm workoutForm, User user) {
