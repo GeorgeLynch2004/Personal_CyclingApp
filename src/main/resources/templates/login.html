@@ -15,7 +15,7 @@
     <div class="form-card">
         <h1>Login</h1>
 
-        <form th:action="@{/login}" method="post">
+        <form th:action="@{/login}" id="loginForm" method="post">
             <input type="hidden"
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}" />
@@ -29,8 +29,8 @@
                 <label for="password">Password</label>
                 <input id="password" type="password" name="password" placeholder="password" />
             </div>
-            <div id="formFeedback">
-
+            <div id="formFeedback" th:if="${errorMessage}">
+                <span th:text="${errorMessage}"></span>
             </div>
             <button class="form-button" type="submit">Sign In</button>
             <a th:href="@{/pages/signup}">Haven't got an account? Sign up here.</a>
