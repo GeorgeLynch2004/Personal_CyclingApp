@@ -1,5 +1,7 @@
 package CyclingApp.users;
 
+import CyclingApp.common.exceptions.EmailAlreadyExistsException;
+import CyclingApp.common.exceptions.UsernameAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -33,34 +36,19 @@ public class UsersController {
         return ResponseEntity.ok().body(user);
     }
 
-    @GetMapping("/usernameExists")
-    public ResponseEntity<Boolean> usernameExists(@RequestParam(required = true) String username){
-        UserDTO user = usersService.getByUsername(username);
-        if (user != null) {
-            return ResponseEntity.ok().body(true);
-        }
-        else{
-            return ResponseEntity.ok().body(false);
-        }
-    }
-
-    @GetMapping("/emailExists")
-    public ResponseEntity<Boolean> emailExists(@RequestParam(required = true) String email){
-        UserDTO user = usersService.getByEmail(email);
-        if (user != null){
-            return ResponseEntity.ok().body(true);
-        }
-        else{
-            return ResponseEntity.ok().body(false);
-        }
-    }
-
     @PreAuthorize("isAnonymous()")
     @PostMapping("/signup")
-    public ResponseEntity<Void> addUser(@ModelAttribute SignupForm signupForm){
-        usersService.addUser(signupForm);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> addUser(@ModelAttribute SignupForm signupForm) {
+        try {
+            usersService.addUser(signupForm);
+            return ResponseEntity.ok().build();
+        } catch (UsernameAlreadyExistsException e) {
+            return ResponseEntity.badRequest().body("Username is already in use.");
+        } catch (EmailAlreadyExistsException e) {
+            return ResponseEntity.badRequest().body("Email is already in use.");
+        }
     }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/filter")

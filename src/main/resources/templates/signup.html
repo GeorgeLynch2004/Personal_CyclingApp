@@ -118,45 +118,97 @@
         return true;
     }
 
-    async function usernameValidation(feedbackDiv, username){
+    function usernameValidation(feedbackDiv, username) {
+        // Clear previous feedback
+        feedbackDiv.textContent = "";
+
+        if (!username || username.trim() === '') {
+            feedbackDiv.textContent += "Username is required.\n";
+            return false;
+        }
+
+        username = username.trim();
+
         if (username.length < 8 || username.length > 40) {
             feedbackDiv.textContent += "Username must be 8–40 characters.\n";
             return false;
         }
 
-        const url = `http://localhost:8080/users/usernameExists?username=${encodeURIComponent(username)}`;
+        // Only allow letters, numbers, underscores, and hyphens
+        const validUsernameRegex = /^[a-zA-Z0-9_-]+$/;
+        if (!validUsernameRegex.test(username)) {
+            feedbackDiv.textContent += "Username can only contain letters, numbers, underscores, and hyphens.\n";
+            return false;
+        }
 
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
+        // Must contain at least one letter
+        if (!/[a-zA-Z]/.test(username)) {
+            feedbackDiv.textContent += "Username must contain at least one letter.\n";
+            return false;
+        }
 
-            if (data === true){
-                feedbackDiv.textContent += "Username taken.\n";
-                return false;
-            }
-        } catch (e) {
-            console.error("Username check failed.", e);
-            feedbackDiv.textContent = "Server error. Try again later.";
+        // Cannot start or end with special characters
+        if (/^[_-]|[_-]$/.test(username)) {
+            feedbackDiv.textContent += "Username cannot start or end with underscores or hyphens.\n";
+            return false;
+        }
+
+        // Cannot have consecutive special characters
+        if (/[_-]{2,}/.test(username)) {
+            feedbackDiv.textContent += "Username cannot contain consecutive special characters.\n";
+            return false;
+        }
+
+        // Check for reserved words
+        const reservedWords = ['admin', 'root', 'system', 'null', 'undefined', 'administrator'];
+        if (reservedWords.includes(username.toLowerCase())) {
+            feedbackDiv.textContent += "This username is reserved and cannot be used.\n";
             return false;
         }
 
         return true;
     }
 
-    async function emailValidation(feedbackDiv, email){
-        const url = `http://localhost:8080/users/emailExists?email=${encodeURIComponent(email)}`;
+    function emailValidation(feedbackDiv, email) {
+        // Clear previous feedback
+        feedbackDiv.textContent = "";
 
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
+        if (!email || email.trim() === '') {
+            feedbackDiv.textContent += "Email is required.\n";
+            return false;
+        }
 
-            if (data === true){
-                feedbackDiv.textContent += "Email taken.\n";
-                return false;
-            }
-        } catch (e) {
-            console.error("Email check failed.", e);
-            feedbackDiv.textContent = "Server error. Try again later.";
+        email = email.trim();
+
+        if (email.length > 254) {
+            feedbackDiv.textContent += "Email is too long.\n";
+            return false;
+        }
+
+        // RFC 5322 compliant email regex
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+        if (!emailRegex.test(email)) {
+            feedbackDiv.textContent += "Please enter a valid email address.\n";
+            return false;
+        }
+
+        // Check for consecutive dots
+        if (email.includes('..')) {
+            feedbackDiv.textContent += "Email cannot contain consecutive dots.\n";
+            return false;
+        }
+
+        // Check that local part (before @) doesn't start or end with a dot
+        const [localPart, domain] = email.split('@');
+        if (localPart.startsWith('.') || localPart.endsWith('.')) {
+            feedbackDiv.textContent += "Email format is invalid.\n";
+            return false;
+        }
+
+        // Basic domain validation
+        if (!domain || !domain.includes('.')) {
+            feedbackDiv.textContent += "Email must have a valid domain.\n";
             return false;
         }
 
