@@ -1,5 +1,7 @@
 package CyclingApp.users;
 
+import CyclingApp.common.exceptions.EmailAlreadyExistsException;
+import CyclingApp.common.exceptions.UsernameAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -21,50 +24,35 @@ public class UsersController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAll")
-    public ResponseEntity<List<UserEntity>> getAllUsers(){
-        List<UserEntity> users = usersService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
+        List<UserDTO> users = usersService.getAllUsers();
         return ResponseEntity.ok().body(users);
     }
 
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/getByUsername")
-    public ResponseEntity<UserEntity> getByUsername(@RequestParam(required = true) String username){
-        UserEntity user = usersService.getByUsername(username);
+    public ResponseEntity<UserDTO> getByUsername(@RequestParam(required = true) String username){
+        UserDTO user = usersService.getByUsername(username);
         return ResponseEntity.ok().body(user);
-    }
-
-    @GetMapping("/usernameExists")
-    public ResponseEntity<Boolean> usernameExists(@RequestParam(required = true) String username){
-        UserEntity user = usersService.getByUsername(username);
-        if (user != null) {
-            return ResponseEntity.ok().body(true);
-        }
-        else{
-            return ResponseEntity.ok().body(false);
-        }
-    }
-
-    @GetMapping("/emailExists")
-    public ResponseEntity<Boolean> emailExists(@RequestParam(required = true) String email){
-        UserEntity user = usersService.getByEmail(email);
-        if (user != null){
-            return ResponseEntity.ok().body(true);
-        }
-        else{
-            return ResponseEntity.ok().body(false);
-        }
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/signup")
-    public ResponseEntity<Void> addUser(@ModelAttribute SignupForm signupForm){
-        usersService.addUser(signupForm);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> addUser(@ModelAttribute SignupForm signupForm) {
+        try {
+            usersService.addUser(signupForm);
+            return ResponseEntity.ok().build();
+        } catch (UsernameAlreadyExistsException e) {
+            return ResponseEntity.badRequest().body("Username is already in use.");
+        } catch (EmailAlreadyExistsException e) {
+            return ResponseEntity.badRequest().body("Email is already in use.");
+        }
     }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/filter")
-    public ResponseEntity<List<UserEntity>> getUsersByFilter(
+    public ResponseEntity<List<UserDTO>> getUsersByFilter(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
