@@ -60,14 +60,12 @@ export function openPopup({
         if (e.key === 'Escape') close();
     }
 
-    closeBtn.onclick = close;
-
     overlay.onclick = e => {
         if (e.target === overlay) close();
     };
 
     document.addEventListener('keydown', escHandler);
 
-    return { close, popup, body, footer };
+    return { popup, body, footer };
 }
 

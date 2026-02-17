@@ -12,119 +12,122 @@
 </head>
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
-    <div class="page-start">
-        <h1>Workouts</h1>
+    <div class="section-container">
+        <div class="page-start">
+            <h1>Workouts</h1>
 
-        <!-- Sidebar toggle button -->
-        <button id="filterToggle" class="filter-toggle-btn">☰ filters</button>
+            <!-- Sidebar toggle button -->
+            <button id="filterToggle" class="filter-toggle-btn">☰ filters</button>
 
+        </div>
+
+
+        <!-- Sidebar -->
+        <aside id="filterSidebar" class="workout-filter sidebar">
+            <form id="workoutFilterForm">
+                <div class="filter-group">
+                    <label for="filterWorkoutName">name</label>
+                    <input type="text" id="filterWorkoutName" placeholder="name">
+                </div>
+
+                <div class="filter-group">
+                    <label for="filterWorkoutDesc">description</label>
+                    <input type="text" id="filterWorkoutDesc" placeholder="description">
+                </div>
+
+                <div class="filter-group">
+                    <label>
+                        <span class="filter-label">target zones</span>
+                    </label>
+
+                    <div class="zone-checkboxes">
+                        <label class="zone-checkbox"><input type="checkbox" value="1"><span>zone 1</span></label>
+                        <label class="zone-checkbox"><input type="checkbox" value="2"><span>zone 2</span></label>
+                        <label class="zone-checkbox"><input type="checkbox" value="3"><span>zone 3</span></label>
+                        <label class="zone-checkbox"><input type="checkbox" value="4"><span>zone 4</span></label>
+                        <label class="zone-checkbox"><input type="checkbox" value="5"><span>zone 5</span></label>
+                        <label class="zone-checkbox"><input type="checkbox" value="6"><span>zone 6</span></label>
+                        <label class="zone-checkbox"><input type="checkbox" value="7"><span>zone 7</span></label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filterWorkoutCreatedBy">Created By</label>
+                    <input type="text" id="filterWorkoutCreatedBy" placeholder="Creator">
+                </div>
+
+                <div class="filter-group">
+                    <label for="filterWorkoutCreatedAt">Created At</label>
+                    <input type="date" id="filterWorkoutCreatedAt" name="filterWorkoutCreatedAt">
+                </div>
+
+                <div class="filter-group">
+                    <label for="filterWorkoutPageSize">Display Items</label>
+                    <select id="filterWorkoutPageSize" class="form-button">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50" selected>50</option>
+                        <option value="75">75</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+
+                <!-- Buttons row -->
+                <div class="form-buttons">
+                    <button type="button" id="clearFilterBtn" class="filter-form-btn">clear</button>
+                    <button type="submit" id="filterFormSubmit" class="filter-form-btn">filter</button>
+                    <button type="button" id="filterFormBack" class="filter-form-btn">back</button>
+                </div>
+            </form>
+        </aside>
+
+        <div id="workoutsContainer" class="workout-container">
+            <template id="workoutCardTemplate">
+                <div id="workoutCard" class="workout-card">
+                    <h3 id="workoutName" class="workout-name"></h3>
+                    <div id="workoutGraph" class="workout-graph">
+                        <canvas></canvas>
+                    </div>
+                    <p id="workoutDescription" class="workout-description"></p>
+                    <p id="workoutTargetZones" class="workout-targetZones"></p>
+                    <div class="workout-actions">
+                        <button
+                                class="workout-thumbsUpButton"
+                                aria-pressed="false"
+                                type="button"
+                                id="likeWorkoutBtn"
+                                aria-label="Like workout"
+                        >
+                            00
+                            👍
+                        </button>
+                        <button
+                                class="workout-thumbsDownButton"
+                                type="button"
+                                id="dislikeWorkoutButton"
+                                aria-pressed="false"
+                                aria-label="Dislike workout"
+                        >
+                            00
+                            👎
+                        </button>
+                        <a id="workoutExpandButton" class="workout-expandButton" href="">view</a>
+                        <button
+                                class="workout-favouriteButton"
+                                type="submit"
+                                id="workoutFavouriteButton"
+                                aria-pressed="false"
+                                aria-label="Add to favourites">
+                            Favourite
+                        </button>
+                    </div>
+
+
+                </div>
+            </template>
+        </div>
     </div>
 
-
-    <!-- Sidebar -->
-    <aside id="filterSidebar" class="workout-filter sidebar">
-        <form id="workoutFilterForm">
-            <div class="filter-group">
-                <label for="filterWorkoutName">name</label>
-                <input type="text" id="filterWorkoutName" placeholder="name">
-            </div>
-
-            <div class="filter-group">
-                <label for="filterWorkoutDesc">description</label>
-                <input type="text" id="filterWorkoutDesc" placeholder="description">
-            </div>
-
-            <div class="filter-group">
-                <label>
-                    <span class="filter-label">target zones</span>
-                </label>
-
-                <div class="zone-checkboxes">
-                    <label class="zone-checkbox"><input type="checkbox" value="1"><span>zone 1</span></label>
-                    <label class="zone-checkbox"><input type="checkbox" value="2"><span>zone 2</span></label>
-                    <label class="zone-checkbox"><input type="checkbox" value="3"><span>zone 3</span></label>
-                    <label class="zone-checkbox"><input type="checkbox" value="4"><span>zone 4</span></label>
-                    <label class="zone-checkbox"><input type="checkbox" value="5"><span>zone 5</span></label>
-                    <label class="zone-checkbox"><input type="checkbox" value="6"><span>zone 6</span></label>
-                    <label class="zone-checkbox"><input type="checkbox" value="7"><span>zone 7</span></label>
-                </div>
-            </div>
-
-            <div class="filter-group">
-                <label for="filterWorkoutCreatedBy">Created By</label>
-                <input type="text" id="filterWorkoutCreatedBy" placeholder="Creator">
-            </div>
-
-            <div class="filter-group">
-                <label for="filterWorkoutCreatedAt">Created At</label>
-                <input type="date" id="filterWorkoutCreatedAt" name="filterWorkoutCreatedAt">
-            </div>
-
-            <div class="filter-group">
-                <label for="filterWorkoutPageSize">Display Items</label>
-                <select id="filterWorkoutPageSize" class="form-button">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50" selected>50</option>
-                    <option value="75">75</option>
-                    <option value="100">100</option>
-                </select>
-            </div>
-
-            <!-- Buttons row -->
-            <div class="form-buttons">
-                <button type="button" id="clearFilterBtn" class="filter-form-btn">clear</button>
-                <button type="submit" id="filterFormSubmit" class="filter-form-btn">filter</button>
-                <button type="button" id="filterFormBack" class="filter-form-btn">back</button>
-            </div>
-        </form>
-    </aside>
-
-    <div id="workoutsContainer" class="workout-container">
-        <template id="workoutCardTemplate">
-            <div id="workoutCard" class="workout-card">
-                <h3 id="workoutName" class="workout-name"></h3>
-                <div id="workoutGraph" class="workout-graph">
-                    <canvas></canvas>
-                </div>
-                <p id="workoutDescription" class="workout-description"></p>
-                <p id="workoutTargetZones" class="workout-targetZones"></p>
-                <div class="workout-actions">
-                    <button
-                            class="workout-thumbsUpButton"
-                            aria-pressed="false"
-                            type="button"
-                            id="likeWorkoutBtn"
-                            aria-label="Like workout"
-                    >
-                        00
-                        👍
-                    </button>
-                    <button
-                            class="workout-thumbsDownButton"
-                            type="button"
-                            id="dislikeWorkoutButton"
-                            aria-pressed="false"
-                            aria-label="Dislike workout"
-                    >
-                        00
-                        👎
-                    </button>
-                    <a id="workoutExpandButton" class="workout-expandButton" href="">view</a>
-                    <button
-                            class="workout-favouriteButton"
-                            type="submit"
-                            id="workoutFavouriteButton"
-                            aria-pressed="false"
-                            aria-label="Add to favourites">
-                        Favourite
-                    </button>
-                </div>
-
-
-            </div>
-        </template>
-    </div>
     <div id="pagination" class="pagination"></div>
 </body>
 

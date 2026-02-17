@@ -1,72 +1,205 @@
+/* =====================================================
+   INTERVAL ITEM CARD - TERMINAL LIST ITEMS
+===================================================== */
+
 .interval-item-card {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: space-between;
 
     gap: 1rem;
+    padding: 1rem 1.25rem;
 
-    padding: 1rem;
+    border: 1px solid var(--border-primary);
+    background: var(--bg-secondary);
 
-    border: 1px solid #3a3a3a;
-    border-radius: 16px;
-
-    background-color: #2a2a2a;
     transition: all 0.2s ease;
 }
 
 .interval-item-card:hover {
-    border-color: #4a9eff;
-    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.2);
+    border-color: var(--accent-primary);
+    background: var(--bg-hover);
 }
 
-.interval-item-actions {
-    flex-basis: 100%;   /* new row */
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-}
+/* =====================================================
+   INTERVAL DATA
+===================================================== */
 
 .interval-item-data {
-    font-weight: bold;
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 500;
     margin: 0;
+    color: var(--text-primary);
+}
+
+.interval-item-data strong {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+/* =====================================================
+   INTERVAL ACTIONS
+===================================================== */
+
+.interval-item-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.interval-item-actions button {
+    padding: 0.5rem 1rem;
+
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-primary);
+
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: lowercase;
+
+    color: var(--text-primary);
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.interval-item-actions button:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+.interval-item-actions button:active {
+    transform: translateY(1px);
+}
+
+/* Delete button variant */
+.interval-item-actions button.delete {
+    color: var(--accent-error);
+    border-color: var(--accent-error);
+}
+
+.interval-item-actions button.delete:hover {
+    background: var(--accent-error);
     color: #ffffff;
 }
 
+/* =====================================================
+   INTERVAL ITEM CONTAINER - SCROLLABLE LIST
+===================================================== */
+
 .interval-item-container {
-    width: 360px;
-    background: #1e1e1e;
+    width: 100%;
+    max-width: 600px;
 
-    border: 1px solid #3a3a3a;
-    border-radius: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
 
-    max-height: 228px;
+    max-height: 400px;
     overflow-y: auto;
 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-    padding: 1.75rem 2rem;
+    box-shadow: var(--shadow-md);
 
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
 }
 
-/* Custom scrollbar for dark mode */
+/* Container header */
+.interval-item-container > h2,
+.interval-item-container > h3 {
+    margin: 0;
+    padding: 1rem 1.25rem;
+
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: lowercase;
+
+    background: var(--bg-elevated);
+    border-bottom: 2px solid var(--border-primary);
+
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Item list */
+.interval-item-container .interval-item-card {
+    border: none;
+    border-bottom: 1px solid var(--border-secondary);
+}
+
+.interval-item-container .interval-item-card:last-child {
+    border-bottom: none;
+}
+
+/* Custom scrollbar */
 .interval-item-container::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 .interval-item-container::-webkit-scrollbar-track {
-    background: #2a2a2a;
-    border-radius: 8px;
+    background: var(--bg-elevated);
 }
 
 .interval-item-container::-webkit-scrollbar-thumb {
-    background: #4a9eff;
-    border-radius: 8px;
+    background: var(--border-accent);
+    border: 2px solid var(--bg-elevated);
 }
 
 .interval-item-container::-webkit-scrollbar-thumb:hover {
-    background: #6bb6ff;
+    background: var(--accent-primary);
+}
+
+/* Firefox scrollbar */
+.interval-item-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-accent) var(--bg-elevated);
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+    .interval-item-container {
+        max-width: 100%;
+        max-height: 350px;
+    }
+
+    .interval-item-card {
+        padding: 0.875rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .interval-item-data {
+        font-size: 0.85rem;
+    }
+
+    .interval-item-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .interval-item-container {
+        max-height: 300px;
+    }
+
+    .interval-item-card {
+        padding: 0.75rem;
+    }
+
+    .interval-item-actions {
+        justify-content: stretch;
+    }
+
+    .interval-item-actions button {
+        flex: 1;
+    }
 }
