@@ -6,7 +6,7 @@ import {
 import {filterUsers, getAllUsers} from "../api/usersApi.js";
 import {openPopup} from "../components/popup.js";
 
-function renderDbVisualisation(div, content) {
+function renderDbVisualisation(div, content, patchFunction) {
     if (!div || !Array.isArray(content) || content.length === 0) {
         div.innerHTML = '<p>No data available</p>';
         return;
@@ -55,94 +55,60 @@ function renderDbVisualisation(div, content) {
             editForm.name = "editRecordForm";
             editForm.id = "editRecordForm";
 
-            // Edit workout privacy form field
-            const privDiv = document.createElement('div');
-            privDiv.className = "filter-item";
-            const privLabel = document.createElement('label');
-            privLabel.htmlFor = 'workoutPrivacyEdit';
-            privLabel.textContent = 'Workout Privacy';
-            const privElement = document.createElement('select');
-            const privacyOptions = await getWorkoutPrivacyOptions();
-            privacyOptions.forEach(option => {
-                const opt = document.createElement("option");
-                opt.value = option.value ?? option;
-                opt.textContent = option.label ?? option;
-                privElement.appendChild(opt);
+            Object.entries(record).forEach(([field, value]) => {
+                const div = document.createElement(`div`);
+                div.className = 'filter-item';
+                const label = document.createElement('label');
+                label.htmlFor = `${field}Edit`;
+                label.textContent = `${field}`;
+                const element = document.createElement('input');
+                element.value = value ?? '';
+                element.id = `${field}Edit`;
+                element.name = field;
+                div.appendChild(label);
+                div.append(element);
+                editForm.appendChild(div);
             });
-            privElement.value = record['privacyStatus'];
-            privElement.id = 'workoutPrivacyEdit';
-            privDiv.appendChild(privLabel);
-            privDiv.appendChild(privElement);
-            editForm.appendChild(privDiv);
-
-            // Edit workout name form field
-            const nameDiv = document.createElement('div');
-            nameDiv.className = "filter-item";
-            const nameLabel = document.createElement('label');
-            nameLabel.htmlFor = 'workoutNameEdit';
-            nameLabel.textContent = 'Workout Name';
-            const nameElement = document.createElement('input');
-            nameElement.value = record['name'];
-            nameElement.id = 'workoutNameEdit';
-            nameDiv.appendChild(nameLabel);
-            nameDiv.appendChild(nameElement);
-            editForm.appendChild(nameDiv);
-
-            // Edit workout description form field
-            const descDiv = document.createElement('div');
-            descDiv.className = "filter-item";
-            const descLabel = document.createElement('label');
-            descLabel.htmlFor = 'workoutDescEdit';
-            descLabel.textContent = 'Workout Description';
-            const descElement = document.createElement('input');
-            descElement.value = record['description'];
-            descElement.id = 'workoutDescEdit';
-            descDiv.appendChild(descLabel);
-            descDiv.appendChild(descElement);
-            editForm.appendChild(descDiv);
 
             const feedbackDiv = document.createElement('div');
             editForm.appendChild(feedbackDiv);
 
-            async function requestUpdate(payload, feedbackDiv) {
-                const res = await patchWorkout({
-                    id: record['id'],
-                    privacyStatus: document.getElementById("workoutPrivacyEdit").value.trim(),
-                    name: document.getElementById("workoutNameEdit").value.trim(),
-                    description: document.getElementById("workoutDescEdit").value.trim(),
+            async function requestUpdate(feedbackDiv) {
+                const payload = { id: record.id };
+
+                const inputs = editForm.querySelectorAll('input');
+
+                inputs.forEach(input => {
+                    payload[input.name] = input.value.trim();
                 });
 
-                while (feedbackDiv.firstChild) {
-                    feedbackDiv.removeChild(feedbackDiv.firstChild);
-                }
+                const res = await patchFunction(payload);
 
-                if (res.ok) {
-                    const p = document.createElement('p');
-                    p.textContent = "Update Successful";
-                    feedbackDiv.appendChild(p);
-                } else {
-                    const p = document.createElement('p');
-                    p.textContent = "Update Unsuccessful";
-                    feedbackDiv.appendChild(p);
-                }
+                feedbackDiv.replaceChildren(
+                    Object.assign(document.createElement('p'), {
+                        textContent: res.ok
+                            ? 'Update Successful'
+                            : 'Update Unsuccessful'
+                    })
+                );
             }
+
 
             openPopup({
                 title: 'Edit Row',
                 content: editForm,
-                buttons: [{
-                    label: "submit", onClick: submit => requestUpdate({
-                        id: record['id'],
-                        privacyStatus: document.getElementById("workoutPrivacyEdit").value.trim(),
-                        name: document.getElementById("workoutNameEdit").value.trim(),
-                        description: document.getElementById("workoutDescEdit").value.trim(),
-                    }, feedbackDiv)
-                },
+                buttons: [
                     {
-                        label: "cancel", onClick: close => close()
+                        label: 'submit',
+                        onClick: () => requestUpdate(feedbackDiv)
+                    },
+                    {
+                        label: 'cancel',
+                        onClick: close => close()
                     }
                 ]
             });
+
         });
         row.appendChild(editBtn);
 
@@ -166,12 +132,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await getWorkouts({ page: 0, size: 20 });
     renderDbVisualisation(
         document.getElementById("workoutsTableContainer"),
-        data.content
+        data.content,
+        patchWorkout()
     );
 
     renderDbVisualisation(
         document.getElementById("usersTableContainer"),
-        await getAllUsers()
+        await getAllUsers(),
     );
 });
 
@@ -215,7 +182,7 @@ filterForm.addEventListener("submit", async (e) => {
         page: currentPage,
         size: pageSize
     });
-    renderDbVisualisation(document.getElementById("workoutsTableContainer"), res.content);
+    renderDbVisualisation(document.getElementById("workoutsTableContainer"), res.content, patchWorkout());
 });
 
 

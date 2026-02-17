@@ -1,83 +1,97 @@
 /* =====================================================
-   Base Layout - Dark Mode
+   WORKOUTS PAGE - TUI CARD LAYOUT
 ===================================================== */
 
 .page-start {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
-    padding: 1.5rem;
-    background: #0f0f0f;
+}
+
+.page-start h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin: 0;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-primary);
+    text-transform: lowercase;
 }
 
 /* =====================================================
-   Workout List (Cards)
+   WORKOUT CONTAINER - GRID LAYOUT
 ===================================================== */
 
 .workout-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
-    padding: 1.5rem;
-    justify-content: center;
-    justify-items: center;
+
 }
 
-/* -----------------------------------------------------
-   Card
------------------------------------------------------ */
+/* =====================================================
+   WORKOUT CARD - TERMINAL WINDOW STYLE
+===================================================== */
 
 .workout-card {
     display: flex;
     flex-direction: column;
-    width: 340px;
-    background: #1e1e1e;
 
-    padding: 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
 
-    border: 1px solid #3a3a3a;
-    border-radius: 16px;
-
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
     overflow: hidden;
+    transition: all 0.2s ease;
 
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .workout-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8);
-    border-color: #4a9eff;
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
-/* -----------------------------------------------------
-   Card Content
------------------------------------------------------ */
+/* =====================================================
+   CARD HEADER - TITLE BAR
+===================================================== */
 
 .workout-name {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 1rem 1.25rem 0.5rem;
-    color: #ffffff;
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    padding: 0.875rem 1rem;
+
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-primary);
+    text-transform: lowercase;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.workout-description,
-.workout-targetZones {
-    margin: 0.5rem 1.25rem;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #e0e0e0;
-    line-height: 1.4;
-}
+/* =====================================================
+   CARD GRAPH - DISPLAY AREA
+===================================================== */
 
-/* -----------------------------------------------------
-   Card Graph (Small)
------------------------------------------------------ */
-
-.workout-card .workout-graph {
+.workout-graph {
     display: flex;
     justify-content: center;
     align-items: center;
+
     height: 160px;
-    padding: 0 1rem 0.5rem;
+    padding: 1rem;
+
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-secondary);
+
+    position: relative;
 }
 
 .workout-graph canvas {
@@ -85,242 +99,212 @@
     height: 100% !important;
 }
 
-/* -----------------------------------------------------
-   Card Buttons
------------------------------------------------------ */
+/* =====================================================
+   CARD CONTENT
+===================================================== */
 
-.workout-actions {
-    margin-top: auto;
-    display: flex;
-    gap: 0.75rem;
+.workout-description,
+.workout-targetZones {
+    margin: 0;
+    padding: 0.75rem 1rem;
 
-    max-width: 320px;
-    margin-left: auto;
-}
-
-.workout-expandButton,
-.workout-favouriteButton {
-    flex: 1;
-    padding: 0.75rem;
-
-    text-align: center;
-    border-radius: 12px;
-    border: 1px solid #3a3a3a;
-
-    background: #2a2a2a;
-    color: #ffffff;
-
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
+    line-height: 1.5;
+
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-secondary);
+}
+
+.workout-targetZones {
     font-weight: 600;
-    text-decoration: none;
-
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.workout-favouriteButton[aria-pressed="true"]{
-    color: #ffffff;
-    background: #1e5a9e;
-    border-color: #4a9eff;
-}
-
-.workout-expandButton:hover {
-    background: #d4a017;
-    border-color: #f4c430;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(244, 196, 48, 0.3);
-}
-
-.workout-favouriteButton:hover {
-    background: #1e5a9e;
-    border-color: #4a9eff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
-}
-
-.workout-favouriteButton.active {
-    background: #1e5a9e;
-    color: #ffffff;
-    border-color: #4a9eff;
-}
-
-/* Thumbs up button - Green */
-.workout-thumbsUpButton {
-    flex: 1;
-    padding: 0.75rem;
-
-    text-align: center;
-    border-radius: 12px;
-    border: 1px solid #3a3a3a;
-
-    background: #2a2a2a;
-    color: #ffffff;
-
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.workout-thumbsUpButton:hover {
-    background: #2c9a2c;
-    border-color: #60dc64;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-}
-
-/* Thumbs down button - Red */
-.workout-thumbsDownButton {
-    flex: 1;
-    padding: 0.75rem;
-
-    text-align: center;
-    border-radius: 12px;
-    border: 1px solid #3a3a3a;
-
-    background: #2a2a2a;
-    color: #ffffff;
-
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.workout-thumbsDownButton:hover {
-    background: #f12424;
-    border-color: #fd4b3e;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
-}
-
-.workout-thumbsUpButton.active {
-    background: #2d7a2d;
-    color: #ffffff;
-    border-color: #4caf50;
-}
-
-.workout-thumbsDownButton.active {
-    background: #b71c1c;
-    color: #ffffff;
-    border-color: #f44336;
+    color: var(--accent-primary);
+    border-bottom: none;
 }
 
 /* =====================================================
-   Filter Sidebar
+   CARD ACTIONS - BUTTON ROW
 ===================================================== */
 
-/* Toggle Button */
+.workout-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 
-.filter-toggle-btn {
-    padding: 0.6rem 1.2rem;
+    border-top: 1px solid var(--border-primary);
+}
 
-    font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: bold;
+.workout-expandButton,
+.workout-favouriteButton,
+.workout-thumbsUpButton,
+.workout-thumbsDownButton {
+    padding: 0.75rem 0.5rem;
 
-    background: #2a2a2a;
-    color: #ffffff;
+    background: var(--bg-secondary);
+    border: none;
+    border-right: 1px solid var(--border-secondary);
 
-    border: 1px solid #3a3a3a;
-    border-radius: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    text-align: center;
+    text-transform: lowercase;
 
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.workout-actions > *:last-child {
+    border-right: none;
+}
+
+.workout-expandButton:hover,
+.workout-favouriteButton:hover,
+.workout-thumbsUpButton:hover,
+.workout-thumbsDownButton:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+/* Active states */
+.workout-favouriteButton[aria-pressed="true"],
+.workout-favouriteButton.active {
+    background: var(--accent-primary);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.workout-thumbsUpButton[aria-pressed="true"],
+.workout-thumbsUpButton.active {
+    background: var(--accent-success);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.workout-thumbsDownButton[aria-pressed="true"],
+.workout-thumbsDownButton.active {
+    background: var(--accent-error);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* =====================================================
+   FILTER TOGGLE BUTTON
+===================================================== */
+
+.filter-toggle-btn {
+    align-self: flex-start;
+
+    padding: 0.625rem 1.25rem;
+
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-transform: lowercase;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    box-shadow: var(--shadow-sm);
 }
 
 .filter-toggle-btn:hover {
-    background: #3a5a7a;
-    border-color: #4a9eff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
 }
 
-/* ================================
-   Workout Filter Sidebar
-================================ */
+/* =====================================================
+   FILTER SIDEBAR - TERMINAL PANEL
+===================================================== */
 
 .workout-filter.sidebar {
     position: fixed;
-    top: 100px;
+    top: 0;
     left: 0;
 
     width: 340px;
-    height: calc(100% - 100px);
+    height: 100vh;
 
-    background: #1e1e1e;
-    border: 1px solid #3a3a3a;
-    border-radius: 0 16px 16px 0;
+    background: var(--bg-secondary);
+    border-right: 2px solid var(--border-primary);
 
-    padding: 1.25rem;
+    padding: 0;
     box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
-    gap: 1rem;
 
-    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
+    box-shadow: var(--shadow-lg);
 
     transform: translateX(-100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     z-index: 999;
+    overflow-y: auto;
 }
 
-/* Sidebar visible */
 .workout-filter.sidebar.active {
     transform: translateX(0);
 }
 
-
-/* -----------------------------------------------------
-   Filter Form Elements
------------------------------------------------------ */
-
-.workout-filter.sidebar .filter-group {
+/* Sidebar form */
+.workout-filter.sidebar form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    height: 100%;
+    padding: 1.5rem;
+    gap: 1.25rem;
 }
 
-.workout-filter.sidebar label {
-    font-size: 0.75rem;
+/* Filter groups */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
     text-transform: lowercase;
-    font-weight: bold;
-    color: #ffffff;
 }
 
-.workout-filter.sidebar input[type="text"] {
-    padding: 0.5rem 0.75rem;
+.filter-group input[type="text"],
+.filter-group input[type="date"],
+.filter-group select {
+    padding: 0.625rem 0.875rem;
 
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
 
-    border: 1px solid #3a3a3a;
-    border-radius: 16px;
+    border: 1px solid var(--border-primary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
 
-    background: #2a2a2a;
-    color: #ffffff;
-    outline: none;
     transition: all 0.2s ease;
 }
 
-.workout-filter.sidebar input[type="text"]:focus {
-    background: #323232;
-    border-color: #4a9eff;
-    box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+.filter-group input:focus,
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
 }
 
-/* -----------------------------------------------------
-   Zone Checkboxes
------------------------------------------------------ */
-
+/* Zone checkboxes */
 .zone-checkboxes {
     display: flex;
     flex-wrap: wrap;
@@ -330,128 +314,163 @@
 .zone-checkbox {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.5rem;
 
-    font-size: 0.75rem;
-    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
     cursor: pointer;
 }
 
 .zone-checkbox input {
     width: 16px;
     height: 16px;
+    cursor: pointer;
+    accent-color: var(--accent-primary);
 }
 
 .zone-checkbox span {
-    padding: 0.3rem 0.5rem;
+    padding: 0.25rem 0.625rem;
 
-    background: #2a2a2a;
-    border: 1px solid #3a3a3a;
-    color: #ffffff;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-secondary);
+    color: var(--text-secondary);
 
-    border-radius: 10px;
-    transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+    transition: all 0.2s ease;
+    text-transform: lowercase;
 }
 
 .zone-checkbox input:checked + span {
-    background: #3a5a7a;
-    border-color: #4a9eff;
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
     color: #ffffff;
+    font-weight: 600;
 }
 
 .zone-checkbox:hover span {
-    transform: translateY(-1px);
-    border-color: #4a9eff;
+    border-color: var(--accent-primary);
 }
 
-/* -----------------------------------------------------
-   Filter Buttons
------------------------------------------------------ */
-
+/* Form buttons */
 .form-buttons {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-primary);
 }
 
-.filter-submit,
 .filter-form-btn {
-    padding: 0.6rem 1.4rem;
+    padding: 0.625rem 1rem;
 
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: bold;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-primary);
 
-    background: #2a2a2a;
-    color: #ffffff;
-
-    border: 1px solid #3a3a3a;
-    border-radius: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-transform: lowercase;
 
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-.filter-submit:hover,
 .filter-form-btn:hover {
-    background: #3a5a7a;
-    border-color: #4a9eff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+}
+
+.form-button {
+    padding: 0.625rem 0.875rem;
+
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
+
+    border: 1px solid var(--border-primary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-button:hover {
+    background: var(--bg-hover);
 }
 
 /* =====================================================
-   Single Workout Page
+   SINGLE WORKOUT PAGE
 ===================================================== */
 
 .workout-page {
     max-width: 900px;
     margin: 2rem auto;
-    padding: 2rem;
+    padding: 0;
 
-    background: #1e1e1e;
-    border: 1px solid #3a3a3a;
-    border-radius: 20px;
-
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-md);
 }
 
 .workout-page h1 {
-    font-size: 2rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
-    color: #ffffff;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 2px solid var(--border-primary);
+    text-transform: lowercase;
 }
 
-/* Large Graph */
-
 .workout-page .workout-graph {
-    width: 90%;
+    width: 100%;
     height: 400px;
-
-    margin: 0 auto 1.5rem auto;
-    padding: 1rem;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border: 1px solid #3a3a3a;
-    border-radius: 16px;
-    background: #2a2a2a;
+    margin: 0;
+    padding: 2rem;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-primary);
 }
 
 /* =====================================================
-   Responsive
+   RESPONSIVE
 ===================================================== */
 
 @media (max-width: 768px) {
+    .page-start {
+        padding: 1.5rem 1rem;
+    }
+
+    .workout-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .workout-filter.sidebar {
+        width: 100%;
+    }
+
     .workout-page {
         margin: 1rem;
-        padding: 1.5rem;
     }
 
     .workout-page .workout-graph {
-        height: 220px;
-        width: 100%;
+        height: 250px;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .workout-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .workout-actions > *:nth-child(2) {
+        border-right: none;
+    }
+
+    .workout-actions > *:nth-child(3) {
+        border-top: 1px solid var(--border-secondary);
     }
 }

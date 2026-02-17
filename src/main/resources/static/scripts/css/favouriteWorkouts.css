@@ -1,5 +1,5 @@
 /* =====================================================
-   Favourite Workout Card (Horizontal Layout) - Dark Mode
+   FAVOURITE WORKOUTS - HORIZONTAL TERMINAL CARDS
 ===================================================== */
 
 .favourite-workout-card--horizontal {
@@ -7,39 +7,39 @@
     flex-direction: row;
     width: 100%;
     max-width: 900px;
-    height: 220px;
-    background: #1e1e1e;
-    border: 1px solid #3a3a3a;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    min-height: 200px;
+
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin-bottom: 1.2rem;
+    transition: all 0.2s ease;
+    margin-bottom: 1.5rem;
+
+    box-shadow: var(--shadow-sm);
 }
 
 .favourite-workout-card--horizontal:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 40px rgba(0,0,0,0.6);
-    border-color: #4a9eff;
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
+/* =====================================================
+   GRAPH SECTION
+===================================================== */
+
 .favourite-workout-graph {
-    flex: 1;
-    height: 100%;
-    padding: 1rem;
+    flex: 0 0 300px;
+    height: auto;
+    padding: 1.5rem;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background: #2a2a2a;
-}
-
-.favourite-workout-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 1.25rem;
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border-primary);
 }
 
 .favourite-workout-graph canvas {
@@ -47,146 +47,137 @@
     height: 100% !important;
 }
 
+/* =====================================================
+   CONTENT SECTION
+===================================================== */
+
+.favourite-workout-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 0.75rem;
+}
 
 .favourite-workout-name {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 0 0 0.4rem;
-    color: #ffffff;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+    text-transform: lowercase;
 }
 
 .favourite-workout-description,
 .favourite-workout-targetZones {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #e0e0e0;
-    line-height: 1.4;
-    margin: 0.25rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
 }
+
+.favourite-workout-targetZones {
+    font-weight: 600;
+    color: var(--accent-primary);
+}
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
 
 .favourite-workout-actions {
     margin-top: auto;
-    display: flex;
-    gap: 0.75rem;
-
-    max-width: 320px;
-    margin-left: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
 }
-
-
-
 
 .favourite-workout-expandButton,
-.favourite-workout-favouriteButton {
-    flex: 1;
-    padding: 0.75rem;
-
-    text-align: center;
-    border-radius: 12px;
-    border: 1px solid #3a3a3a;
-
-    background: #2a2a2a;
-    color: #ffffff;
-
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.favourite-workout-expandButton:hover {
-    background: #d4a017;
-    border-color: #f4c430;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(244, 196, 48, 0.3);
-}
-
-.favourite-workout-favouriteButton:hover {
-    background: #1e5a9e;
-    border-color: #4a9eff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(74, 158, 255, 0.3);
-}
-
-/* Thumbs up button - Green */
-.favourite-workout-thumbsUpButton {
-    flex: 1;
-    padding: 0.75rem;
-
-    text-align: center;
-    border-radius: 12px;
-    border: 1px solid #3a3a3a;
-
-    background: #2a2a2a;
-    color: #ffffff;
-
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.favourite-workout-thumbsUpButton:hover {
-    background: #2d7a2d;
-    border-color: #4caf50;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.3);
-}
-
-/* Thumbs down button - Red */
+.favourite-workout-favouriteButton,
+.favourite-workout-thumbsUpButton,
 .favourite-workout-thumbsDownButton {
-    flex: 1;
-    padding: 0.75rem;
+    padding: 0.625rem 1rem;
 
     text-align: center;
-    border-radius: 12px;
-    border: 1px solid #3a3a3a;
+    border: 1px solid var(--border-primary);
 
-    background: #2a2a2a;
-    color: #ffffff;
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
 
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
     text-decoration: none;
+    text-transform: lowercase;
 
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.favourite-workout-expandButton:hover,
+.favourite-workout-favouriteButton:hover,
+.favourite-workout-thumbsUpButton:hover,
 .favourite-workout-thumbsDownButton:hover {
-    background: #b71c1c;
-    border-color: #f44336;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(244, 67, 54, 0.3);
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
 }
 
+/* Active states */
+.favourite-workout-favouriteButton.active {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border-color: var(--accent-primary);
+    font-weight: 600;
+}
 
-/* Responsive: stack on mobile */
+.favourite-workout-thumbsUpButton.active {
+    background: var(--accent-success);
+    color: #ffffff;
+    border-color: var(--accent-success);
+    font-weight: 600;
+}
+
+.favourite-workout-thumbsDownButton.active {
+    background: var(--accent-error);
+    color: #ffffff;
+    border-color: var(--accent-error);
+    font-weight: 600;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
 @media (max-width: 768px) {
     .favourite-workout-card--horizontal {
         flex-direction: column;
-        height: auto;
+        max-width: 100%;
     }
 
     .favourite-workout-graph {
-        width: 100%;
-        height: 180px;
+        flex: 0 0 200px;
         border-right: none;
-        border-bottom: 1px solid #3a3a3a;
+        border-bottom: 1px solid var(--border-primary);
+    }
+
+    .favourite-workout-content {
+        padding: 1.25rem;
+    }
+
+    .favourite-workout-actions {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 480px) {
     .favourite-workout-actions {
-        max-width: 100%;
-    }
-
-    .favourite-workout-expandButton,
-    .favourite-workout-favouriteButton {
-        flex: 1;
+        grid-template-columns: 1fr;
     }
 }
