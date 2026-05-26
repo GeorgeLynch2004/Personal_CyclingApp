@@ -5,10 +5,7 @@
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Workouts</title>
-    <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/workouts.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/pagination.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/main.css}">
 </head>
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -63,7 +60,7 @@
 
                 <div class="filter-group">
                     <label for="filterWorkoutPageSize">Display Items</label>
-                    <select id="filterWorkoutPageSize" class="form-button">
+                    <select id="filterWorkoutPageSize" class="filter-select">
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50" selected>50</option>

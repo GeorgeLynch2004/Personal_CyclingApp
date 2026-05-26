@@ -1,9 +1,11 @@
 import { zoneColor } from "../utils/zones.js";
-import { formatDuration } from "../utils/formatters.js";
+import { buildPowerSeries } from "../utils/formatters.js";
 
 let chart;
 export function createWorkoutGraph(canvas, structure, refreshChart = true) {
-    const { points, totalDuration } = buildPowerSeries(structure);
+    const { points } = buildPowerSeries(structure);
+    const totalDuration = points.length > 0 ? points[points.length - 1].x : 0;
+    points.push({ x: totalDuration, y: 0 });
 
     if (chart && refreshChart) chart.destroy();
 
@@ -33,14 +35,12 @@ export function createWorkoutGraph(canvas, structure, refreshChart = true) {
                     type: "linear",
                     min: 0,
                     max: totalDuration,
-                    grid: { display: false },
-                    ticks: { display: false }
+                    display: false
                 },
                 y: {
                     min: 0,
                     max: 7,
-                    grid: { display: false },
-                    ticks: { display: false }
+                    display: false
                 }
             },
 
@@ -52,19 +52,4 @@ export function createWorkoutGraph(canvas, structure, refreshChart = true) {
     });
 }
 
-
-function buildPowerSeries(structure) {
-    let time = 0;
-    const points = [];
-
-    structure.forEach(interval => {
-        points.push({ x: time, y: interval.powerZone });
-        time += interval.duration;
-        points.push({ x: time, y: interval.powerZone });
-    });
-
-    points.push({ x: time, y: 0 });
-
-    return { points, totalDuration: time };
-}
 

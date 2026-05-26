@@ -5,9 +5,7 @@
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>Workouts</title>
-    <link rel="stylesheet" th:href="@{/scripts/css/global.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/scripts/css/workouts.css}">
+    <link rel="stylesheet" th:href="@{/scripts/css/main.css}">
 </head>
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -27,9 +25,12 @@
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script th:src="@{/scripts/js/workouts.js}"></script>
+<script th:src="@{/scripts/js/components/workoutChart.js}"></script>
 <script th:src="@{/scripts/js/api/downloadsApi.js}"></script>
 <script th:inline="javascript">
+
+    import {convertTargetZonesToString} from "../static/scripts/js/utils/zones.js";
+    import {createWorkoutGraph} from "../static/scripts/js/components/workoutChart.js";
 
     const workoutId = [[${workout.id}]];
     const workoutStructure = [[${workout.structure}]];

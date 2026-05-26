@@ -17,7 +17,6 @@ const elements = {
     favouriteButton: "workoutFavouriteButton",
     deleteButton: "workoutDeleteButton"
 }
-const data = await getWorkouts({page: currentPage, size: defaultPageSize, privacy: "PUBLIC"});
 await loadWorkouts(currentPage);
 
 const toggleBtn = document.getElementById('filterToggle');
